@@ -1,0 +1,151 @@
+import { useState } from 'react';
+import { MapPin, Users, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Product } from '../lib/supabase';
+import { useLanguage } from '../contexts/LanguageContext';
+
+interface ProductCardProps {
+  product: Product;
+  onViewDetails: (product: Product) => void;
+}
+
+export function ProductCard({ product, onViewDetails }: ProductCardProps) {
+  const { t } = useLanguage();
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
+
+  const images = product.images && product.images.length > 0 ? product.images : [product.image_url];
+
+  const handlePrevImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
+  };
+
+  const handleNextImage = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  };
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    e.stopPropagation();
+    if (!touchStart || !touchEnd) return;
+
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe && currentImageIndex < images.length - 1) {
+      setCurrentImageIndex(currentImageIndex + 1);
+    }
+    if (isRightSwipe && currentImageIndex > 0) {
+      setCurrentImageIndex(currentImageIndex - 1);
+    }
+
+    setTouchStart(0);
+    setTouchEnd(0);
+  };
+
+  return (
+    <div
+      onClick={() => onViewDetails(product)}
+      className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group"
+    >
+      <div
+        className="relative h-40 md:h-64 overflow-hidden"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+      >
+        <img
+          src={images[currentImageIndex]}
+          alt={`${product.name} - ${currentImageIndex + 1}`}
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+        />
+
+        {images.length > 1 && (
+          <>
+            <button
+              onClick={handlePrevImage}
+              className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white/80 rounded-full p-1 hover:bg-white transition opacity-0 group-hover:opacity-100"
+            >
+              <ChevronLeft className="h-3 w-3 md:h-4 md:w-4 text-gray-700" />
+            </button>
+            <button
+              onClick={handleNextImage}
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white/80 rounded-full p-1 hover:bg-white transition opacity-0 group-hover:opacity-100"
+            >
+              <ChevronRight className="h-3 w-3 md:h-4 md:w-4 text-gray-700" />
+            </button>
+
+            <div className="absolute bottom-2 left-1/2 transform -translate-x-1/2 flex space-x-1">
+              {images.map((_, index) => (
+                <div
+                  key={index}
+                  className={`w-1.5 h-1.5 md:w-2 md:h-2 rounded-full transition ${
+                    index === currentImageIndex ? 'bg-white' : 'bg-white/50'
+                  }`}
+                />
+              ))}
+            </div>
+          </>
+        )}
+
+        <div className="absolute top-2 right-2 md:top-4 md:right-4 bg-white px-2 py-1 md:px-3 rounded-full text-xs md:text-sm font-semibold text-gray-700 capitalize">
+          {product.category}
+        </div>
+      </div>
+
+      <div className="p-3 md:p-6">
+        <h3 className="text-sm md:text-xl font-bold text-gray-900 mb-1 md:mb-2 group-hover:text-blue-600 transition line-clamp-2">
+          {product.name}
+        </h3>
+
+        <div className="flex flex-col md:flex-row md:items-center text-gray-600 text-xs md:text-sm mb-2 md:mb-3 md:space-x-4 space-y-1 md:space-y-0">
+          <div className="flex items-center space-x-1">
+            <MapPin className="h-3 w-3 md:h-4 md:w-4 flex-shrink-0" />
+            <span className="truncate">{product.location}</span>
+          </div>
+          {product.capacity && (
+            <div className="flex items-center space-x-1">
+              <Users className="h-3 w-3 md:h-4 md:w-4 flex-shrink-0" />
+              <span>{product.capacity} {t('products.guests')}</span>
+            </div>
+          )}
+        </div>
+
+        <p className="text-gray-600 text-xs md:text-sm mb-2 md:mb-4 line-clamp-2 hidden md:block">{product.description}</p>
+
+        <div className="flex flex-wrap gap-1 md:gap-2 mb-2 md:mb-4">
+          {product.features.slice(0, 2).map((feature, index) => (
+            <span
+              key={index}
+              className="bg-blue-50 text-blue-700 text-xs px-2 py-0.5 md:px-3 md:py-1 rounded-full"
+            >
+              {feature}
+            </span>
+          ))}
+        </div>
+
+        <div className="flex items-center justify-between pt-2 md:pt-4 border-t">
+          <div>
+            <p className="text-lg md:text-2xl font-bold text-gray-900">
+              ${product.price_per_day}
+            </p>
+            <p className="text-xs md:text-sm text-gray-500">{t('products.perDay')}</p>
+          </div>
+          <div className="text-blue-600 font-semibold text-xs md:text-sm group-hover:underline">
+            {t('products.viewDetails')} →
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

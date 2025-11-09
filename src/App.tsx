@@ -1,0 +1,171 @@
+import { useState, useEffect } from 'react';
+import { Header } from './components/Header';
+import { Hero } from './components/Hero';
+import { ProductCard } from './components/ProductCard';
+import { ProductDetails } from './components/ProductDetails';
+import { ContactForm } from './components/ContactForm';
+import { Product, supabase } from './lib/supabase';
+import { Loader2, Search } from 'lucide-react';
+import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
+
+function AppContent() {
+  const { t } = useLanguage();
+  const [products, setProducts] = useState<Product[]>([]);
+  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [showProductDetails, setShowProductDetails] = useState(false);
+  const [categoryFilter, setCategoryFilter] = useState('');
+  const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+  useEffect(() => {
+    filterProducts();
+  }, [products, categoryFilter, searchQuery]);
+
+  const fetchProducts = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from('products')
+      .select('*')
+      .eq('is_active', true)
+      .order('created_at', { ascending: false });
+
+    if (!error && data) {
+      setProducts(data);
+    }
+    setLoading(false);
+  };
+
+  const filterProducts = () => {
+    let filtered = [...products];
+
+    if (categoryFilter) {
+      filtered = filtered.filter((p) => p.category === categoryFilter);
+    }
+
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase();
+      filtered = filtered.filter((p) =>
+        p.name.toLowerCase().includes(query) ||
+        p.location.toLowerCase().includes(query) ||
+        p.category.toLowerCase().includes(query)
+      );
+    }
+
+    setFilteredProducts(filtered);
+  };
+
+  const handleViewDetails = (product: Product) => {
+    setSelectedProduct(product);
+    setShowProductDetails(true);
+  };
+
+  const handleCloseDetails = () => {
+    setShowProductDetails(false);
+    setSelectedProduct(null);
+  };
+
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+      <Hero />
+
+      <main id="rentals" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16">
+        <div className="mb-8 md:mb-12">
+          <div className="max-w-2xl mx-auto mb-6 md:mb-8">
+            <div className="relative">
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 md:h-5 md:w-5 text-gray-400" />
+              <input
+                type="text"
+                placeholder={t('products.filter.all')}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-10 md:pl-12 pr-4 py-3 md:py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 text-sm md:text-base"
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-6 md:mb-8">
+            {['', 'yacht', 'car', 'villa', 'jet'].map((category) => (
+              <button
+                key={category}
+                onClick={() => setCategoryFilter(category)}
+                className={`px-4 md:px-6 py-2 rounded-full font-medium transition text-sm md:text-base ${
+                  categoryFilter === category
+                    ? 'bg-blue-600 text-white'
+                    : 'bg-white text-gray-700 border border-gray-300 hover:border-blue-600'
+                }`}
+              >
+                {category === '' ? t('products.filter.all') : category.charAt(0).toUpperCase() + category.slice(1) + 's'}
+              </button>
+            ))}
+          </div>
+        </div>
+        {loading ? (
+          <div className="flex justify-center items-center py-20">
+            <Loader2 className="h-12 w-12 text-blue-600 animate-spin" />
+          </div>
+        ) : (
+          <>
+            <div className="mb-8 text-center">
+              <p className="text-gray-600 text-lg">
+                {filteredProducts.length} {filteredProducts.length === 1 ? 'rental' : 'rentals'}{' '}
+                available
+              </p>
+            </div>
+
+            {filteredProducts.length === 0 ? (
+              <div className="text-center py-20">
+                <p className="text-gray-500 text-lg">
+                  No rentals found matching your criteria
+                </p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
+                {filteredProducts.map((product) => (
+                  <ProductCard
+                    key={product.id}
+                    product={product}
+                    onViewDetails={handleViewDetails}
+                  />
+                ))}
+              </div>
+            )}
+          </>
+        )}
+      </main>
+
+      <ContactForm />
+
+      <footer className="bg-gray-900 text-white py-6 md:py-8">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+          <p className="text-gray-400 text-sm md:text-base">
+            © 2024 LuxeRentals. Premium rentals for discerning travelers.
+          </p>
+        </div>
+      </footer>
+
+      {showProductDetails && (
+        <ProductDetails
+          product={selectedProduct}
+          onClose={handleCloseDetails}
+        />
+      )}
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <LanguageProvider>
+      <AppContent />
+    </LanguageProvider>
+  );
+}
+
+export default App;
