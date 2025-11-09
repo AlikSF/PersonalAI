@@ -4,12 +4,14 @@ import { Hero } from './components/Hero';
 import { ProductCard } from './components/ProductCard';
 import { ProductDetails } from './components/ProductDetails';
 import { ContactForm } from './components/ContactForm';
+import { AdminPanel } from './components/AdminPanel';
 import { Product, supabase } from './lib/supabase';
 import { Loader2, Search } from 'lucide-react';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 
 function AppContent() {
   const { t } = useLanguage();
+  const [currentPage, setCurrentPage] = useState('home');
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -17,6 +19,27 @@ function AppContent() {
   const [showProductDetails, setShowProductDetails] = useState(false);
   const [categoryFilter, setCategoryFilter] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+
+  useEffect(() => {
+    const path = window.location.pathname;
+    if (path === '/admin') {
+      setCurrentPage('admin');
+    } else {
+      setCurrentPage('home');
+    }
+
+    const handlePopState = () => {
+      const path = window.location.pathname;
+      if (path === '/admin') {
+        setCurrentPage('admin');
+      } else {
+        setCurrentPage('home');
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
 
   useEffect(() => {
     fetchProducts();
@@ -69,6 +92,10 @@ function AppContent() {
     setSelectedProduct(null);
   };
 
+
+  if (currentPage === 'admin') {
+    return <AdminPanel />;
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
