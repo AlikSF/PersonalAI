@@ -13,80 +13,21 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
     customer_name: '',
     customer_email: '',
     customer_phone: '',
-    start_date: '',
-    end_date: '',
+    tour_date: '',
+    adults_count: '1',
+    children_count: '0',
     special_requests: '',
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState(false);
-  const [unavailableDates, setUnavailableDates] = useState<string[]>([]);
-  const [totalPrice, setTotalPrice] = useState(0);
-
-  useEffect(() => {
-    if (product) {
-      fetchUnavailableDates();
-    }
-  }, [product]);
-
-  useEffect(() => {
-    if (formData.start_date && formData.end_date && product) {
-      const start = new Date(formData.start_date);
-      const end = new Date(formData.end_date);
-      const days = Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24)) + 1;
-      setTotalPrice(days * product.price_per_day);
-    }
-  }, [formData.start_date, formData.end_date, product]);
-
-  const fetchUnavailableDates = async () => {
-    if (!product) return;
-
-    const { data, error } = await supabase
-      .from('bookings')
-      .select('start_date, end_date')
-      .eq('product_id', product.id)
-      .in('booking_status', ['confirmed', 'completed']);
-
-    if (!error && data) {
-      const dates: string[] = [];
-      data.forEach((booking) => {
-        const start = new Date(booking.start_date);
-        const end = new Date(booking.end_date);
-        for (let d = start; d <= end; d.setDate(d.getDate() + 1)) {
-          dates.push(d.toISOString().split('T')[0]);
-        }
-      });
-      setUnavailableDates(dates);
-    }
-  };
-
-  const isDateUnavailable = (dateStr: string) => {
-    return unavailableDates.includes(dateStr);
-  };
-
-  const validateDates = () => {
-    const start = new Date(formData.start_date);
-    const end = new Date(formData.end_date);
-
-    for (let d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-      const dateStr = d.toISOString().split('T')[0];
-      if (isDateUnavailable(dateStr)) {
-        return false;
-      }
-    }
-    return true;
-  };
+  const totalPrice = product ? product.price_per_day : 0;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
     if (!product) return;
-
-    if (!validateDates()) {
-      setError('Selected dates are not available. Please choose different dates.');
-      return;
-    }
 
     setLoading(true);
 
@@ -96,8 +37,8 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
         customer_name: formData.customer_name,
         customer_email: formData.customer_email,
         customer_phone: formData.customer_phone,
-        start_date: formData.start_date,
-        end_date: formData.end_date,
+        start_date: formData.tour_date,
+        end_date: formData.tour_date,
         total_price: totalPrice,
         payment_status: 'paid',
         booking_status: 'confirmed',
@@ -106,19 +47,20 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
 
       if (bookingError) throw bookingError;
 
-      const telegramMessage = `NEW BOOKING CONFIRMED!\n\n` +
-        `Product: ${product.name}\n` +
-        `Category: ${product.category}\n` +
-        `Location: ${product.location}\n\n` +
-        `Customer Details:\n` +
-        `Name: ${formData.customer_name}\n` +
+      const telegramMessage = `🎉 НОВОЕ БРОНИРОВАНИЕ!\n\n` +
+        `🎯 Тур: ${product.name}\n` +
+        `📂 Категория: ${product.category}\n` +
+        `📍 Локация: ${product.location}\n\n` +
+        `👤 Информация о клиенте:\n` +
+        `Имя: ${formData.customer_name}\n` +
         `Email: ${formData.customer_email}\n` +
-        `Phone: ${formData.customer_phone}\n\n` +
-        `Booking Details:\n` +
-        `Start Date: ${formData.start_date}\n` +
-        `End Date: ${formData.end_date}\n` +
-        `Total Price: $${totalPrice.toFixed(2)}\n` +
-        `Special Requests: ${formData.special_requests || 'None'}`;
+        `Телефон: ${formData.customer_phone}\n\n` +
+        `📅 Детали бронирования:\n` +
+        `Дата тура: ${formData.tour_date}\n` +
+        `Взрослых: ${formData.adults_count}\n` +
+        `Детей: ${formData.children_count}\n` +
+        `Цена: ฿${totalPrice}\n` +
+        `Особые пожелания: ${formData.special_requests || 'Нет'}`;
 
       await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-telegram`,
@@ -166,15 +108,16 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
           </div>
           <h2 className="text-2xl font-bold text-gray-900 mb-2">Booking Confirmed!</h2>
           <p className="text-gray-600 mb-4">
-            Your booking for <strong>{product.name}</strong> has been confirmed.
+            Ваше бронирование <strong>{product.name}</strong> подтверждено.
           </p>
           <div className="bg-gray-50 rounded-lg p-4 text-left text-sm">
-            <p className="mb-2"><strong>Dates:</strong> {formData.start_date} to {formData.end_date}</p>
-            <p className="mb-2"><strong>Total:</strong> ${totalPrice.toFixed(2)}</p>
+            <p className="mb-2"><strong>Дата тура:</strong> {formData.tour_date}</p>
+            <p className="mb-2"><strong>Взрослых:</strong> {formData.adults_count} | <strong>Детей:</strong> {formData.children_count}</p>
+            <p className="mb-2"><strong>Цена:</strong> ฿{totalPrice}</p>
             <p><strong>Email:</strong> {formData.customer_email}</p>
           </div>
           <p className="text-sm text-gray-500 mt-4">
-            Our team will contact you shortly with further details.
+            Наша команда свяжется с вами в ближайшее время.
           </p>
         </div>
       </div>
@@ -186,7 +129,7 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
       <div className="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <div className="sticky top-0 bg-white border-b px-6 py-4 flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-gray-900">Book {product.name}</h2>
+            <h2 className="text-2xl font-bold text-gray-900">Забронировать {product.name}</h2>
             <p className="text-sm text-gray-500">{product.location}</p>
           </div>
           <button
@@ -208,11 +151,12 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
           <div className="space-y-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Full Name *
+                Ваше имя *
               </label>
               <input
                 type="text"
                 required
+                placeholder="Введите ваше полное имя"
                 value={formData.customer_name}
                 onChange={(e) =>
                   setFormData({ ...formData, customer_name: e.target.value })
@@ -239,7 +183,7 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Phone *
+                  Телефон *
                 </label>
                 <input
                   type="tel"
@@ -253,19 +197,35 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
               </div>
             </div>
 
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                <Calendar className="inline h-4 w-4 mr-1" />
+                Дата тура *
+              </label>
+              <input
+                type="date"
+                required
+                min={today}
+                value={formData.tour_date}
+                onChange={(e) =>
+                  setFormData({ ...formData, tour_date: e.target.value })
+                }
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  <Calendar className="inline h-4 w-4 mr-1" />
-                  Start Date *
+                  Количество взрослых *
                 </label>
                 <input
-                  type="date"
+                  type="number"
                   required
-                  min={today}
-                  value={formData.start_date}
+                  min="1"
+                  value={formData.adults_count}
                   onChange={(e) =>
-                    setFormData({ ...formData, start_date: e.target.value })
+                    setFormData({ ...formData, adults_count: e.target.value })
                   }
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
@@ -273,16 +233,14 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  <Calendar className="inline h-4 w-4 mr-1" />
-                  End Date *
+                  Количество детей
                 </label>
                 <input
-                  type="date"
-                  required
-                  min={formData.start_date || today}
-                  value={formData.end_date}
+                  type="number"
+                  min="0"
+                  value={formData.children_count}
                   onChange={(e) =>
-                    setFormData({ ...formData, end_date: e.target.value })
+                    setFormData({ ...formData, children_count: e.target.value })
                   }
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
@@ -291,7 +249,7 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Special Requests
+                Особые пожелания
               </label>
               <textarea
                 rows={3}
@@ -300,20 +258,18 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
                   setFormData({ ...formData, special_requests: e.target.value })
                 }
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                placeholder="Any special requirements or questions..."
+                placeholder="Любые особые требования или вопросы..."
               />
             </div>
 
-            {totalPrice > 0 && (
-              <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <div className="flex justify-between items-center">
-                  <span className="text-gray-700 font-medium">Total Price:</span>
-                  <span className="text-2xl font-bold text-blue-600">
-                    ${totalPrice.toFixed(2)}
-                  </span>
-                </div>
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="flex justify-between items-center">
+                <span className="text-gray-700 font-medium">Цена:</span>
+                <span className="text-2xl font-bold text-blue-600">
+                  ฿{totalPrice}
+                </span>
               </div>
-            )}
+            </div>
           </div>
 
           <div className="mt-6 flex space-x-3">
@@ -322,14 +278,14 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
               onClick={onClose}
               className="flex-1 px-6 py-3 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition font-medium"
             >
-              Cancel
+              Назад
             </button>
             <button
               type="submit"
               disabled={loading}
               className="flex-1 px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              {loading ? 'Confirming Booking...' : 'Confirm Booking'}
+              {loading ? 'Подтверждение...' : 'Подтвердить бронирование'}
             </button>
           </div>
         </form>
