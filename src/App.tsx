@@ -181,7 +181,7 @@ function AppContent() {
       <footer className="bg-gray-900 text-white py-6 md:py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-gray-400 text-sm md:text-base">
-            © 2024 LuxeRentals. {t('footer.text')}
+            © 2024 Phuket Vibe. {t('footer.text')}
           </p>
         </div>
       </footer>
