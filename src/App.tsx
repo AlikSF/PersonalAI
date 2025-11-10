@@ -118,17 +118,24 @@ function AppContent() {
           </div>
 
           <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-6 md:mb-8">
-            {['', 'yacht', 'car', 'villa', 'jet'].map((category) => (
+            {[
+              { value: '', labelKey: 'products.filter.all' },
+              { value: 'accommodation', labelKey: 'products.filter.accommodation' },
+              { value: 'transport', labelKey: 'products.filter.transport' },
+              { value: 'tours', labelKey: 'products.filter.tours' },
+              { value: 'experiences', labelKey: 'products.filter.experiences' },
+              { value: 'food', labelKey: 'products.filter.food' },
+            ].map((category) => (
               <button
-                key={category}
-                onClick={() => setCategoryFilter(category)}
-                className={`px-4 md:px-6 py-2 rounded-full font-medium transition text-sm md:text-base ${
-                  categoryFilter === category
+                key={category.value}
+                onClick={() => setCategoryFilter(category.value)}
+                className={`px-3 md:px-5 py-1.5 md:py-2 rounded-full font-medium transition text-xs md:text-sm ${
+                  categoryFilter === category.value
                     ? 'bg-blue-600 text-white'
                     : 'bg-white text-gray-700 border border-gray-300 hover:border-blue-600'
                 }`}
               >
-                {category === '' ? t('products.filter.all') : category.charAt(0).toUpperCase() + category.slice(1) + 's'}
+                {t(category.labelKey)}
               </button>
             ))}
           </div>
