@@ -133,7 +133,7 @@ export function ProductCard({ product, onViewDetails }: ProductCardProps) {
             </p>
             <p className="text-xs md:text-sm text-gray-500">{t('products.startingFrom')}</p>
           </div>
-          <div className="text-blue-600 font-semibold text-xs md:text-sm group-hover:underline">
+          <div className="text-blue-600 font-semibold text-[10px] md:text-xs group-hover:underline whitespace-nowrap">
             {t('products.viewDetails')} →
           </div>
         </div>
