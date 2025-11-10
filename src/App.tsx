@@ -148,7 +148,7 @@ function AppContent() {
           </div>
         ) : (
           <>
-            <div className="mb-8 text-center">
+            <div className="mb-4 md:mb-6 text-center">
               <p className="text-gray-600 text-lg">
                 {filteredProducts.length} {filteredProducts.length === 1 ? t('products.rental') : t('products.rentals')}{' '}
                 {t('products.available')}
