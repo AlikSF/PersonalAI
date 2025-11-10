@@ -189,9 +189,9 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
             </div>
 
             <div className="prose max-w-none mb-6 md:mb-8">
-              <p className="text-gray-700 text-sm md:text-lg leading-relaxed">
+              <div className="text-gray-700 text-sm md:text-base leading-relaxed whitespace-pre-line">
                 {product.description}
-              </p>
+              </div>
             </div>
 
             {product.features && product.features.length > 0 && (
