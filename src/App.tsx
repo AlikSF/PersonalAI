@@ -120,13 +120,13 @@ function AppContent() {
           <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-6 md:mb-8">
             {[
               { value: '', labelKey: 'products.filter.all' },
-              { value: 'трансфер', labelKey: 'products.filter.transfer' },
-              { value: 'острова', labelKey: 'products.filter.islands' },
-              { value: 'сафари', labelKey: 'products.filter.safari' },
-              { value: 'экстрим', labelKey: 'products.filter.extreme' },
-              { value: 'клубы', labelKey: 'products.filter.clubs' },
-              { value: 'озеро', labelKey: 'products.filter.lake' },
-              { value: 'шоу', labelKey: 'products.filter.show' },
+              { value: 'Трансфер', labelKey: 'products.filter.transfer' },
+              { value: 'Острова', labelKey: 'products.filter.islands' },
+              { value: 'Сафари', labelKey: 'products.filter.safari' },
+              { value: 'Экстрим', labelKey: 'products.filter.extreme' },
+              { value: 'Клубы', labelKey: 'products.filter.clubs' },
+              { value: 'Озеро', labelKey: 'products.filter.lake' },
+              { value: 'Шоу', labelKey: 'products.filter.show' },
             ].map((category) => (
               <button
                 key={category.value}
