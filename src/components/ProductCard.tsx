@@ -98,8 +98,8 @@ export function ProductCard({ product, onViewDetails }: ProductCardProps) {
           </>
         )}
 
-        <div className="absolute top-2 right-2 md:top-4 md:right-4 bg-white px-2 py-1 md:px-3 rounded-full text-xs md:text-sm font-semibold text-gray-700 capitalize">
-          {product.category}
+        <div className="absolute top-2 right-2 md:top-4 md:right-4 bg-white px-2 py-1 md:px-3 rounded-full text-xs md:text-sm font-semibold text-gray-700">
+          {t(`category.${product.category}`) !== `category.${product.category}` ? t(`category.${product.category}`) : product.category}
         </div>
       </div>
 

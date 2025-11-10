@@ -148,15 +148,15 @@ function AppContent() {
           <>
             <div className="mb-8 text-center">
               <p className="text-gray-600 text-lg">
-                {filteredProducts.length} {filteredProducts.length === 1 ? 'rental' : 'rentals'}{' '}
-                available
+                {filteredProducts.length} {filteredProducts.length === 1 ? t('products.rental') : t('products.rentals')}{' '}
+                {t('products.available')}
               </p>
             </div>
 
             {filteredProducts.length === 0 ? (
               <div className="text-center py-20">
                 <p className="text-gray-500 text-lg">
-                  No rentals found matching your criteria
+                  {t('products.noRentalsFound')}
                 </p>
               </div>
             ) : (
@@ -179,7 +179,7 @@ function AppContent() {
       <footer className="bg-gray-900 text-white py-6 md:py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-gray-400 text-sm md:text-base">
-            © 2024 LuxeRentals. Premium rentals for discerning travelers.
+            © 2024 LuxeRentals. {t('footer.text')}
           </p>
         </div>
       </footer>

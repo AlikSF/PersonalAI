@@ -50,7 +50,7 @@ export function Header() {
             >
               <Languages className="h-4 w-4 md:h-5 md:w-5 text-gray-700" />
               <span className="text-xs md:text-sm font-medium text-gray-700 uppercase">
-                {language === 'ru' ? 'EN' : 'RU'}
+                {language}
               </span>
             </button>
           </div>
