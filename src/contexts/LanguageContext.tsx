@@ -26,7 +26,7 @@ const translations = {
     'products.filter.clubs': 'Клубы',
     'products.filter.lake': 'Озеро',
     'products.filter.show': 'Шоу',
-    'products.perDay': 'в день',
+    'products.perDay': 'от',
     'products.viewDetails': 'Подробнее',
     'products.bookNow': 'Забронировать',
     'products.location': 'Местоположение',

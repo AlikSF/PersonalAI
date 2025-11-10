@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, MapPin, Users, Calendar, MessageCircle, User, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, MapPin, Calendar, MessageCircle, User, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Product } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -52,8 +52,8 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
       `📅 Заезд: ${new Date(checkIn).toLocaleDateString()}\n` +
       `📅 Выезд: ${new Date(checkOut).toLocaleDateString()}\n` +
       `🗓️ Продолжительность: ${days} ${days === 1 ? 'день' : days < 5 ? 'дня' : 'дней'}\n\n` +
-      `💰 Цена: $${product.price_per_day}/день\n` +
-      `💵 Итого: $${totalPrice.toFixed(2)}`
+      `💰 Цена: ฿${product.price_per_day}/день\n` +
+      `💵 Итого: ฿${totalPrice.toFixed(2)}`
     );
 
     const telegramUsername = import.meta.env.VITE_TELEGRAM_USERNAME || 'yourusername';
@@ -176,12 +176,6 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
                 <MapPin className="h-4 w-4 md:h-5 md:w-5" />
                 <span>{product.location}</span>
               </div>
-              {product.capacity && (
-                <div className="flex items-center space-x-1 md:space-x-2">
-                  <Users className="h-4 w-4 md:h-5 md:w-5" />
-                  <span>{product.capacity} {t('products.guests')}</span>
-                </div>
-              )}
               <div className="flex items-center space-x-1 md:space-x-2">
                 <Calendar className="h-4 w-4 md:h-5 md:w-5" />
                 <span>{t(`category.${product.category}`) !== `category.${product.category}` ? t(`category.${product.category}`) : product.category}</span>
@@ -217,9 +211,8 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
                     <p className="text-gray-600 text-xs md:text-sm mb-1">{t('products.startingFrom')}</p>
                     <div className="flex items-baseline">
                       <span className="text-3xl md:text-4xl font-bold text-gray-900">
-                        ${product.price_per_day.toFixed(2)}
+                        ฿{product.price_per_day.toFixed(2)}
                       </span>
-                      <span className="text-gray-600 text-sm md:text-base ml-2">{t('products.perDay')}</span>
                     </div>
                   </div>
 
@@ -250,26 +243,6 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
                         value={formData.name}
                         onChange={handleInputChange}
                         placeholder={t('booking.namePlaceholder')}
-                        className="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition text-sm md:text-base"
-                      />
-                    </div>
-
-                    <div>
-                      <label htmlFor="guests" className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
-                        <div className="flex items-center space-x-2">
-                          <Users className="h-4 w-4" />
-                          <span>{t('booking.guests')}</span>
-                        </div>
-                      </label>
-                      <input
-                        type="number"
-                        id="guests"
-                        name="guests"
-                        value={formData.guests}
-                        onChange={handleInputChange}
-                        min="1"
-                        max={product.capacity || 100}
-                        placeholder={t('booking.guestsPlaceholder')}
                         className="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition text-sm md:text-base"
                       />
                     </div>

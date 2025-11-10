@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { MapPin, Users, ChevronLeft, ChevronRight } from 'lucide-react';
+import { MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Product } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -108,17 +108,9 @@ export function ProductCard({ product, onViewDetails }: ProductCardProps) {
           {product.name}
         </h3>
 
-        <div className="flex flex-col md:flex-row md:items-center text-gray-600 text-xs md:text-sm mb-2 md:mb-3 md:space-x-4 space-y-1 md:space-y-0">
-          <div className="flex items-center space-x-1">
-            <MapPin className="h-3 w-3 md:h-4 md:w-4 flex-shrink-0" />
-            <span className="truncate">{product.location}</span>
-          </div>
-          {product.capacity && (
-            <div className="flex items-center space-x-1">
-              <Users className="h-3 w-3 md:h-4 md:w-4 flex-shrink-0" />
-              <span>{product.capacity} {t('products.guests')}</span>
-            </div>
-          )}
+        <div className="flex items-center text-gray-600 text-xs md:text-sm mb-2 md:mb-3">
+          <MapPin className="h-3 w-3 md:h-4 md:w-4 flex-shrink-0" />
+          <span className="truncate ml-1">{product.location}</span>
         </div>
 
         <p className="text-gray-600 text-xs md:text-sm mb-2 md:mb-4 line-clamp-2 hidden md:block">{product.description}</p>
@@ -137,9 +129,9 @@ export function ProductCard({ product, onViewDetails }: ProductCardProps) {
         <div className="flex items-center justify-between pt-2 md:pt-4 border-t">
           <div>
             <p className="text-lg md:text-2xl font-bold text-gray-900">
-              ${product.price_per_day}
+              ฿{product.price_per_day}
             </p>
-            <p className="text-xs md:text-sm text-gray-500">{t('products.perDay')}</p>
+            <p className="text-xs md:text-sm text-gray-500">{t('products.startingFrom')}</p>
           </div>
           <div className="text-blue-600 font-semibold text-xs md:text-sm group-hover:underline">
             {t('products.viewDetails')} →
