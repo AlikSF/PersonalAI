@@ -184,7 +184,7 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
               )}
               <div className="flex items-center space-x-1 md:space-x-2">
                 <Calendar className="h-4 w-4 md:h-5 md:w-5" />
-                <span className="capitalize">{product.category}</span>
+                <span>{t(`category.${product.category}`) !== `category.${product.category}` ? t(`category.${product.category}`) : product.category}</span>
               </div>
             </div>
 
