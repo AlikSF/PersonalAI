@@ -14,7 +14,7 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
     customer_email: '',
     customer_phone: '',
     tour_date: '',
-    adults_count: '1',
+    adults_count: '0',
     children_count: '0',
     special_requests: '',
   });
@@ -35,14 +35,14 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
       const { error: bookingError } = await supabase.from('bookings').insert({
         product_id: product.id,
         customer_name: formData.customer_name,
-        customer_email: formData.customer_email,
+        customer_email: formData.customer_email || 'no-email@provided.com',
         customer_phone: formData.customer_phone,
         start_date: formData.tour_date,
         end_date: formData.tour_date,
         total_price: totalPrice,
         payment_status: 'paid',
         booking_status: 'confirmed',
-        special_requests: formData.special_requests,
+        special_requests: `Взрослых: ${formData.adults_count}, Детей: ${formData.children_count}`,
       });
 
       if (bookingError) throw bookingError;
@@ -53,14 +53,12 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
         `📍 Локация: ${product.location}\n\n` +
         `👤 Информация о клиенте:\n` +
         `Имя: ${formData.customer_name}\n` +
-        `Email: ${formData.customer_email}\n` +
         `Телефон: ${formData.customer_phone}\n\n` +
         `📅 Детали бронирования:\n` +
         `Дата тура: ${formData.tour_date}\n` +
         `Взрослых: ${formData.adults_count}\n` +
         `Детей: ${formData.children_count}\n` +
-        `Цена: ฿${totalPrice}\n` +
-        `Особые пожелания: ${formData.special_requests || 'Нет'}`;
+        `Цена: ฿${totalPrice}`;
 
       await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-telegram`,
@@ -106,7 +104,7 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
               <CheckCircle className="h-16 w-16 text-green-600" />
             </div>
           </div>
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Booking Confirmed!</h2>
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Бронирование подтверждено!</h2>
           <p className="text-gray-600 mb-4">
             Ваше бронирование <strong>{product.name}</strong> подтверждено.
           </p>
@@ -114,7 +112,7 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
             <p className="mb-2"><strong>Дата тура:</strong> {formData.tour_date}</p>
             <p className="mb-2"><strong>Взрослых:</strong> {formData.adults_count} | <strong>Детей:</strong> {formData.children_count}</p>
             <p className="mb-2"><strong>Цена:</strong> ฿{totalPrice}</p>
-            <p><strong>Email:</strong> {formData.customer_email}</p>
+            <p><strong>Телефон:</strong> {formData.customer_phone}</p>
           </div>
           <p className="text-sm text-gray-500 mt-4">
             Наша команда свяжется с вами в ближайшее время.
@@ -165,36 +163,19 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
               />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Email *
-                </label>
-                <input
-                  type="email"
-                  required
-                  value={formData.customer_email}
-                  onChange={(e) =>
-                    setFormData({ ...formData, customer_email: e.target.value })
-                  }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Телефон *
-                </label>
-                <input
-                  type="tel"
-                  required
-                  value={formData.customer_phone}
-                  onChange={(e) =>
-                    setFormData({ ...formData, customer_phone: e.target.value })
-                  }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Телефон *
+              </label>
+              <input
+                type="tel"
+                required
+                value={formData.customer_phone}
+                onChange={(e) =>
+                  setFormData({ ...formData, customer_phone: e.target.value })
+                }
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
             </div>
 
             <div>
@@ -222,7 +203,7 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
                 <input
                   type="number"
                   required
-                  min="1"
+                  min="0"
                   value={formData.adults_count}
                   onChange={(e) =>
                     setFormData({ ...formData, adults_count: e.target.value })
@@ -233,10 +214,11 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Количество детей
+                  Количество детей *
                 </label>
                 <input
                   type="number"
+                  required
                   min="0"
                   value={formData.children_count}
                   onChange={(e) =>
@@ -245,21 +227,6 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
               </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Особые пожелания
-              </label>
-              <textarea
-                rows={3}
-                value={formData.special_requests}
-                onChange={(e) =>
-                  setFormData({ ...formData, special_requests: e.target.value })
-                }
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                placeholder="Любые особые требования или вопросы..."
-              />
             </div>
 
             <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
