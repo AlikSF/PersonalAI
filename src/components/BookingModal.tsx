@@ -32,7 +32,7 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
     setLoading(true);
 
     try {
-      const { error: bookingError } = await supabase.from('bookings').insert({
+      const { data: bookingData, error: bookingError } = await supabase.from('bookings').insert({
         product_id: product.id,
         customer_name: formData.customer_name,
         customer_email: formData.customer_email || 'no-email@provided.com',
@@ -46,7 +46,12 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
         special_requests: `Взрослых: ${formData.adults_count}, Детей: ${formData.children_count}`,
       });
 
-      if (bookingError) throw bookingError;
+      if (bookingError) {
+        console.error('Booking error details:', bookingError);
+        throw bookingError;
+      }
+
+      console.log('Booking created successfully:', bookingData);
 
       const telegramMessage = `🎉 НОВОЕ БРОНИРОВАНИЕ!\n\n` +
         `🎯 Тур: ${product.name}\n` +
@@ -84,9 +89,10 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
         onSuccess();
         onClose();
       }, 3000);
-    } catch (err) {
-      setError('Failed to create booking. Please try again.');
-      console.error(err);
+    } catch (err: any) {
+      const errorMessage = err?.message || 'Failed to create booking. Please try again.';
+      setError(errorMessage);
+      console.error('Full error:', err);
     } finally {
       setLoading(false);
     }
