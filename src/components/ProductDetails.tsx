@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { X, MapPin, Calendar, MessageCircle, User, ChevronLeft, ChevronRight } from 'lucide-react';
-import { Product } from '../lib/supabase';
+import { Product, supabase } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface ProductDetailsProps {
@@ -31,7 +31,7 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
     });
   };
 
-  const handleConfirmBooking = (platform: 'telegram' | 'whatsapp') => {
+  const handleConfirmBooking = async (platform: 'telegram' | 'whatsapp') => {
     const { name, phone, tourDate, adults, children } = formData;
 
     if (!name || !phone || !tourDate || !adults) {
@@ -40,6 +40,31 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
     }
 
     const totalPrice = product.price_per_day;
+
+    // Save booking to database
+    try {
+      const { error: bookingError } = await supabase.from('bookings').insert({
+        product_id: product.id,
+        customer_name: name,
+        customer_email: 'no-email@provided.com',
+        customer_phone: phone,
+        tour_date: tourDate,
+        start_date: tourDate,
+        end_date: tourDate,
+        total_price: totalPrice,
+        payment_status: 'pending',
+        booking_status: 'confirmed',
+        special_requests: `Взрослых: ${adults}, Детей: ${children}, Платформа: ${platform}`,
+      });
+
+      if (bookingError) {
+        console.error('Error saving booking:', bookingError);
+      } else {
+        console.log('Booking saved successfully');
+      }
+    } catch (err) {
+      console.error('Failed to save booking:', err);
+    }
 
     const message = encodeURIComponent(
       `🎯 ЗАПРОС НА БРОНИРОВАНИЕ ТУРА\n\n` +
