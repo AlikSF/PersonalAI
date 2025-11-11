@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, Calendar, AlertCircle, CheckCircle } from 'lucide-react';
+import { X, Calendar, AlertCircle, CheckCircle, Minus, Plus } from 'lucide-react';
 import { Product, supabase } from '../lib/supabase';
 
 interface BookingModalProps {
@@ -14,8 +14,8 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
     customer_email: '',
     customer_phone: '',
     tour_date: '',
-    adults_count: '1',
-    children_count: '0',
+    adults_count: 1,
+    children_count: 0,
     special_requests: '',
   });
   const [loading, setLoading] = useState(false);
@@ -203,35 +203,73 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Количество взрослых *
                 </label>
-                <input
-                  type="number"
-                  required
-                  min="1"
-                  value={formData.adults_count}
-                  onChange={(e) =>
-                    setFormData({ ...formData, adults_count: e.target.value })
-                  }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
+                <div className="flex items-center justify-center gap-4">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setFormData({
+                        ...formData,
+                        adults_count: Math.max(1, formData.adults_count - 1),
+                      })
+                    }
+                    className="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full transition-all active:scale-95 shadow-sm"
+                  >
+                    <Minus className="h-4 w-4" />
+                  </button>
+                  <span className="text-2xl font-semibold text-gray-900 w-12 text-center">
+                    {formData.adults_count}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setFormData({
+                        ...formData,
+                        adults_count: formData.adults_count + 1,
+                      })
+                    }
+                    className="w-10 h-10 flex items-center justify-center bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-full transition-all active:scale-95 shadow-sm"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </button>
+                </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Количество детей *
                 </label>
-                <input
-                  type="number"
-                  required
-                  min="0"
-                  value={formData.children_count}
-                  onChange={(e) =>
-                    setFormData({ ...formData, children_count: e.target.value })
-                  }
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
+                <div className="flex items-center justify-center gap-4">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setFormData({
+                        ...formData,
+                        children_count: Math.max(0, formData.children_count - 1),
+                      })
+                    }
+                    className="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full transition-all active:scale-95 shadow-sm"
+                  >
+                    <Minus className="h-4 w-4" />
+                  </button>
+                  <span className="text-2xl font-semibold text-gray-900 w-12 text-center">
+                    {formData.children_count}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      setFormData({
+                        ...formData,
+                        children_count: formData.children_count + 1,
+                      })
+                    }
+                    className="w-10 h-10 flex items-center justify-center bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-full transition-all active:scale-95 shadow-sm"
+                  >
+                    <Plus className="h-4 w-4" />
+                  </button>
+                </div>
               </div>
             </div>
 
