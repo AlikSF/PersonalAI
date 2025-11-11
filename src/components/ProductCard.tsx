@@ -59,7 +59,7 @@ export function ProductCard({ product, onViewDetails }: ProductCardProps) {
       className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col h-full"
     >
       <div
-        className="relative h-40 md:h-56 overflow-hidden flex-shrink-0 bg-gray-100"
+        className="relative h-40 md:h-56 overflow-hidden flex-shrink-0"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -67,7 +67,7 @@ export function ProductCard({ product, onViewDetails }: ProductCardProps) {
         <img
           src={images[currentImageIndex]}
           alt={`${product.name} - ${currentImageIndex + 1}`}
-          className="w-full h-full object-contain group-hover:scale-105 transition-transform duration-500"
+          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
         />
 
         {images.length > 1 && (
