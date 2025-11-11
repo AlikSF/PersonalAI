@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { X, MapPin, Calendar, MessageCircle, User, ChevronLeft, ChevronRight } from 'lucide-react';
+import { X, MapPin, Calendar, MessageCircle, User, ChevronLeft, ChevronRight, Minus, Plus } from 'lucide-react';
 import { Product, supabase } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -18,8 +18,8 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
     name: '',
     phone: '',
     tourDate: '',
-    adults: '1',
-    children: '0'
+    adults: 1,
+    children: 0
   });
 
   if (!product) return null;
@@ -309,33 +309,73 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label htmlFor="adults" className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
                           <span>{t('booking.adults')}</span>
                         </label>
-                        <input
-                          type="number"
-                          id="adults"
-                          name="adults"
-                          value={formData.adults}
-                          onChange={handleInputChange}
-                          min="1"
-                          className="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition text-sm md:text-base"
-                        />
+                        <div className="flex items-center justify-center gap-3 border border-gray-300 rounded-lg py-2 md:py-3">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setFormData({
+                                ...formData,
+                                adults: Math.max(1, formData.adults - 1),
+                              })
+                            }
+                            className="w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full transition-all active:scale-95"
+                          >
+                            <Minus className="h-4 w-4" />
+                          </button>
+                          <span className="text-xl md:text-2xl font-semibold text-gray-900 w-10 text-center">
+                            {formData.adults}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setFormData({
+                                ...formData,
+                                adults: formData.adults + 1,
+                              })
+                            }
+                            className="w-8 h-8 flex items-center justify-center bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-full transition-all active:scale-95"
+                          >
+                            <Plus className="h-4 w-4" />
+                          </button>
+                        </div>
                       </div>
 
                       <div>
-                        <label htmlFor="children" className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
                           <span>{t('booking.children')}</span>
                         </label>
-                        <input
-                          type="number"
-                          id="children"
-                          name="children"
-                          value={formData.children}
-                          onChange={handleInputChange}
-                          min="0"
-                          className="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition text-sm md:text-base"
-                        />
+                        <div className="flex items-center justify-center gap-3 border border-gray-300 rounded-lg py-2 md:py-3">
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setFormData({
+                                ...formData,
+                                children: Math.max(0, formData.children - 1),
+                              })
+                            }
+                            className="w-8 h-8 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full transition-all active:scale-95"
+                          >
+                            <Minus className="h-4 w-4" />
+                          </button>
+                          <span className="text-xl md:text-2xl font-semibold text-gray-900 w-10 text-center">
+                            {formData.children}
+                          </span>
+                          <button
+                            type="button"
+                            onClick={() =>
+                              setFormData({
+                                ...formData,
+                                children: formData.children + 1,
+                              })
+                            }
+                            className="w-8 h-8 flex items-center justify-center bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-full transition-all active:scale-95"
+                          >
+                            <Plus className="h-4 w-4" />
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
