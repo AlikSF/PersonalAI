@@ -66,7 +66,7 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
       console.error('Failed to save booking:', err);
     }
 
-    const message = encodeURIComponent(
+    const telegramMessage =
       `🎯 ЗАПРОС НА БРОНИРОВАНИЕ ТУРА\n\n` +
       `👤 Клиент: ${name}\n` +
       `📞 Телефон: ${phone}\n` +
@@ -75,15 +75,25 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
       `📅 Дата тура: ${new Date(tourDate).toLocaleDateString()}\n` +
       `👥 Взрослых: ${adults}\n` +
       `👶 Детей: ${children}\n\n` +
-      `💰 Цена: ฿${totalPrice.toFixed(2)}`
-    );
+      `💰 Цена: ฿${totalPrice.toFixed(2)}`;
+
+    const whatsappMessage =
+      `ЗАПРОС НА БРОНИРОВАНИЕ ТУРА\n\n` +
+      `Клиент: ${name}\n` +
+      `Телефон: ${phone}\n` +
+      `Тур: ${product.name}\n` +
+      `Местоположение: ${product.location}\n\n` +
+      `Дата тура: ${new Date(tourDate).toLocaleDateString()}\n` +
+      `Взрослых: ${adults}\n` +
+      `Детей: ${children}\n\n` +
+      `Цена: ฿${totalPrice.toFixed(2)}`;
 
     if (platform === 'telegram') {
       const telegramUsername = import.meta.env.VITE_TELEGRAM_USERNAME || 'yourusername';
-      window.open(`https://t.me/${telegramUsername}?text=${message}`, '_blank');
+      window.open(`https://t.me/${telegramUsername}?text=${encodeURIComponent(telegramMessage)}`, '_blank');
     } else {
       const whatsappNumber = '33788603290';
-      window.open(`https://wa.me/${whatsappNumber}?text=${message}`, '_blank');
+      window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`, '_blank');
     }
   };
 
