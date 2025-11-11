@@ -19,7 +19,7 @@ export function Header() {
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="text-lg md:text-2xl font-bold text-gray-900 hover:text-blue-600 transition"
           >
-            Phuket Vibe
+            Phuket Vibe Tours
           </button>
 
           <nav className="hidden md:flex items-center space-x-8">
