@@ -111,7 +111,6 @@ function AppContent() {
     <div className="min-h-screen bg-gray-50">
       <Header />
       <Hero />
-      <Benefits />
 
       <main id="rentals" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16">
         <div className="text-center mb-8 md:mb-12">
@@ -195,6 +194,8 @@ function AppContent() {
           </>
         )}
       </main>
+
+      <Benefits />
 
       <TrustSection />
 
