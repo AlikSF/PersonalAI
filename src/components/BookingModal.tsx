@@ -179,10 +179,6 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                <Calendar className="inline h-4 w-4 mr-1" />
-                Дата тура *
-              </label>
               <input
                 type="date"
                 required
