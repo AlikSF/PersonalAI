@@ -5,6 +5,7 @@ import { Benefits } from './components/Benefits';
 import { TrustSection } from './components/TrustSection';
 import { ProductCard } from './components/ProductCard';
 import { ProductDetails } from './components/ProductDetails';
+import { Testimonials } from './components/Testimonials';
 import { ContactForm } from './components/ContactForm';
 import { AdminPanel } from './components/AdminPanel';
 import { Footer } from './components/Footer';
@@ -198,6 +199,8 @@ function AppContent() {
       <Benefits />
 
       <TrustSection />
+
+      <Testimonials />
 
       <ContactForm />
 
