@@ -118,17 +118,26 @@ function AppContent() {
           </div>
 
           <div className="flex flex-wrap justify-center gap-2 md:gap-3 mb-6 md:mb-8">
-            {['', 'yacht', 'car', 'villa', 'jet'].map((category) => (
+            {[
+              { value: '', labelKey: 'products.filter.all' },
+              { value: 'Трансфер', labelKey: 'products.filter.transfer' },
+              { value: 'Острова', labelKey: 'products.filter.islands' },
+              { value: 'Сафари', labelKey: 'products.filter.safari' },
+              { value: 'Экстрим', labelKey: 'products.filter.extreme' },
+              { value: 'Клубы', labelKey: 'products.filter.clubs' },
+              { value: 'Озеро', labelKey: 'products.filter.lake' },
+              { value: 'Шоу', labelKey: 'products.filter.show' },
+            ].map((category) => (
               <button
-                key={category}
-                onClick={() => setCategoryFilter(category)}
-                className={`px-4 md:px-6 py-2 rounded-full font-medium transition text-sm md:text-base ${
-                  categoryFilter === category
+                key={category.value}
+                onClick={() => setCategoryFilter(category.value)}
+                className={`px-3 md:px-5 py-1.5 md:py-2 rounded-full font-medium transition text-xs md:text-sm ${
+                  categoryFilter === category.value
                     ? 'bg-blue-600 text-white'
                     : 'bg-white text-gray-700 border border-gray-300 hover:border-blue-600'
                 }`}
               >
-                {category === '' ? t('products.filter.all') : category.charAt(0).toUpperCase() + category.slice(1) + 's'}
+                {t(category.labelKey)}
               </button>
             ))}
           </div>
@@ -139,17 +148,17 @@ function AppContent() {
           </div>
         ) : (
           <>
-            <div className="mb-8 text-center">
+            <div className="mb-4 md:mb-6 text-center">
               <p className="text-gray-600 text-lg">
-                {filteredProducts.length} {filteredProducts.length === 1 ? 'rental' : 'rentals'}{' '}
-                available
+                {filteredProducts.length} {filteredProducts.length === 1 ? t('products.rental') : t('products.rentals')}{' '}
+                {t('products.available')}
               </p>
             </div>
 
             {filteredProducts.length === 0 ? (
               <div className="text-center py-20">
                 <p className="text-gray-500 text-lg">
-                  No rentals found matching your criteria
+                  {t('products.noRentalsFound')}
                 </p>
               </div>
             ) : (
@@ -172,7 +181,7 @@ function AppContent() {
       <footer className="bg-gray-900 text-white py-6 md:py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <p className="text-gray-400 text-sm md:text-base">
-            © 2024 LuxeRentals. Premium rentals for discerning travelers.
+            © 2024 Phuket Vibe. {t('footer.text')}
           </p>
         </div>
       </footer>

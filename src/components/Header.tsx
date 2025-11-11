@@ -19,7 +19,7 @@ export function Header() {
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="text-lg md:text-2xl font-bold text-gray-900 hover:text-blue-600 transition"
           >
-            LuxeRentals
+            Phuket Vibe
           </button>
 
           <nav className="hidden md:flex items-center space-x-8">
@@ -50,7 +50,7 @@ export function Header() {
             >
               <Languages className="h-4 w-4 md:h-5 md:w-5 text-gray-700" />
               <span className="text-xs md:text-sm font-medium text-gray-700 uppercase">
-                {language === 'ru' ? 'EN' : 'RU'}
+                {language}
               </span>
             </button>
           </div>
