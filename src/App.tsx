@@ -1,13 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
+import { Benefits } from './components/Benefits';
+import { TrustSection } from './components/TrustSection';
 import { ProductCard } from './components/ProductCard';
 import { ProductDetails } from './components/ProductDetails';
 import { ContactForm } from './components/ContactForm';
 import { AdminPanel } from './components/AdminPanel';
 import { Footer } from './components/Footer';
 import { Product, supabase } from './lib/supabase';
-import { Loader2, Search } from 'lucide-react';
+import { Loader2, Search, MessageCircle } from 'lucide-react';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 
 function AppContent() {
@@ -98,12 +100,29 @@ function AppContent() {
     return <AdminPanel />;
   }
 
+  const scrollToContact = () => {
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
       <Hero />
+      <Benefits />
 
       <main id="rentals" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 md:py-16">
+        <div className="text-center mb-8 md:mb-12">
+          <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-3 md:mb-4">
+            {t('products.title')}
+          </h2>
+          <p className="text-base md:text-xl text-gray-600 max-w-2xl mx-auto">
+            {t('products.subtitle')}
+          </p>
+        </div>
+
         <div className="mb-8 md:mb-12">
           <div className="max-w-2xl mx-auto mb-6 md:mb-8">
             <div className="relative">
@@ -177,9 +196,19 @@ function AppContent() {
         )}
       </main>
 
+      <TrustSection />
+
       <ContactForm />
 
       <Footer />
+
+      <button
+        onClick={scrollToContact}
+        className="fixed bottom-6 right-6 md:bottom-8 md:right-8 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-all hover:scale-110 z-40 md:hidden"
+        aria-label="Contact us"
+      >
+        <MessageCircle className="h-6 w-6" />
+      </button>
 
       {showProductDetails && (
         <ProductDetails

@@ -1,3 +1,4 @@
+import { Star } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 export function Hero() {
@@ -24,9 +25,18 @@ export function Hero() {
             <h1 className="text-3xl sm:text-4xl md:text-7xl font-bold text-white mb-4 md:mb-6 leading-tight">
               {t('hero.title')}
             </h1>
-            <p className="text-base sm:text-lg md:text-2xl text-gray-200 mb-6 md:mb-10 leading-relaxed">
+            <p className="text-base sm:text-lg md:text-2xl text-gray-200 mb-6 md:mb-8 leading-relaxed">
               {t('hero.subtitle')}
             </p>
+
+            <div className="mb-6 md:mb-10">
+              <div className="inline-flex items-center bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 text-white">
+                <Star className="h-5 w-5 fill-yellow-400 text-yellow-400 mr-1" />
+                <span className="font-bold text-lg mr-2">4.9</span>
+                <span className="text-sm text-gray-200">{t('hero.rating')} 200+ {t('hero.reviews')}</span>
+              </div>
+            </div>
+
             <button
               onClick={scrollToRentals}
               className="bg-blue-600 text-white px-6 md:px-10 py-3 md:py-4 rounded-lg text-base md:text-lg font-semibold hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105 w-full sm:w-auto"
