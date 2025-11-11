@@ -113,7 +113,7 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
           onClick={(e) => e.stopPropagation()}
         >
           <div
-            className="relative h-48 md:h-96"
+            className="relative h-48 md:h-96 bg-gray-100 rounded-t-2xl"
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
             onTouchEnd={handleTouchEnd}
@@ -121,7 +121,7 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
             <img
               src={images[currentImageIndex]}
               alt={`${product.name} - ${currentImageIndex + 1}`}
-              className="w-full h-full object-cover rounded-t-2xl"
+              className="w-full h-full object-contain rounded-t-2xl"
             />
 
             {images.length > 1 && (
