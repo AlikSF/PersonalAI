@@ -66,7 +66,7 @@ export function Footer() {
               <FileText className="h-5 w-5 flex-shrink-0 mt-0.5 text-blue-400" />
               <div>
                 <h4 className="font-semibold mb-1">Лицензии и документы</h4>
-                <p className="text-sm text-gray-300">{companyInfo.license_info}</p>
+                <p className="text-sm text-gray-300 whitespace-pre-line">{companyInfo.license_info}</p>
               </div>
             </div>
           </div>
@@ -76,7 +76,7 @@ export function Footer() {
               <Shield className="h-5 w-5 flex-shrink-0 mt-0.5 text-green-400" />
               <div>
                 <h4 className="font-semibold mb-1">Страхование</h4>
-                <p className="text-sm text-gray-300">{companyInfo.insurance_info}</p>
+                <p className="text-sm text-gray-300 whitespace-pre-line">{companyInfo.insurance_info}</p>
               </div>
             </div>
           </div>
@@ -86,7 +86,7 @@ export function Footer() {
               <CreditCard className="h-5 w-5 flex-shrink-0 mt-0.5 text-yellow-400" />
               <div>
                 <h4 className="font-semibold mb-1">Способы оплаты</h4>
-                <p className="text-sm text-gray-300">{companyInfo.payment_info}</p>
+                <p className="text-sm text-gray-300 whitespace-pre-line">{companyInfo.payment_info}</p>
               </div>
             </div>
           </div>
