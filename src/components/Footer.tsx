@@ -87,31 +87,12 @@ export function Footer() {
               <div>
                 <h4 className="font-semibold mb-1">Способы оплаты</h4>
                 <p className="text-sm text-gray-300 whitespace-pre-line">{companyInfo.payment_info}</p>
-                <div className="flex items-center gap-3 mt-4 flex-wrap">
-                  <div className="bg-white rounded px-3 py-2 flex items-center justify-center">
-                    <svg className="h-5 w-12" viewBox="0 0 48 16" fill="none">
-                      <text x="2" y="12" fill="#1A1F71" style={{ fontSize: '10px', fontWeight: 'bold', fontFamily: 'Arial, sans-serif' }}>VISA</text>
-                    </svg>
+                <div className="flex items-center gap-2 mt-4">
+                  <div className="bg-white rounded px-2 py-1 flex items-center justify-center">
+                    <img src="/VISA logo.png" alt="VISA" className="h-4 w-auto" />
                   </div>
-                  <div className="bg-white rounded px-3 py-2 flex items-center justify-center">
-                    <svg className="h-5 w-12" viewBox="0 0 48 32" fill="none">
-                      <circle cx="16" cy="16" r="8" fill="#EB001B"/>
-                      <circle cx="32" cy="16" r="8" fill="#F79E1B"/>
-                    </svg>
-                  </div>
-                  <div className="bg-white rounded px-3 py-2 flex items-center justify-center">
-                    <svg className="h-5 w-12" viewBox="0 0 48 16" fill="none">
-                      <circle cx="8" cy="8" r="6" fill="#0075EB"/>
-                      <circle cx="20" cy="8" r="6" fill="#00D4FF"/>
-                      <circle cx="32" cy="8" r="6" fill="#FA4D8C"/>
-                      <circle cx="44" cy="8" r="6" fill="#FFCF23"/>
-                    </svg>
-                  </div>
-                  <div className="bg-white rounded px-3 py-2 flex items-center justify-center">
-                    <svg className="h-5 w-12" viewBox="0 0 48 32" fill="none">
-                      <rect x="8" y="8" width="32" height="16" rx="2" fill="#4CAF50" stroke="#2E7D32" strokeWidth="1"/>
-                      <text x="13" y="20" fill="white" style={{ fontSize: '8px', fontWeight: 'bold', fontFamily: 'Arial, sans-serif' }}>CASH</text>
-                    </svg>
+                  <div className="bg-white rounded px-2 py-1 flex items-center justify-center">
+                    <img src="/mastercard.png" alt="Mastercard" className="h-4 w-auto" />
                   </div>
                 </div>
               </div>
