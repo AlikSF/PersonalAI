@@ -37,6 +37,7 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
         customer_name: formData.customer_name,
         customer_email: formData.customer_email || 'no-email@provided.com',
         customer_phone: formData.customer_phone,
+        tour_date: formData.tour_date,
         start_date: formData.tour_date,
         end_date: formData.tour_date,
         total_price: totalPrice,

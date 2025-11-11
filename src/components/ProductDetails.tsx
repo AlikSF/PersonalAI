@@ -16,9 +16,10 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
   const [touchEnd, setTouchEnd] = useState(0);
   const [formData, setFormData] = useState({
     name: '',
-    guests: '',
-    checkIn: '',
-    checkOut: ''
+    phone: '',
+    tourDate: '',
+    adults: '1',
+    children: '0'
   });
 
   if (!product) return null;
@@ -31,29 +32,25 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
   };
 
   const handleConfirmBooking = () => {
-    const { name, guests, checkIn, checkOut } = formData;
+    const { name, phone, tourDate, adults, children } = formData;
 
-    if (!name || !guests || !checkIn || !checkOut) {
+    if (!name || !phone || !tourDate || !adults) {
       alert(t('booking.fillFields'));
       return;
     }
 
-    const checkInDate = new Date(checkIn);
-    const checkOutDate = new Date(checkOut);
-    const days = Math.ceil((checkOutDate.getTime() - checkInDate.getTime()) / (1000 * 60 * 60 * 24));
-    const totalPrice = days * product.price_per_day;
+    const totalPrice = product.price_per_day;
 
     const message = encodeURIComponent(
-      `🎯 ЗАПРОС НА БРОНИРОВАНИЕ\n\n` +
+      `🎯 ЗАПРОС НА БРОНИРОВАНИЕ ТУРА\n\n` +
       `👤 Клиент: ${name}\n` +
-      `📦 Товар: ${product.name}\n` +
+      `📞 Телефон: ${phone}\n` +
+      `🎯 Тур: ${product.name}\n` +
       `📍 Местоположение: ${product.location}\n\n` +
-      `👥 Количество гостей: ${guests}\n` +
-      `📅 Заезд: ${new Date(checkIn).toLocaleDateString()}\n` +
-      `📅 Выезд: ${new Date(checkOut).toLocaleDateString()}\n` +
-      `🗓️ Продолжительность: ${days} ${days === 1 ? 'день' : days < 5 ? 'дня' : 'дней'}\n\n` +
-      `💰 Цена: ฿${product.price_per_day}/день\n` +
-      `💵 Итого: ฿${totalPrice.toFixed(2)}`
+      `📅 Дата тура: ${new Date(tourDate).toLocaleDateString()}\n` +
+      `👥 Взрослых: ${adults}\n` +
+      `👶 Детей: ${children}\n\n` +
+      `💰 Цена: ฿${totalPrice.toFixed(2)}`
     );
 
     const telegramUsername = import.meta.env.VITE_TELEGRAM_USERNAME || 'yourusername';
@@ -247,39 +244,66 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
                       />
                     </div>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                      <label htmlFor="phone" className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
+                        <span>{t('booking.phone')}</span>
+                      </label>
+                      <input
+                        type="tel"
+                        id="phone"
+                        name="phone"
+                        value={formData.phone}
+                        onChange={handleInputChange}
+                        placeholder={t('booking.phonePlaceholder')}
+                        className="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition text-sm md:text-base"
+                      />
+                    </div>
+
+                    <div>
+                      <label htmlFor="tourDate" className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
+                        <div className="flex items-center space-x-2">
+                          <Calendar className="h-4 w-4" />
+                          <span>{t('booking.tourDate')}</span>
+                        </div>
+                      </label>
+                      <input
+                        type="date"
+                        id="tourDate"
+                        name="tourDate"
+                        value={formData.tourDate}
+                        onChange={handleInputChange}
+                        min={getTodayDate()}
+                        className="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition text-sm md:text-base"
+                      />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label htmlFor="checkIn" className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
-                          <div className="flex items-center space-x-2">
-                            <Calendar className="h-4 w-4" />
-                            <span>{t('booking.checkIn')}</span>
-                          </div>
+                        <label htmlFor="adults" className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
+                          <span>{t('booking.adults')}</span>
                         </label>
                         <input
-                          type="date"
-                          id="checkIn"
-                          name="checkIn"
-                          value={formData.checkIn}
+                          type="number"
+                          id="adults"
+                          name="adults"
+                          value={formData.adults}
                           onChange={handleInputChange}
-                          min={getTodayDate()}
+                          min="1"
                           className="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition text-sm md:text-base"
                         />
                       </div>
 
                       <div>
-                        <label htmlFor="checkOut" className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
-                          <div className="flex items-center space-x-2">
-                            <Calendar className="h-4 w-4" />
-                            <span>{t('booking.checkOut')}</span>
-                          </div>
+                        <label htmlFor="children" className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
+                          <span>{t('booking.children')}</span>
                         </label>
                         <input
-                          type="date"
-                          id="checkOut"
-                          name="checkOut"
-                          value={formData.checkOut}
+                          type="number"
+                          id="children"
+                          name="children"
+                          value={formData.children}
                           onChange={handleInputChange}
-                          min={formData.checkIn || getTodayDate()}
+                          min="0"
                           className="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition text-sm md:text-base"
                         />
                       </div>
