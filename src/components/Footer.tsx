@@ -88,35 +88,29 @@ export function Footer() {
                 <h4 className="font-semibold mb-1">Способы оплаты</h4>
                 <p className="text-sm text-gray-300 whitespace-pre-line">{companyInfo.payment_info}</p>
                 <div className="flex items-center gap-3 mt-4 flex-wrap">
-                  <div className="bg-white rounded px-2 py-1 flex items-center justify-center">
-                    <svg className="h-6 w-8" viewBox="0 0 48 32" fill="none">
-                      <rect width="48" height="32" rx="4" fill="white"/>
-                      <path d="M18.5 11.5L14 20.5H17.5L22 11.5H18.5Z" fill="#1434CB"/>
-                      <path d="M22 11.5L17.5 20.5H21L25.5 11.5H22Z" fill="#FAA61A"/>
+                  <div className="bg-white rounded px-3 py-2 flex items-center justify-center">
+                    <svg className="h-5 w-12" viewBox="0 0 48 16" fill="none">
+                      <text x="2" y="12" fill="#1A1F71" style={{ fontSize: '10px', fontWeight: 'bold', fontFamily: 'Arial, sans-serif' }}>VISA</text>
                     </svg>
                   </div>
-                  <div className="bg-white rounded px-2 py-1 flex items-center justify-center">
-                    <svg className="h-6 w-8" viewBox="0 0 48 32" fill="none">
-                      <rect width="48" height="32" rx="4" fill="white"/>
-                      <circle cx="18" cy="16" r="7" fill="#EB001B"/>
-                      <circle cx="30" cy="16" r="7" fill="#FF5F00"/>
-                      <circle cx="24" cy="16" r="7" fill="#F79E1B" opacity="0.6"/>
+                  <div className="bg-white rounded px-3 py-2 flex items-center justify-center">
+                    <svg className="h-5 w-12" viewBox="0 0 48 32" fill="none">
+                      <circle cx="16" cy="16" r="8" fill="#EB001B"/>
+                      <circle cx="32" cy="16" r="8" fill="#F79E1B"/>
                     </svg>
                   </div>
-                  <div className="bg-white rounded px-2 py-1 flex items-center justify-center">
-                    <svg className="h-6 w-8" viewBox="0 0 48 32" fill="none">
-                      <rect width="48" height="32" rx="4" fill="white"/>
-                      <path d="M20 12h8v8h-8z" fill="#003087"/>
-                      <path d="M28 16c0-3-2-5-5-5h-3v10h3c3 0 5-2 5-5z" fill="#009CDE"/>
-                      <path d="M20 16c0-3 2-5 5-5v10c-3 0-5-2-5-5z" fill="#012169"/>
+                  <div className="bg-white rounded px-3 py-2 flex items-center justify-center">
+                    <svg className="h-5 w-12" viewBox="0 0 48 16" fill="none">
+                      <circle cx="8" cy="8" r="6" fill="#0075EB"/>
+                      <circle cx="20" cy="8" r="6" fill="#00D4FF"/>
+                      <circle cx="32" cy="8" r="6" fill="#FA4D8C"/>
+                      <circle cx="44" cy="8" r="6" fill="#FFCF23"/>
                     </svg>
                   </div>
-                  <div className="bg-white rounded px-2 py-1 flex items-center justify-center">
-                    <svg className="h-6 w-8" viewBox="0 0 48 32" fill="none">
-                      <rect width="48" height="32" rx="4" fill="white"/>
-                      <path d="M24 12c-4 0-7 3-7 7s3 7 7 7 7-3 7-7-3-7-7-7zm0 12c-3 0-5-2-5-5s2-5 5-5 5 2 5 5-2 5-5 5z" fill="#0075FF"/>
-                      <path d="M24 15v6" stroke="#0075FF" strokeWidth="1.5"/>
-                      <path d="M21 19h6" stroke="#0075FF" strokeWidth="1.5"/>
+                  <div className="bg-white rounded px-3 py-2 flex items-center justify-center">
+                    <svg className="h-5 w-12" viewBox="0 0 48 32" fill="none">
+                      <rect x="8" y="8" width="32" height="16" rx="2" fill="#4CAF50" stroke="#2E7D32" strokeWidth="1"/>
+                      <text x="13" y="20" fill="white" style={{ fontSize: '8px', fontWeight: 'bold', fontFamily: 'Arial, sans-serif' }}>CASH</text>
                     </svg>
                   </div>
                 </div>
