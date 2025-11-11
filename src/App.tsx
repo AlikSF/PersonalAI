@@ -5,6 +5,7 @@ import { ProductCard } from './components/ProductCard';
 import { ProductDetails } from './components/ProductDetails';
 import { ContactForm } from './components/ContactForm';
 import { AdminPanel } from './components/AdminPanel';
+import { Footer } from './components/Footer';
 import { Product, supabase } from './lib/supabase';
 import { Loader2, Search } from 'lucide-react';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
@@ -178,13 +179,7 @@ function AppContent() {
 
       <ContactForm />
 
-      <footer className="bg-gray-900 text-white py-6 md:py-8">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <p className="text-gray-400 text-sm md:text-base">
-            © 2024 Phuket Vibe. {t('footer.text')}
-          </p>
-        </div>
-      </footer>
+      <Footer />
 
       {showProductDetails && (
         <ProductDetails

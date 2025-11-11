@@ -14,7 +14,7 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
     customer_email: '',
     customer_phone: '',
     tour_date: '',
-    adults_count: '0',
+    adults_count: '1',
     children_count: '0',
     special_requests: '',
   });
@@ -179,6 +179,9 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
             </div>
 
             <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Дата тура *
+              </label>
               <input
                 type="date"
                 required
@@ -199,7 +202,7 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
                 <input
                   type="number"
                   required
-                  min="0"
+                  min="1"
                   value={formData.adults_count}
                   onChange={(e) =>
                     setFormData({ ...formData, adults_count: e.target.value })
