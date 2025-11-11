@@ -56,10 +56,10 @@ export function ProductCard({ product, onViewDetails }: ProductCardProps) {
   return (
     <div
       onClick={() => onViewDetails(product)}
-      className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group"
+      className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col h-full"
     >
       <div
-        className="relative h-40 md:h-64 overflow-hidden"
+        className="relative h-40 md:h-56 overflow-hidden flex-shrink-0"
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -103,8 +103,8 @@ export function ProductCard({ product, onViewDetails }: ProductCardProps) {
         </div>
       </div>
 
-      <div className="p-3 md:p-6">
-        <h3 className="text-sm md:text-xl font-bold text-gray-900 mb-1 md:mb-2 group-hover:text-blue-600 transition line-clamp-2">
+      <div className="p-3 md:p-5 flex flex-col flex-grow">
+        <h3 className="text-sm md:text-lg font-bold text-gray-900 mb-1 md:mb-2 group-hover:text-blue-600 transition line-clamp-2">
           {product.name}
         </h3>
 
@@ -113,29 +113,29 @@ export function ProductCard({ product, onViewDetails }: ProductCardProps) {
           <span className="truncate ml-1">{product.location}</span>
         </div>
 
-        <p className="text-gray-600 text-xs md:text-sm mb-2 md:mb-4 line-clamp-2 hidden md:block">{product.description}</p>
-
-        <div className="flex flex-wrap gap-1 md:gap-2 mb-2 md:mb-4">
+        <div className="flex flex-wrap gap-1 md:gap-2 mb-3 md:mb-4">
           {product.features.slice(0, 2).map((feature, index) => (
             <span
               key={index}
-              className="bg-blue-50 text-blue-700 text-xs px-2 py-0.5 md:px-3 md:py-1 rounded-full"
+              className="bg-blue-50 text-blue-700 text-[10px] md:text-xs px-2 py-0.5 md:px-2 md:py-1 rounded-full"
             >
               {feature}
             </span>
           ))}
         </div>
 
-        <div className="flex items-center justify-between pt-2 md:pt-4 border-t">
-          <div>
-            <p className="text-lg md:text-2xl font-bold text-gray-900">
-              ฿{product.price_per_day}
-            </p>
-            <p className="text-xs md:text-sm text-gray-500">{t('products.startingFrom')}</p>
+        <div className="mt-auto pt-3 md:pt-4 border-t">
+          <div className="flex items-center justify-between mb-2">
+            <div>
+              <p className="text-base md:text-xl font-bold text-gray-900">
+                ฿{product.price_per_day}
+              </p>
+              <p className="text-[10px] md:text-xs text-gray-500">{t('products.startingFrom')}</p>
+            </div>
           </div>
-          <div className="text-blue-600 font-semibold text-[10px] md:text-xs group-hover:underline whitespace-nowrap">
-            {t('products.viewDetails')} →
-          </div>
+          <button className="w-full bg-blue-600 text-white py-2 md:py-2.5 rounded-lg text-xs md:text-sm font-semibold hover:bg-blue-700 transition group-hover:shadow-lg">
+            {t('products.viewDetails')}
+          </button>
         </div>
       </div>
     </div>
