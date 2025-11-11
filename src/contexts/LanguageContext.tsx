@@ -89,6 +89,8 @@ const translations = {
     'category.Парк': 'Парк',
     'category.Озеро': 'Озеро',
     'category.Шоу': 'Шоу',
+    'testimonials.title': 'Отзывы наших клиентов',
+    'testimonials.subtitle': 'Узнайте, что говорят о нас наши довольные клиенты',
   },
   en: {
     'nav.home': 'Home',
@@ -170,6 +172,8 @@ const translations = {
     'category.Парк': 'Парк',
     'category.Озеро': 'Озеро',
     'category.Шоу': 'Шоу',
+    'testimonials.title': 'Customer Reviews',
+    'testimonials.subtitle': 'See what our happy customers are saying about us',
   },
 };
 

@@ -1,11 +1,14 @@
 import { Star } from 'lucide-react';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface Testimonial {
   id: number;
   name: string;
   rating: number;
-  text: string;
-  location: string;
+  textRu: string;
+  textEn: string;
+  locationRu: string;
+  locationEn: string;
 }
 
 const testimonials: Testimonial[] = [
@@ -13,42 +16,51 @@ const testimonials: Testimonial[] = [
     id: 1,
     name: 'Анна Петрова',
     rating: 5,
-    text: 'Отличный сервис! Арендовали скутер на неделю, всё было идеально. Персонал очень дружелюбный и помогли с выбором маршрута.',
-    location: 'Москва, Россия'
+    textRu: 'Отличный сервис! Арендовали скутер на неделю, всё было идеально. Персонал очень дружелюбный и помогли с выбором маршрута.',
+    textEn: 'Excellent service! We rented a scooter for a week, everything was perfect. The staff was very friendly and helped us choose the best routes.',
+    locationRu: 'Москва, Россия',
+    locationEn: 'Moscow, Russia'
   },
   {
     id: 2,
     name: 'Sophie Dubois',
     rating: 5,
-    text: 'Лучшие туры на Пхукете! Организация на высоте, гид был очень информативным. Особенно понравилась экскурсия к островам.',
-    location: 'Париж, Франция'
+    textRu: 'Лучшие туры на Пхукете! Организация на высоте, гид был очень информативным. Особенно понравилась экскурсия к островам.',
+    textEn: 'Best tours in Phuket! Perfect organization, the guide was very informative. We especially loved the island excursion.',
+    locationRu: 'Париж, Франция',
+    locationEn: 'Paris, France'
   },
   {
     id: 3,
     name: 'Айгүл Нұрғалиева',
     rating: 5,
-    text: 'Прекрасный опыт аренды байка. Все документы оформили быстро, техника в отличном состоянии. Обязательно вернёмся снова!',
-    location: 'Алматы, Казахстан'
+    textRu: 'Прекрасный опыт аренды байка. Все документы оформили быстро, техника в отличном состоянии. Обязательно вернёмся снова!',
+    textEn: 'Great bike rental experience. All documents were processed quickly, the bike was in excellent condition. Will definitely come back again!',
+    locationRu: 'Алматы, Казахстан',
+    locationEn: 'Almaty, Kazakhstan'
   },
   {
     id: 4,
     name: 'Michael Johnson',
     rating: 5,
-    text: 'Профессиональный подход к каждому клиенту. Помогли с выбором тура, учли все наши пожелания. Рекомендую всем!',
-    location: 'New York, USA'
+    textRu: 'Профессиональный подход к каждому клиенту. Помогли с выбором тура, учли все наши пожелания. Рекомендую всем!',
+    textEn: 'Professional approach to every client. They helped us choose the right tour and accommodated all our requests. Highly recommend!',
+    locationRu: 'Нью-Йорк, США',
+    locationEn: 'New York, USA'
   }
 ];
 
 export function Testimonials() {
+  const { language, t } = useLanguage();
   return (
     <section className="py-12 md:py-16 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8 md:mb-12">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
-            Отзывы наших клиентов
+            {t('testimonials.title')}
           </h2>
           <p className="text-sm md:text-base text-gray-600">
-            Узнайте, что говорят о нас наши довольные клиенты
+            {t('testimonials.subtitle')}
           </p>
         </div>
 
@@ -70,7 +82,7 @@ export function Testimonials() {
               </div>
 
               <p className="text-sm text-gray-700 mb-4 leading-relaxed">
-                "{testimonial.text}"
+                "{language === 'ru' ? testimonial.textRu : testimonial.textEn}"
               </p>
 
               <div className="border-t border-gray-200 pt-4">
@@ -78,7 +90,7 @@ export function Testimonials() {
                   {testimonial.name}
                 </p>
                 <p className="text-xs text-gray-500 mt-1">
-                  {testimonial.location}
+                  {language === 'ru' ? testimonial.locationRu : testimonial.locationEn}
                 </p>
               </div>
             </div>
