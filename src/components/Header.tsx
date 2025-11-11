@@ -17,9 +17,16 @@ export function Header() {
         <div className="flex items-center justify-between h-16 md:h-20">
           <button
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-            className="text-lg md:text-2xl font-bold text-gray-900 hover:text-blue-600 transition"
+            className="flex items-center space-x-2 md:space-x-3 hover:opacity-80 transition"
           >
-            Phuket Vibe Tours
+            <img
+              src="/logo web.jpg"
+              alt="Phuket Vibe Tours Logo"
+              className="h-10 w-10 md:h-14 md:w-14 rounded-full object-cover shadow-sm"
+            />
+            <span className="text-lg md:text-2xl font-bold text-gray-900">
+              Phuket Vibe Tours
+            </span>
           </button>
 
           <nav className="hidden md:flex items-center space-x-8">
