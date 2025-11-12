@@ -124,8 +124,10 @@ export function Lightbox({ images, startIndex = 0, isOpen, onClose }: LightboxPr
   };
 
   const handleBackdropClick = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    onClose();
+    if (e.target === e.currentTarget) {
+      e.stopPropagation();
+      onClose();
+    }
   };
 
   if (!isOpen || images.length === 0) return null;
@@ -139,28 +141,32 @@ export function Lightbox({ images, startIndex = 0, isOpen, onClose }: LightboxPr
       className="fixed inset-0 z-[100]"
     >
       <div
-        className="absolute inset-0 bg-black bg-opacity-95"
+        className="absolute inset-0 bg-black bg-opacity-95 flex items-center justify-center"
         onClick={handleBackdropClick}
-      />
-
-      <div className="relative z-10 w-full h-full flex items-center justify-center">
+      >
         <button
           ref={closeButtonRef}
-          onClick={onClose}
+          onClick={(e) => {
+            e.stopPropagation();
+            onClose();
+          }}
           aria-label="Close"
-          className="absolute top-4 right-4 bg-white/90 hover:bg-white rounded-full p-2 md:p-3 transition-all shadow-lg hover:shadow-xl"
+          className="absolute top-4 right-4 z-20 bg-white/90 hover:bg-white rounded-full p-2 md:p-3 transition-all shadow-lg hover:shadow-xl"
         >
           <X className="h-5 w-5 md:h-6 md:w-6 text-gray-900" />
         </button>
 
         {images.length > 1 && (
-          <div className="absolute top-4 left-4 bg-black/70 text-white px-3 md:px-4 py-1 md:py-2 rounded-full text-sm md:text-base font-medium pointer-events-none">
+          <div
+            className="absolute top-4 left-4 z-20 bg-black/70 text-white px-3 md:px-4 py-1 md:py-2 rounded-full text-sm md:text-base font-medium pointer-events-none"
+          >
             {currentIndex + 1} / {images.length}
           </div>
         )}
 
         <div
           className="relative flex items-center justify-center p-4 md:p-8 max-w-full max-h-full"
+          onClick={(e) => e.stopPropagation()}
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
