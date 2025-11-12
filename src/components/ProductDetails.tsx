@@ -141,10 +141,11 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
   };
 
   return (
-    <div
-      className="fixed inset-0 bg-black bg-opacity-50 z-50 overflow-y-auto"
-      onClick={onClose}
-    >
+    <>
+      <div
+        className="fixed inset-0 bg-black bg-opacity-50 z-50 overflow-y-auto"
+        onClick={onClose}
+      >
       <div className="min-h-screen px-4 py-8 flex items-center justify-center">
         <div
           className="bg-white rounded-2xl max-w-4xl w-full"
@@ -434,6 +435,7 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
           </div>
         </div>
       </div>
+      </div>
 
       <Lightbox
         images={images}
@@ -441,6 +443,6 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
         isOpen={isLightboxOpen}
         onClose={() => setIsLightboxOpen(false)}
       />
-    </div>
+    </>
   );
 }

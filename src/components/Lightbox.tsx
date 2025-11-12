@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { X, ChevronLeft, ChevronRight } from 'lucide-react';
 
 interface LightboxProps {
@@ -27,10 +28,14 @@ export function Lightbox({ images, startIndex = 0, isOpen, onClose }: LightboxPr
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
+        e.preventDefault();
+        e.stopPropagation();
         onClose();
       } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
         handlePrevious();
       } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
         handleNext();
       }
     };
@@ -82,8 +87,6 @@ export function Lightbox({ images, startIndex = 0, isOpen, onClose }: LightboxPr
     }
   }, [currentIndex, images, isOpen]);
 
-  if (!isOpen || images.length === 0) return null;
-
   const handlePrevious = (e?: React.MouseEvent) => {
     e?.stopPropagation();
     setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
@@ -120,11 +123,14 @@ export function Lightbox({ images, startIndex = 0, isOpen, onClose }: LightboxPr
     setTouchEnd(0);
   };
 
-  const handleBackdropClick = () => {
+  const handleBackdropClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
     onClose();
   };
 
-  return (
+  if (!isOpen || images.length === 0) return null;
+
+  const lightboxContent = (
     <div
       ref={overlayRef}
       role="dialog"
@@ -190,4 +196,6 @@ export function Lightbox({ images, startIndex = 0, isOpen, onClose }: LightboxPr
       </div>
     </div>
   );
+
+  return createPortal(lightboxContent, document.body);
 }
