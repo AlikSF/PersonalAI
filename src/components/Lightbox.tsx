@@ -120,10 +120,8 @@ export function Lightbox({ images, startIndex = 0, isOpen, onClose }: LightboxPr
     setTouchEnd(0);
   };
 
-  const handleBackdropClick = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
+  const handleBackdropClick = () => {
+    onClose();
   };
 
   return (
@@ -132,65 +130,63 @@ export function Lightbox({ images, startIndex = 0, isOpen, onClose }: LightboxPr
       role="dialog"
       aria-modal="true"
       aria-label="Image viewer"
-      className="fixed inset-0 z-[100] bg-black bg-opacity-95 flex items-center justify-center"
-      onClick={handleBackdropClick}
+      className="fixed inset-0 z-[100]"
     >
-      <button
-        ref={closeButtonRef}
-        onClick={(e) => {
-          e.stopPropagation();
-          onClose();
-        }}
-        aria-label="Close"
-        className="absolute top-4 right-4 z-10 bg-white/90 hover:bg-white rounded-full p-2 md:p-3 transition-all shadow-lg hover:shadow-xl"
-      >
-        <X className="h-5 w-5 md:h-6 md:w-6 text-gray-900" />
-      </button>
-
-      {images.length > 1 && (
-        <div
-          className="absolute top-4 left-4 z-10 bg-black/70 text-white px-3 md:px-4 py-1 md:py-2 rounded-full text-sm md:text-base font-medium"
-          onClick={(e) => e.stopPropagation()}
-        >
-          {currentIndex + 1} / {images.length}
-        </div>
-      )}
-
       <div
-        className="relative w-full h-full flex items-center justify-center p-4 md:p-8"
-        onClick={(e) => e.stopPropagation()}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-      >
-        <img
-          src={images[currentIndex]}
-          alt={`Image ${currentIndex + 1} of ${images.length}`}
-          className="max-w-full max-h-full object-contain select-none"
-          style={{ maxWidth: '100vw', maxHeight: '100vh' }}
-          draggable={false}
-          onClick={(e) => e.stopPropagation()}
-        />
+        className="absolute inset-0 bg-black bg-opacity-95"
+        onClick={handleBackdropClick}
+      />
+
+      <div className="relative z-10 w-full h-full flex items-center justify-center">
+        <button
+          ref={closeButtonRef}
+          onClick={onClose}
+          aria-label="Close"
+          className="absolute top-4 right-4 bg-white/90 hover:bg-white rounded-full p-2 md:p-3 transition-all shadow-lg hover:shadow-xl"
+        >
+          <X className="h-5 w-5 md:h-6 md:w-6 text-gray-900" />
+        </button>
 
         {images.length > 1 && (
-          <>
-            <button
-              onClick={handlePrevious}
-              aria-label="Previous image"
-              className="absolute left-2 md:left-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white rounded-full p-2 md:p-3 transition-all shadow-lg hover:shadow-xl active:scale-95"
-            >
-              <ChevronLeft className="h-6 w-6 md:h-8 md:w-8 text-gray-900" />
-            </button>
-
-            <button
-              onClick={handleNext}
-              aria-label="Next image"
-              className="absolute right-2 md:right-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white rounded-full p-2 md:p-3 transition-all shadow-lg hover:shadow-xl active:scale-95"
-            >
-              <ChevronRight className="h-6 w-6 md:h-8 md:w-8 text-gray-900" />
-            </button>
-          </>
+          <div className="absolute top-4 left-4 bg-black/70 text-white px-3 md:px-4 py-1 md:py-2 rounded-full text-sm md:text-base font-medium pointer-events-none">
+            {currentIndex + 1} / {images.length}
+          </div>
         )}
+
+        <div
+          className="relative flex items-center justify-center p-4 md:p-8 max-w-full max-h-full"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          <img
+            src={images[currentIndex]}
+            alt={`Image ${currentIndex + 1} of ${images.length}`}
+            className="max-w-full max-h-full object-contain select-none"
+            style={{ maxWidth: '100vw', maxHeight: '100vh' }}
+            draggable={false}
+          />
+
+          {images.length > 1 && (
+            <>
+              <button
+                onClick={handlePrevious}
+                aria-label="Previous image"
+                className="absolute left-2 md:left-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white rounded-full p-2 md:p-3 transition-all shadow-lg hover:shadow-xl active:scale-95"
+              >
+                <ChevronLeft className="h-6 w-6 md:h-8 md:w-8 text-gray-900" />
+              </button>
+
+              <button
+                onClick={handleNext}
+                aria-label="Next image"
+                className="absolute right-2 md:right-4 top-1/2 transform -translate-y-1/2 bg-white/90 hover:bg-white rounded-full p-2 md:p-3 transition-all shadow-lg hover:shadow-xl active:scale-95"
+              >
+                <ChevronRight className="h-6 w-6 md:h-8 md:w-8 text-gray-900" />
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
