@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { X, MapPin, Calendar, MessageCircle, User, ChevronLeft, ChevronRight, Minus, Plus } from 'lucide-react';
 import { Product, supabase } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
+import { Lightbox } from './Lightbox';
 
 interface ProductDetailsProps {
   product: Product | null;
@@ -14,6 +15,8 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
+  const [isLightboxOpen, setIsLightboxOpen] = useState(false);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
@@ -156,7 +159,11 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
             <img
               src={images[currentImageIndex]}
               alt={`${product.name} - ${currentImageIndex + 1}`}
-              className="w-full h-full object-cover rounded-t-2xl"
+              className="w-full h-full object-cover rounded-t-2xl cursor-pointer"
+              onClick={() => {
+                setLightboxIndex(currentImageIndex);
+                setIsLightboxOpen(true);
+              }}
             />
 
             {images.length > 1 && (
@@ -427,6 +434,13 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
           </div>
         </div>
       </div>
+
+      <Lightbox
+        images={images}
+        startIndex={lightboxIndex}
+        isOpen={isLightboxOpen}
+        onClose={() => setIsLightboxOpen(false)}
+      />
     </div>
   );
 }
