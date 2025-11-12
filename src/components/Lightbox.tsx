@@ -64,7 +64,7 @@ export function Lightbox({ images, startIndex = 0, isOpen, onClose }: LightboxPr
       document.removeEventListener('keydown', handleKeyDown);
       document.removeEventListener('keydown', handleFocusTrap);
     };
-  }, [isOpen, currentIndex, images.length]);
+  }, [isOpen, currentIndex, images.length, onClose]);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -84,11 +84,13 @@ export function Lightbox({ images, startIndex = 0, isOpen, onClose }: LightboxPr
 
   if (!isOpen || images.length === 0) return null;
 
-  const handlePrevious = () => {
+  const handlePrevious = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
     setCurrentIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   };
 
-  const handleNext = () => {
+  const handleNext = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
     setCurrentIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
 
@@ -135,7 +137,10 @@ export function Lightbox({ images, startIndex = 0, isOpen, onClose }: LightboxPr
     >
       <button
         ref={closeButtonRef}
-        onClick={onClose}
+        onClick={(e) => {
+          e.stopPropagation();
+          onClose();
+        }}
         aria-label="Close"
         className="absolute top-4 right-4 z-10 bg-white/90 hover:bg-white rounded-full p-2 md:p-3 transition-all shadow-lg hover:shadow-xl"
       >
@@ -143,13 +148,17 @@ export function Lightbox({ images, startIndex = 0, isOpen, onClose }: LightboxPr
       </button>
 
       {images.length > 1 && (
-        <div className="absolute top-4 left-4 z-10 bg-black/70 text-white px-3 md:px-4 py-1 md:py-2 rounded-full text-sm md:text-base font-medium">
+        <div
+          className="absolute top-4 left-4 z-10 bg-black/70 text-white px-3 md:px-4 py-1 md:py-2 rounded-full text-sm md:text-base font-medium"
+          onClick={(e) => e.stopPropagation()}
+        >
           {currentIndex + 1} / {images.length}
         </div>
       )}
 
       <div
         className="relative w-full h-full flex items-center justify-center p-4 md:p-8"
+        onClick={(e) => e.stopPropagation()}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
@@ -160,6 +169,7 @@ export function Lightbox({ images, startIndex = 0, isOpen, onClose }: LightboxPr
           className="max-w-full max-h-full object-contain select-none"
           style={{ maxWidth: '100vw', maxHeight: '100vh' }}
           draggable={false}
+          onClick={(e) => e.stopPropagation()}
         />
 
         {images.length > 1 && (
