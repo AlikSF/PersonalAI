@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Product } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
-import { getDisplayName, getDisplayLocation, getDisplayFeatures } from '../lib/productHelpers';
+import { getDisplayName, getDisplayLocation, getDisplayFeatures, getDisplayCategory } from '../lib/productHelpers';
 
 interface ProductCardProps {
   product: Product;
@@ -100,7 +100,7 @@ export function ProductCard({ product, onViewDetails }: ProductCardProps) {
         )}
 
         <div className="absolute top-2 right-2 md:top-4 md:right-4 bg-white px-2 py-1 md:px-3 rounded-full text-xs md:text-sm font-semibold text-gray-700">
-          {t(`category.${product.category}`) !== `category.${product.category}` ? t(`category.${product.category}`) : product.category}
+          {getDisplayCategory(product, language, t)}
         </div>
       </div>
 

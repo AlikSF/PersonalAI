@@ -20,6 +20,7 @@ export function AdminPanel() {
     description_en: '',
     location_en: '',
     features_en: '',
+    category_en: '',
   });
 
   useEffect(() => {
@@ -57,6 +58,7 @@ export function AdminPanel() {
       description_en: formData.description_en || null,
       location_en: formData.location_en || null,
       features_en: featuresEnArray && featuresEnArray.length > 0 ? featuresEnArray : null,
+      category_en: formData.category_en || null,
     };
 
     if (editingProduct) {
@@ -104,6 +106,7 @@ export function AdminPanel() {
       description_en: product.description_en || '',
       location_en: product.location_en || '',
       features_en: product.features_en ? product.features_en.join(', ') : '',
+      category_en: product.category_en || '',
     });
     setIsFormOpen(true);
   };
@@ -138,6 +141,7 @@ export function AdminPanel() {
       description_en: '',
       location_en: '',
       features_en: '',
+      category_en: '',
     });
     setEditingProduct(null);
     setIsFormOpen(false);
@@ -370,6 +374,19 @@ export function AdminPanel() {
                         value={formData.location_en}
                         onChange={(e) => setFormData({ ...formData, location_en: e.target.value })}
                         placeholder="Optional English location"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Category - English
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.category_en}
+                        onChange={(e) => setFormData({ ...formData, category_en: e.target.value })}
+                        placeholder="Optional English category (e.g., Transfer, Islands, Safari)"
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                       />
                     </div>

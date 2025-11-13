@@ -3,7 +3,7 @@ import { X, MapPin, Calendar, MessageCircle, User, ChevronLeft, ChevronRight, Mi
 import { Product, supabase } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Lightbox } from './Lightbox';
-import { getDisplayName, getDisplayDescription, getDisplayLocation, getDisplayFeatures } from '../lib/productHelpers';
+import { getDisplayName, getDisplayDescription, getDisplayLocation, getDisplayFeatures, getDisplayCategory } from '../lib/productHelpers';
 
 interface ProductDetailsProps {
   product: Product | null;
@@ -227,7 +227,7 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
               </div>
               <div className="flex items-center space-x-1 md:space-x-2">
                 <Calendar className="h-4 w-4 md:h-5 md:w-5" />
-                <span>{t(`category.${product.category}`) !== `category.${product.category}` ? t(`category.${product.category}`) : product.category}</span>
+                <span>{getDisplayCategory(product, language, t)}</span>
               </div>
             </div>
 
