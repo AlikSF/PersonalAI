@@ -16,6 +16,10 @@ export function AdminPanel() {
     capacity: '',
     features: '',
     images: '',
+    name_en: '',
+    description_en: '',
+    location_en: '',
+    features_en: '',
   });
 
   useEffect(() => {
@@ -35,6 +39,7 @@ export function AdminPanel() {
     setLoading(true);
 
     const featuresArray = formData.features.split(',').map(f => f.trim()).filter(f => f);
+    const featuresEnArray = formData.features_en ? formData.features_en.split(',').map(f => f.trim()).filter(f => f) : null;
     const imagesArray = formData.images.split('\n').map(i => i.trim()).filter(i => i);
 
     const productData = {
@@ -48,6 +53,10 @@ export function AdminPanel() {
       images: imagesArray,
       image_url: imagesArray[0] || '',
       is_active: true,
+      name_en: formData.name_en || null,
+      description_en: formData.description_en || null,
+      location_en: formData.location_en || null,
+      features_en: featuresEnArray && featuresEnArray.length > 0 ? featuresEnArray : null,
     };
 
     if (editingProduct) {
@@ -91,6 +100,10 @@ export function AdminPanel() {
       capacity: product.capacity?.toString() || '',
       features: product.features.join(', '),
       images: product.images?.join('\n') || product.image_url,
+      name_en: product.name_en || '',
+      description_en: product.description_en || '',
+      location_en: product.location_en || '',
+      features_en: product.features_en ? product.features_en.join(', ') : '',
     });
     setIsFormOpen(true);
   };
@@ -121,6 +134,10 @@ export function AdminPanel() {
       capacity: '',
       features: '',
       images: '',
+      name_en: '',
+      description_en: '',
+      location_en: '',
+      features_en: '',
     });
     setEditingProduct(null);
     setIsFormOpen(false);
@@ -301,16 +318,75 @@ export function AdminPanel() {
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Features (comma-separated)
+                    Features (comma-separated) - Russian
                   </label>
                   <input
                     type="text"
                     required
                     value={formData.features}
                     onChange={(e) => setFormData({ ...formData, features: e.target.value })}
-                    placeholder="WiFi, Pool, Garden, Parking"
+                    placeholder="WiFi, Бассейн, Сад, Парковка"
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                   />
+                </div>
+
+                <div className="border-t pt-4">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-3">English Translations (Optional)</h3>
+                  <p className="text-sm text-gray-600 mb-4">Leave empty to use Russian values as fallback</p>
+
+                  <div className="space-y-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Product Name - English
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.name_en}
+                        onChange={(e) => setFormData({ ...formData, name_en: e.target.value })}
+                        placeholder="Optional English name"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Description - English
+                      </label>
+                      <textarea
+                        rows={3}
+                        value={formData.description_en}
+                        onChange={(e) => setFormData({ ...formData, description_en: e.target.value })}
+                        placeholder="Optional English description"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Location - English
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.location_en}
+                        onChange={(e) => setFormData({ ...formData, location_en: e.target.value })}
+                        placeholder="Optional English location"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Features - English (comma-separated)
+                      </label>
+                      <input
+                        type="text"
+                        value={formData.features_en}
+                        onChange={(e) => setFormData({ ...formData, features_en: e.target.value })}
+                        placeholder="WiFi, Pool, Garden, Parking"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      />
+                    </div>
+                  </div>
                 </div>
 
                 <div>
