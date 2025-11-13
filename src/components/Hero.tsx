@@ -19,17 +19,17 @@ export function Hero() {
         className="absolute inset-0 w-full h-full object-cover"
       />
 
-      <div className="relative z-20 h-full flex items-center -mt-12 md:-mt-16">
+      <div className="relative z-20 h-full flex items-center -mt-20 md:-mt-32">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="max-w-3xl">
-            <h1 className="text-3xl sm:text-4xl md:text-7xl font-bold text-white mb-4 md:mb-6 leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-7xl font-bold text-white mb-6 md:mb-10 leading-tight">
               {t('hero.title')}
             </h1>
-            <p className="text-base sm:text-lg md:text-2xl text-gray-200 mb-6 md:mb-8 leading-relaxed">
+            <p className="text-base sm:text-lg md:text-2xl text-gray-200 mb-8 md:mb-12 leading-relaxed">
               {t('hero.subtitle')}
             </p>
 
-            <div className="mb-6 md:mb-10">
+            <div className="mb-8 md:mb-12">
               <div className="inline-flex items-center bg-white/10 backdrop-blur-sm border border-white/20 rounded-full px-4 py-2 text-white">
                 <Star className="h-5 w-5 fill-yellow-400 text-yellow-400 mr-1" />
                 <span className="font-bold text-lg mr-2">4.9</span>
