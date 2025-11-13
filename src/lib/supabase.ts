@@ -28,6 +28,7 @@ export interface Product {
   location_en?: string | null;
   features_en?: string[] | null;
   category_en?: string | null;
+  priority?: number | null;
 }
 
 export interface Booking {

@@ -59,6 +59,7 @@ function AppContent() {
       .from('products')
       .select('*')
       .eq('is_active', true)
+      .order('priority', { ascending: true, nullsLast: true })
       .order('created_at', { ascending: false });
 
     if (!error && data) {

@@ -99,8 +99,15 @@ export function ProductCard({ product, onViewDetails }: ProductCardProps) {
           </>
         )}
 
-        <div className="absolute top-2 right-2 md:top-4 md:right-4 bg-white px-2 py-1 md:px-3 rounded-full text-xs md:text-sm font-semibold text-gray-700">
-          {getDisplayCategory(product, language, t)}
+        <div className="absolute top-2 left-2 right-2 md:top-4 md:left-4 md:right-4 flex items-start justify-between gap-2">
+          {product.priority !== null && product.priority !== undefined && product.priority <= 3 && (
+            <span className="px-2 py-1 md:px-3 rounded-full text-xs md:text-sm font-semibold bg-red-500 text-white shadow-md">
+              🔥 HOT
+            </span>
+          )}
+          <span className="px-2 py-1 md:px-3 rounded-full text-xs md:text-sm font-semibold bg-white text-gray-700 ml-auto">
+            {getDisplayCategory(product, language, t)}
+          </span>
         </div>
       </div>
 
