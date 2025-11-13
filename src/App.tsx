@@ -10,7 +10,7 @@ import { ContactForm } from './components/ContactForm';
 import { AdminPanel } from './components/AdminPanel';
 import { Footer } from './components/Footer';
 import { Product, supabase } from './lib/supabase';
-import { Loader2, Search, MessageCircle } from 'lucide-react';
+import { Loader2, Search, MessageCircle, X } from 'lucide-react';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 
 function AppContent() {
@@ -96,6 +96,15 @@ function AppContent() {
     setSelectedProduct(null);
   };
 
+  const handleClearSearch = () => {
+    setSearchQuery('');
+    // Remove focus to close keyboard on mobile
+    const searchInput = document.querySelector('input[type="search"]') as HTMLInputElement;
+    if (searchInput) {
+      searchInput.blur();
+    }
+  };
+
 
   if (currentPage === 'admin') {
     return <AdminPanel />;
@@ -126,14 +135,26 @@ function AppContent() {
         <div className="mb-8 md:mb-12">
           <div className="max-w-2xl mx-auto mb-6 md:mb-8">
             <div className="relative">
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 md:h-5 md:w-5 text-gray-400" />
+              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 h-4 w-4 md:h-5 md:w-5 text-gray-400 pointer-events-none" />
               <input
-                type="text"
+                type="search"
+                enterKeyHint="search"
+                inputMode="search"
                 placeholder={t('products.filter.all')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-10 md:pl-12 pr-4 py-3 md:py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent text-gray-900 text-sm md:text-base"
+                className="w-full pl-10 md:pl-12 pr-10 md:pr-12 py-3 md:py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:outline-none text-gray-900 text-base md:text-lg"
               />
+              {searchQuery && (
+                <button
+                  onClick={handleClearSearch}
+                  className="absolute right-3 md:right-4 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors p-1"
+                  aria-label="Clear search"
+                  type="button"
+                >
+                  <X className="h-4 w-4 md:h-5 md:w-5" />
+                </button>
+              )}
             </div>
           </div>
 
