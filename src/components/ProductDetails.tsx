@@ -73,27 +73,57 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
     const displayName = getDisplayName(product, language);
     const displayLocation = getDisplayLocation(product, language);
 
-    const telegramMessage =
-      `🎯 ЗАПРОС НА БРОНИРОВАНИЕ ТУРА\n\n` +
-      `👤 Клиент: ${name}\n` +
-      `📞 Телефон: ${phone}\n` +
-      `🎯 Тур: ${displayName}\n` +
-      `📍 Местоположение: ${displayLocation}\n\n` +
-      `📅 Дата тура: ${new Date(tourDate).toLocaleDateString()}\n` +
-      `👥 Взрослых: ${adults}\n` +
-      `👶 Детей: ${children}\n\n` +
-      `💰 Цена: ฿${totalPrice.toFixed(2)}`;
+    // Build message based on current language
+    let telegramMessage: string;
+    let whatsappMessage: string;
 
-    const whatsappMessage =
-      `ЗАПРОС НА БРОНИРОВАНИЕ ТУРА\n\n` +
-      `Клиент: ${name}\n` +
-      `Телефон: ${phone}\n` +
-      `Тур: ${displayName}\n` +
-      `Местоположение: ${displayLocation}\n\n` +
-      `Дата тура: ${new Date(tourDate).toLocaleDateString()}\n` +
-      `Взрослых: ${adults}\n` +
-      `Детей: ${children}\n\n` +
-      `Цена: ฿${totalPrice.toFixed(2)}`;
+    if (language === 'en') {
+      // English message templates
+      telegramMessage =
+        `🎯 TOUR BOOKING REQUEST\n\n` +
+        `👤 Client: ${name}\n` +
+        `📞 Phone: ${phone}\n` +
+        `🎯 Tour: ${displayName}\n` +
+        `📍 Location: ${displayLocation}\n\n` +
+        `📅 Tour date: ${new Date(tourDate).toLocaleDateString()}\n` +
+        `👥 Adults: ${adults}\n` +
+        `👶 Children: ${children}\n\n` +
+        `💰 Price: ฿${totalPrice.toFixed(2)}`;
+
+      whatsappMessage =
+        `TOUR BOOKING REQUEST\n\n` +
+        `Client: ${name}\n` +
+        `Phone: ${phone}\n` +
+        `Tour: ${displayName}\n` +
+        `Location: ${displayLocation}\n\n` +
+        `Tour date: ${new Date(tourDate).toLocaleDateString()}\n` +
+        `Adults: ${adults}\n` +
+        `Children: ${children}\n\n` +
+        `Price: ฿${totalPrice.toFixed(2)}`;
+    } else {
+      // Russian message templates (default)
+      telegramMessage =
+        `🎯 ЗАПРОС НА БРОНИРОВАНИЕ ТУРА\n\n` +
+        `👤 Клиент: ${name}\n` +
+        `📞 Телефон: ${phone}\n` +
+        `🎯 Тур: ${displayName}\n` +
+        `📍 Местоположение: ${displayLocation}\n\n` +
+        `📅 Дата тура: ${new Date(tourDate).toLocaleDateString()}\n` +
+        `👥 Взрослых: ${adults}\n` +
+        `👶 Детей: ${children}\n\n` +
+        `💰 Цена: ฿${totalPrice.toFixed(2)}`;
+
+      whatsappMessage =
+        `ЗАПРОС НА БРОНИРОВАНИЕ ТУРА\n\n` +
+        `Клиент: ${name}\n` +
+        `Телефон: ${phone}\n` +
+        `Тур: ${displayName}\n` +
+        `Местоположение: ${displayLocation}\n\n` +
+        `Дата тура: ${new Date(tourDate).toLocaleDateString()}\n` +
+        `Взрослых: ${adults}\n` +
+        `Детей: ${children}\n\n` +
+        `Цена: ฿${totalPrice.toFixed(2)}`;
+    }
 
     if (platform === 'telegram') {
       const telegramUsername = import.meta.env.VITE_TELEGRAM_USERNAME || 'yourusername';

@@ -4,7 +4,7 @@ import { supabase } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
 
 export function ContactForm() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -28,12 +28,26 @@ export function ContactForm() {
 
       if (error) throw error;
 
-      const message =
-        `📬 НОВОЕ КОНТАКТНОЕ СООБЩЕНИЕ\n\n` +
-        `👤 Имя: ${formData.name}\n` +
-        `📧 Email: ${formData.email}\n` +
-        `📱 Телефон: ${formData.phone}\n\n` +
-        `💬 Сообщение:\n${formData.message}`;
+      // Build message based on current language
+      let message: string;
+
+      if (language === 'en') {
+        // English message template
+        message =
+          `📬 NEW CONTACT MESSAGE\n\n` +
+          `👤 Name: ${formData.name}\n` +
+          `📧 Email: ${formData.email}\n` +
+          `📱 Phone: ${formData.phone}\n\n` +
+          `💬 Message:\n${formData.message}`;
+      } else {
+        // Russian message template (default)
+        message =
+          `📬 НОВОЕ КОНТАКТНОЕ СООБЩЕНИЕ\n\n` +
+          `👤 Имя: ${formData.name}\n` +
+          `📧 Email: ${formData.email}\n` +
+          `📱 Телефон: ${formData.phone}\n\n` +
+          `💬 Сообщение:\n${formData.message}`;
+      }
 
       if (platform === 'telegram') {
         const telegramUsername = import.meta.env.VITE_TELEGRAM_USERNAME || 'yourusername';
