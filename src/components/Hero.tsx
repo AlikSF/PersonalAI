@@ -39,7 +39,7 @@ export function Hero() {
 
             <button
               onClick={scrollToRentals}
-              className="bg-blue-600 text-white px-6 md:px-10 py-3 md:py-4 rounded-lg text-base md:text-lg font-semibold hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105 w-full sm:w-auto"
+              className="bg-blue-600 text-white px-6 md:px-10 py-3 md:py-4 rounded-lg text-base md:text-lg font-semibold hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105 w-full sm:w-auto animate-micro-bounce-once"
             >
               {t('hero.cta')}
             </button>
