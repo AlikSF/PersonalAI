@@ -176,7 +176,7 @@ export function ContactForm() {
 
         <div className="mt-12 md:mt-16 text-center">
           <h3 className="text-lg md:text-xl font-bold text-gray-900 mb-6">
-            Мы в соцсетях
+            {t('contact.socialMedia')}
           </h3>
           <div className="flex items-center justify-center gap-4">
             <a
