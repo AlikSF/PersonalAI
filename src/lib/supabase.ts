@@ -57,3 +57,18 @@ export interface ContactMessage {
   telegram_sent?: boolean;
   created_at?: string;
 }
+
+export interface CompanyInfo {
+  id: number;
+  name: string;
+  address: string;
+  license_info: string;
+  insurance_info: string;
+  payment_info: string;
+  address_en?: string | null;
+  license_info_en?: string | null;
+  insurance_info_en?: string | null;
+  payment_info_en?: string | null;
+  created_at: string;
+  updated_at: string;
+}

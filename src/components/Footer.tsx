@@ -1,17 +1,10 @@
 import { useState, useEffect } from 'react';
 import { MapPin, Shield, CreditCard, FileText } from 'lucide-react';
-import { supabase } from '../lib/supabase';
-
-interface CompanyInfo {
-  id: number;
-  name: string;
-  address: string;
-  license_info: string;
-  insurance_info: string;
-  payment_info: string;
-}
+import { supabase, CompanyInfo } from '../lib/supabase';
+import { useLanguage } from '../contexts/LanguageContext';
 
 export function Footer() {
+  const { language } = useLanguage();
   const [companyInfo, setCompanyInfo] = useState<CompanyInfo | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -49,6 +42,28 @@ export function Footer() {
     return null;
   }
 
+  // Helper function to get display value with fallback
+  const getDisplayValue = (russianValue: string, englishValue?: string | null): string => {
+    if (language === 'en' && englishValue?.trim()) {
+      return englishValue.trim();
+    }
+    return russianValue;
+  };
+
+  // Get display values based on language
+  const displayAddress = getDisplayValue(companyInfo.address, companyInfo.address_en);
+  const displayLicenseInfo = getDisplayValue(companyInfo.license_info, companyInfo.license_info_en);
+  const displayInsuranceInfo = getDisplayValue(companyInfo.insurance_info, companyInfo.insurance_info_en);
+  const displayPaymentInfo = getDisplayValue(companyInfo.payment_info, companyInfo.payment_info_en);
+
+  // Translations for section headings
+  const licensesHeading = language === 'en' ? 'Licenses & Documents' : 'Лицензии и документы';
+  const insuranceHeading = language === 'en' ? 'Insurance' : 'Страхование';
+  const paymentHeading = language === 'en' ? 'Payment Methods' : 'Способы оплаты';
+  const rightsText = language === 'en'
+    ? 'All rights reserved.'
+    : 'Все права защищены.';
+
   return (
     <footer className="bg-gray-900 text-white py-12 mt-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -57,7 +72,7 @@ export function Footer() {
             <h3 className="text-2xl font-bold mb-4">{companyInfo.name}</h3>
             <div className="flex items-start space-x-2 text-gray-300">
               <MapPin className="h-5 w-5 flex-shrink-0 mt-0.5" />
-              <p className="text-sm leading-relaxed">{companyInfo.address}</p>
+              <p className="text-sm leading-relaxed">{displayAddress}</p>
             </div>
           </div>
 
@@ -65,8 +80,8 @@ export function Footer() {
             <div className="flex items-start space-x-2 mb-4">
               <FileText className="h-5 w-5 flex-shrink-0 mt-0.5 text-blue-400" />
               <div>
-                <h4 className="font-semibold mb-1">Лицензии и документы</h4>
-                <p className="text-sm text-gray-300 whitespace-pre-line">{companyInfo.license_info}</p>
+                <h4 className="font-semibold mb-1">{licensesHeading}</h4>
+                <p className="text-sm text-gray-300 whitespace-pre-line">{displayLicenseInfo}</p>
               </div>
             </div>
           </div>
@@ -75,8 +90,8 @@ export function Footer() {
             <div className="flex items-start space-x-2 mb-4">
               <Shield className="h-5 w-5 flex-shrink-0 mt-0.5 text-green-400" />
               <div>
-                <h4 className="font-semibold mb-1">Страхование</h4>
-                <p className="text-sm text-gray-300 whitespace-pre-line">{companyInfo.insurance_info}</p>
+                <h4 className="font-semibold mb-1">{insuranceHeading}</h4>
+                <p className="text-sm text-gray-300 whitespace-pre-line">{displayInsuranceInfo}</p>
               </div>
             </div>
           </div>
@@ -85,8 +100,8 @@ export function Footer() {
             <div className="flex items-start space-x-2 mb-4">
               <CreditCard className="h-5 w-5 flex-shrink-0 mt-0.5 text-yellow-400" />
               <div>
-                <h4 className="font-semibold mb-1">Способы оплаты</h4>
-                <p className="text-sm text-gray-300 whitespace-pre-line">{companyInfo.payment_info}</p>
+                <h4 className="font-semibold mb-1">{paymentHeading}</h4>
+                <p className="text-sm text-gray-300 whitespace-pre-line">{displayPaymentInfo}</p>
                 <div className="flex items-center gap-2 mt-4">
                   <div className="bg-white rounded px-2 py-1 flex items-center justify-center">
                     <img src="/VISA logo.png" alt="VISA" className="h-4 w-auto" />
@@ -102,7 +117,7 @@ export function Footer() {
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center">
           <p className="text-sm text-gray-400">
-            &copy; {new Date().getFullYear()} {companyInfo.name}. Все права защищены.
+            &copy; {new Date().getFullYear()} {companyInfo.name}. {rightsText}
           </p>
         </div>
       </div>
