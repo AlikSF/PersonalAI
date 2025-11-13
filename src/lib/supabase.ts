@@ -23,6 +23,10 @@ export interface Product {
   is_active: boolean;
   created_at: string;
   updated_at: string;
+  name_en?: string | null;
+  description_en?: string | null;
+  location_en?: string | null;
+  features_en?: string[] | null;
 }
 
 export interface Booking {

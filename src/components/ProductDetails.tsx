@@ -3,6 +3,7 @@ import { X, MapPin, Calendar, MessageCircle, User, ChevronLeft, ChevronRight, Mi
 import { Product, supabase } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Lightbox } from './Lightbox';
+import { getDisplayName, getDisplayDescription, getDisplayLocation, getDisplayFeatures } from '../lib/productHelpers';
 
 interface ProductDetailsProps {
   product: Product | null;
@@ -10,7 +11,7 @@ interface ProductDetailsProps {
 }
 
 export function ProductDetails({ product, onClose }: ProductDetailsProps) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [showBookingForm, setShowBookingForm] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
@@ -69,12 +70,15 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
       console.error('Failed to save booking:', err);
     }
 
+    const displayName = getDisplayName(product, language);
+    const displayLocation = getDisplayLocation(product, language);
+
     const telegramMessage =
       `🎯 ЗАПРОС НА БРОНИРОВАНИЕ ТУРА\n\n` +
       `👤 Клиент: ${name}\n` +
       `📞 Телефон: ${phone}\n` +
-      `🎯 Тур: ${product.name}\n` +
-      `📍 Местоположение: ${product.location}\n\n` +
+      `🎯 Тур: ${displayName}\n` +
+      `📍 Местоположение: ${displayLocation}\n\n` +
       `📅 Дата тура: ${new Date(tourDate).toLocaleDateString()}\n` +
       `👥 Взрослых: ${adults}\n` +
       `👶 Детей: ${children}\n\n` +
@@ -84,8 +88,8 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
       `ЗАПРОС НА БРОНИРОВАНИЕ ТУРА\n\n` +
       `Клиент: ${name}\n` +
       `Телефон: ${phone}\n` +
-      `Тур: ${product.name}\n` +
-      `Местоположение: ${product.location}\n\n` +
+      `Тур: ${displayName}\n` +
+      `Местоположение: ${displayLocation}\n\n` +
       `Дата тура: ${new Date(tourDate).toLocaleDateString()}\n` +
       `Взрослых: ${adults}\n` +
       `Детей: ${children}\n\n` +
@@ -159,7 +163,7 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
           >
             <img
               src={images[currentImageIndex]}
-              alt={`${product.name} - ${currentImageIndex + 1}`}
+              alt={`${getDisplayName(product, language)} - ${currentImageIndex + 1}`}
               className="w-full h-full object-cover rounded-t-2xl cursor-pointer"
               onClick={() => {
                 setLightboxIndex(currentImageIndex);
@@ -213,13 +217,13 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
           <div className="p-4 md:p-8">
             <div className="mb-4 md:mb-6">
             <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-3 md:mb-4">
-              {product.name}
+              {getDisplayName(product, language)}
             </h1>
 
             <div className="flex flex-wrap gap-3 md:gap-4 text-gray-600 mb-4 md:mb-6 text-sm md:text-base">
               <div className="flex items-center space-x-1 md:space-x-2">
                 <MapPin className="h-4 w-4 md:h-5 md:w-5" />
-                <span>{product.location}</span>
+                <span>{getDisplayLocation(product, language)}</span>
               </div>
               <div className="flex items-center space-x-1 md:space-x-2">
                 <Calendar className="h-4 w-4 md:h-5 md:w-5" />
@@ -229,15 +233,15 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
 
             <div className="prose max-w-none mb-6 md:mb-8">
               <div className="text-gray-700 text-sm md:text-base leading-relaxed whitespace-pre-line">
-                {product.description}
+                {getDisplayDescription(product, language)}
               </div>
             </div>
 
-            {product.features && product.features.length > 0 && (
+            {getDisplayFeatures(product, language).length > 0 && (
               <div className="mb-6 md:mb-8">
                 <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-3 md:mb-4">{t('products.features')}</h3>
                 <div className="flex flex-wrap gap-2">
-                  {product.features.map((feature, index) => (
+                  {getDisplayFeatures(product, language).map((feature, index) => (
                     <span
                       key={index}
                       className="px-3 md:px-4 py-1 md:py-2 bg-blue-50 text-blue-700 rounded-full text-xs md:text-sm font-medium border border-blue-200"

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Product } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
+import { getDisplayName, getDisplayLocation, getDisplayFeatures } from '../lib/productHelpers';
 
 interface ProductCardProps {
   product: Product;
@@ -9,7 +10,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, onViewDetails }: ProductCardProps) {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
@@ -66,7 +67,7 @@ export function ProductCard({ product, onViewDetails }: ProductCardProps) {
       >
         <img
           src={images[currentImageIndex]}
-          alt={`${product.name} - ${currentImageIndex + 1}`}
+          alt={`${getDisplayName(product, language)} - ${currentImageIndex + 1}`}
           className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
         />
 
@@ -105,16 +106,16 @@ export function ProductCard({ product, onViewDetails }: ProductCardProps) {
 
       <div className="p-3 md:p-5 flex flex-col flex-grow">
         <h3 className="text-sm md:text-lg font-bold text-gray-900 mb-1 md:mb-2 group-hover:text-blue-600 transition line-clamp-2">
-          {product.name}
+          {getDisplayName(product, language)}
         </h3>
 
         <div className="flex items-center text-gray-600 text-xs md:text-sm mb-2 md:mb-3">
           <MapPin className="h-3 w-3 md:h-4 md:w-4 flex-shrink-0" />
-          <span className="truncate ml-1">{product.location}</span>
+          <span className="truncate ml-1">{getDisplayLocation(product, language)}</span>
         </div>
 
         <div className="flex flex-wrap gap-1 md:gap-2 mb-3 md:mb-4">
-          {product.features.slice(0, 2).map((feature, index) => (
+          {getDisplayFeatures(product, language).slice(0, 2).map((feature, index) => (
             <span
               key={index}
               className="bg-blue-50 text-blue-700 text-[10px] md:text-xs px-2 py-0.5 md:px-2 md:py-1 rounded-full"
