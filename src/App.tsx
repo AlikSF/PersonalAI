@@ -9,8 +9,9 @@ import { Testimonials } from './components/Testimonials';
 import { ContactForm } from './components/ContactForm';
 import { AdminPanel } from './components/AdminPanel';
 import { Footer } from './components/Footer';
+import { FloatingWhatsAppButton } from './components/FloatingWhatsAppButton';
 import { Product, supabase } from './lib/supabase';
-import { Loader2, Search, MessageCircle, X } from 'lucide-react';
+import { Loader2, Search, X } from 'lucide-react';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 
 function AppContent() {
@@ -228,13 +229,7 @@ function AppContent() {
 
       <Footer />
 
-      <button
-        onClick={scrollToContact}
-        className="fixed bottom-6 right-6 md:bottom-8 md:right-8 bg-blue-600 text-white p-4 rounded-full shadow-lg hover:bg-blue-700 transition-all hover:scale-110 z-40 md:hidden"
-        aria-label="Contact us"
-      >
-        <MessageCircle className="h-6 w-6" />
-      </button>
+      <FloatingWhatsAppButton />
 
       {showProductDetails && (
         <ProductDetails
