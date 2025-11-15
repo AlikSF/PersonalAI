@@ -479,10 +479,9 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
         onClose={() => setIsLightboxOpen(false)}
       />
 
-      <FloatingWhatsAppButton
-        productName={getDisplayName(product, language)}
-        hideInModal={showBookingForm}
-      />
+      {!showBookingForm && (
+        <FloatingWhatsAppButton productName={getDisplayName(product, language)} />
+      )}
     </>
   );
 }
