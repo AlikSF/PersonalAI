@@ -39,7 +39,7 @@ export function FloatingWhatsAppButton({ productName }: FloatingWhatsAppButtonPr
       title="WhatsApp"
     >
       <img
-        src="/whatsapp-icon.png"
+        src="/logo new.jpg"
         alt="WhatsApp"
         className="w-14 h-14 md:w-16 md:h-16 rounded-full"
       />
