@@ -1,4 +1,3 @@
-import { MessageCircle } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface FloatingWhatsAppButtonProps {
@@ -14,15 +13,15 @@ export function FloatingWhatsAppButton({ productName }: FloatingWhatsAppButtonPr
 
     if (productName) {
       if (language === 'ru') {
-        message = `Здравствуйте! Хочу узнать доступность и подробности тура «${productName}». Есть ли свободные места на ближайшие даты?`;
+        message = `Здравствуйте! Хочу узнать доступность тура «${productName}».`;
       } else {
-        message = `Hello! I would like to check the availability and details for the «${productName}» tour. Are there any spots available in the coming days?`;
+        message = `Hello! I would like to check availability for the «${productName}» tour.`;
       }
     } else {
       if (language === 'ru') {
-        message = 'Здравствуйте! Я хочу узнать подробнее о доступных турах в Пхукете и ближайших свободных датах. Подскажите, пожалуйста?';
+        message = 'Здравствуйте! Я хочу узнать подробнее о доступных турах в Пхукете.';
       } else {
-        message = 'Hello! I would like to get more information about the available tours in Phuket and the nearest available dates. Could you please assist me?';
+        message = 'Hello! I would like to get more information about available tours in Phuket.';
       }
     }
 
@@ -34,11 +33,16 @@ export function FloatingWhatsAppButton({ productName }: FloatingWhatsAppButtonPr
   return (
     <button
       onClick={handleClick}
-      className="fixed bottom-6 right-6 md:bottom-8 md:right-8 bg-green-500 text-white p-4 rounded-full shadow-lg hover:bg-green-600 transition-all hover:scale-110 z-40"
+      className="fixed bottom-6 right-6 md:bottom-8 md:right-8 bg-transparent p-0 rounded-full shadow-lg hover:scale-110 transition-all"
+      style={{ zIndex: 9999 }}
       aria-label="WhatsApp"
       title="WhatsApp"
     >
-      <MessageCircle className="h-6 w-6" />
+      <img
+        src="/whatsapp-icon.png"
+        alt="WhatsApp"
+        className="w-14 h-14 md:w-16 md:h-16 rounded-full"
+      />
     </button>
   );
 }
