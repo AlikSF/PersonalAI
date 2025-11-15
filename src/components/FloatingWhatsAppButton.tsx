@@ -2,9 +2,10 @@ import { useLanguage } from '../contexts/LanguageContext';
 
 interface FloatingWhatsAppButtonProps {
   productName?: string;
+  hideInModal?: boolean;
 }
 
-export function FloatingWhatsAppButton({ productName }: FloatingWhatsAppButtonProps) {
+export function FloatingWhatsAppButton({ productName, hideInModal = false }: FloatingWhatsAppButtonProps) {
   const { language } = useLanguage();
   const whatsappNumber = '33788603290';
 
@@ -29,6 +30,10 @@ export function FloatingWhatsAppButton({ productName }: FloatingWhatsAppButtonPr
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
     window.open(whatsappUrl, '_blank');
   };
+
+  if (hideInModal) {
+    return null;
+  }
 
   return (
     <button
