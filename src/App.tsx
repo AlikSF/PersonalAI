@@ -229,7 +229,7 @@ function AppContent() {
 
       <Footer />
 
-      <FloatingWhatsAppButton />
+      {!showProductDetails && <FloatingWhatsAppButton />}
 
       {showProductDetails && (
         <ProductDetails
