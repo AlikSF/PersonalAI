@@ -1,29 +1,13 @@
 import { useLanguage } from '../contexts/LanguageContext';
 
-interface FloatingWhatsAppButtonProps {
-  productName?: string;
-}
-
-export function FloatingWhatsAppButton({ productName }: FloatingWhatsAppButtonProps) {
+export function FloatingWhatsAppButton() {
   const { language } = useLanguage();
   const whatsappNumber = '33788603290';
 
   const handleClick = () => {
-    let message: string;
-
-    if (productName) {
-      if (language === 'ru') {
-        message = `Здравствуйте! Хочу узнать доступность тура «${productName}».`;
-      } else {
-        message = `Hello! I would like to check availability for the «${productName}» tour.`;
-      }
-    } else {
-      if (language === 'ru') {
-        message = 'Здравствуйте! Я хочу узнать подробнее о доступных турах в Пхукете.';
-      } else {
-        message = 'Hello! I would like to get more information about available tours in Phuket.';
-      }
-    }
+    const message = language === 'ru'
+      ? 'Здравствуйте! Я хочу узнать подробнее о доступных турах в Пхукете.'
+      : 'Hello! I would like to get more information about available tours in Phuket.';
 
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;

@@ -3,7 +3,6 @@ import { X, MapPin, Calendar, MessageCircle, User, ChevronLeft, ChevronRight, Mi
 import { Product, supabase } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Lightbox } from './Lightbox';
-import { FloatingWhatsAppButton } from './FloatingWhatsAppButton';
 import { getDisplayName, getDisplayDescription, getDisplayLocation, getDisplayFeatures, getDisplayCategory } from '../lib/productHelpers';
 
 interface ProductDetailsProps {
@@ -478,10 +477,6 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
         isOpen={isLightboxOpen}
         onClose={() => setIsLightboxOpen(false)}
       />
-
-      {!showBookingForm && (
-        <FloatingWhatsAppButton productName={getDisplayName(product, language)} />
-      )}
     </>
   );
 }
