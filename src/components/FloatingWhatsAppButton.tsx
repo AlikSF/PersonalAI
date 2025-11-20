@@ -2,7 +2,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 
 export function FloatingWhatsAppButton() {
   const { language } = useLanguage();
-  const whatsappNumber = '33788603290';
+  const telegramUsername = 'your_telegram_username'; // Replace with your actual Telegram username
 
   const handleClick = () => {
     let message = '';
@@ -15,8 +15,8 @@ export function FloatingWhatsAppButton() {
     }
 
     const encodedMessage = encodeURIComponent(message);
-    const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
-    window.open(whatsappUrl, '_blank');
+    const telegramUrl = `https://t.me/${telegramUsername}?text=${encodedMessage}`;
+    window.open(telegramUrl, '_blank');
   };
 
   return (
@@ -24,12 +24,12 @@ export function FloatingWhatsAppButton() {
       onClick={handleClick}
       className="fixed bottom-6 right-6 md:bottom-8 md:right-8 bg-transparent p-0 rounded-full shadow-lg hover:scale-110 transition-all"
       style={{ zIndex: 9999 }}
-      aria-label="WhatsApp"
-      title="WhatsApp"
+      aria-label="Telegram"
+      title="Telegram"
     >
       <img
-        src="/logo new.jpg"
-        alt="WhatsApp"
+        src="/Telegram_(software)-Logo.wine.png"
+        alt="Telegram"
         className="w-14 h-14 md:w-16 md:h-16 rounded-full"
       />
     </button>
