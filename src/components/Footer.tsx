@@ -43,26 +43,100 @@ export function Footer() {
   }
 
   // Helper function to get display value with fallback
-  const getDisplayValue = (russianValue: string, englishValue?: string | null): string => {
+  const getDisplayValue = (
+    russianValue: string,
+    englishValue?: string | null,
+    azValue?: string | null,
+    kkValue?: string | null,
+    kyValue?: string | null
+  ): string => {
     if (language === 'en' && englishValue?.trim()) {
       return englishValue.trim();
+    }
+    if (language === 'az' && azValue?.trim()) {
+      return azValue.trim();
+    }
+    if (language === 'kk' && kkValue?.trim()) {
+      return kkValue.trim();
+    }
+    if (language === 'ky' && kyValue?.trim()) {
+      return kyValue.trim();
     }
     return russianValue;
   };
 
   // Get display values based on language
-  const displayAddress = getDisplayValue(companyInfo.address, companyInfo.address_en);
-  const displayLicenseInfo = getDisplayValue(companyInfo.license_info, companyInfo.license_info_en);
-  const displayInsuranceInfo = getDisplayValue(companyInfo.insurance_info, companyInfo.insurance_info_en);
-  const displayPaymentInfo = getDisplayValue(companyInfo.payment_info, companyInfo.payment_info_en);
+  const displayAddress = getDisplayValue(
+    companyInfo.address,
+    companyInfo.address_en,
+    companyInfo.address_az,
+    companyInfo.address_kk,
+    companyInfo.address_ky
+  );
+  const displayLicenseInfo = getDisplayValue(
+    companyInfo.license_info,
+    companyInfo.license_info_en,
+    companyInfo.license_info_az,
+    companyInfo.license_info_kk,
+    companyInfo.license_info_ky
+  );
+  const displayInsuranceInfo = getDisplayValue(
+    companyInfo.insurance_info,
+    companyInfo.insurance_info_en,
+    companyInfo.insurance_info_az,
+    companyInfo.insurance_info_kk,
+    companyInfo.insurance_info_ky
+  );
+  const displayPaymentInfo = getDisplayValue(
+    companyInfo.payment_info,
+    companyInfo.payment_info_en,
+    companyInfo.payment_info_az,
+    companyInfo.payment_info_kk,
+    companyInfo.payment_info_ky
+  );
 
   // Translations for section headings
-  const licensesHeading = language === 'en' ? 'Licenses & Documents' : 'Лицензии и документы';
-  const insuranceHeading = language === 'en' ? 'Insurance' : 'Страхование';
-  const paymentHeading = language === 'en' ? 'Payment Methods' : 'Способы оплаты';
-  const rightsText = language === 'en'
-    ? 'All rights reserved.'
-    : 'Все права защищены.';
+  const getHeadings = () => {
+    switch (language) {
+      case 'en':
+        return {
+          licenses: 'Licenses & Documents',
+          insurance: 'Insurance',
+          payment: 'Payment Methods',
+          rights: 'All rights reserved.'
+        };
+      case 'az':
+        return {
+          licenses: 'Lisenziyalar və sənədlər',
+          insurance: 'Sığorta',
+          payment: 'Ödəniş üsulları',
+          rights: 'Bütün hüquqlar qorunur.'
+        };
+      case 'kk':
+        return {
+          licenses: 'Лицензиялар және құжаттар',
+          insurance: 'Сақтандыру',
+          payment: 'Төлем әдістері',
+          rights: 'Барлық құқықтар қорғалған.'
+        };
+      case 'ky':
+        return {
+          licenses: 'Лицензиялар жана документтер',
+          insurance: 'Камсыздандыруу',
+          payment: 'Төлөм ыкмалары',
+          rights: 'Бардык укуктар корголгон.'
+        };
+      default:
+        return {
+          licenses: 'Лицензии и документы',
+          insurance: 'Страхование',
+          payment: 'Способы оплаты',
+          rights: 'Все права защищены.'
+        };
+    }
+  };
+
+  const headings = getHeadings();
 
   return (
     <footer className="bg-gray-900 text-white py-12 mt-16">
@@ -80,7 +154,7 @@ export function Footer() {
             <div className="flex items-start space-x-2 mb-4">
               <FileText className="h-5 w-5 flex-shrink-0 mt-0.5 text-blue-400" />
               <div>
-                <h4 className="font-semibold mb-1">{licensesHeading}</h4>
+                <h4 className="font-semibold mb-1">{headings.licenses}</h4>
                 <p className="text-sm text-gray-300 whitespace-pre-line">{displayLicenseInfo}</p>
               </div>
             </div>
@@ -90,7 +164,7 @@ export function Footer() {
             <div className="flex items-start space-x-2 mb-4">
               <Shield className="h-5 w-5 flex-shrink-0 mt-0.5 text-green-400" />
               <div>
-                <h4 className="font-semibold mb-1">{insuranceHeading}</h4>
+                <h4 className="font-semibold mb-1">{headings.insurance}</h4>
                 <p className="text-sm text-gray-300 whitespace-pre-line">{displayInsuranceInfo}</p>
               </div>
             </div>
@@ -100,7 +174,7 @@ export function Footer() {
             <div className="flex items-start space-x-2 mb-4">
               <CreditCard className="h-5 w-5 flex-shrink-0 mt-0.5 text-yellow-400" />
               <div>
-                <h4 className="font-semibold mb-1">{paymentHeading}</h4>
+                <h4 className="font-semibold mb-1">{headings.payment}</h4>
                 <p className="text-sm text-gray-300 whitespace-pre-line">{displayPaymentInfo}</p>
                 <div className="flex items-center gap-2 mt-4">
                   <div className="bg-white rounded px-2 py-1 flex items-center justify-center">
@@ -117,7 +191,7 @@ export function Footer() {
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center">
           <p className="text-sm text-gray-400">
-            &copy; {new Date().getFullYear()} {companyInfo.name}. {rightsText}
+            &copy; {new Date().getFullYear()} {companyInfo.name}. {headings.rights}
           </p>
         </div>
       </div>

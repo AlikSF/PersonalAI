@@ -85,6 +85,18 @@ export interface CompanyInfo {
   license_info_en?: string | null;
   insurance_info_en?: string | null;
   payment_info_en?: string | null;
+  address_az?: string | null;
+  license_info_az?: string | null;
+  insurance_info_az?: string | null;
+  payment_info_az?: string | null;
+  address_kk?: string | null;
+  license_info_kk?: string | null;
+  insurance_info_kk?: string | null;
+  payment_info_kk?: string | null;
+  address_ky?: string | null;
+  license_info_ky?: string | null;
+  insurance_info_ky?: string | null;
+  payment_info_ky?: string | null;
   created_at: string;
   updated_at: string;
 }
