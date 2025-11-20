@@ -19,10 +19,10 @@ export function Hero() {
         className="absolute inset-0 w-full h-full object-cover"
       />
 
-      <div className="relative z-20 h-full flex items-center">
+      <div className="relative z-20 h-full flex items-center py-12 md:py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
           <div className="max-w-3xl">
-            <h1 className="text-3xl sm:text-4xl md:text-7xl font-bold text-white mb-6 md:mb-10 leading-tight">
+            <h1 className="text-3xl sm:text-4xl md:text-7xl font-bold text-white mb-6 md:mb-10 leading-tight md:leading-tight">
               {t('hero.title')}
             </h1>
             <p className="text-base sm:text-lg md:text-2xl text-gray-200 mb-8 md:mb-12 leading-relaxed">
