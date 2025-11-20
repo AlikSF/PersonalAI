@@ -2,7 +2,7 @@ import { useLanguage } from '../contexts/LanguageContext';
 
 export function FloatingWhatsAppButton() {
   const { language } = useLanguage();
-  const telegramUsername = 'your_telegram_username'; // Replace with your actual Telegram username
+  const telegramUsername = 'PhuketVibemanager';
 
   const handleClick = () => {
     let message = '';
@@ -14,8 +14,7 @@ export function FloatingWhatsAppButton() {
       message = 'Здравствуйте! Я хочу узнать подробнее о доступных турах в Пхукете.';
     }
 
-    const encodedMessage = encodeURIComponent(message);
-    const telegramUrl = `https://t.me/${telegramUsername}?text=${encodedMessage}`;
+    const telegramUrl = `https://t.me/${telegramUsername}?start=${encodeURIComponent(message)}`;
     window.open(telegramUrl, '_blank');
   };
 
