@@ -7,8 +7,14 @@ interface Testimonial {
   rating: number;
   textRu: string;
   textEn: string;
+  textAz: string;
+  textKk: string;
+  textKy: string;
   locationRu: string;
   locationEn: string;
+  locationAz: string;
+  locationKk: string;
+  locationKy: string;
 }
 
 const testimonials: Testimonial[] = [
@@ -18,8 +24,14 @@ const testimonials: Testimonial[] = [
     rating: 5,
     textRu: 'Отличный сервис! Арендовали скутер на неделю, всё было идеально. Персонал очень дружелюбный и помогли с выбором маршрута.',
     textEn: 'Excellent service! We rented a scooter for a week, everything was perfect. The staff was very friendly and helped us choose the best routes.',
+    textAz: 'Əla xidmət! Bir həftəliyə skuter icarəyə götürdük, hər şey mükəmməl idi. Personal çox mehriban idi və ən yaxşı marşrutları seçməyə kömək etdi.',
+    textKk: 'Тамаша қызмет! Біз бір аптаға скутер жалдадық, бәрі керемет болды. Қызметкерлер өте достық және ең жақсы бағыттарды таңдауға көмектесті.',
+    textKy: 'Мыкты кызмат! Бир жумага скутер ижарага алдык, баары эң сонун болду. Кызматкерлер өтө достук жана эң мыкты багыттарды тандоого жардам беришти.',
     locationRu: 'Москва, Россия',
-    locationEn: 'Moscow, Russia'
+    locationEn: 'Moscow, Russia',
+    locationAz: 'Moskva, Rusiya',
+    locationKk: 'Мәскеу, Ресей',
+    locationKy: 'Москва, Россия'
   },
   {
     id: 2,
@@ -27,8 +39,14 @@ const testimonials: Testimonial[] = [
     rating: 5,
     textRu: 'Лучшие туры на Пхукете! Организация на высоте, гид был очень информативным. Особенно понравилась экскурсия к островам.',
     textEn: 'Best tours in Phuket! Perfect organization, the guide was very informative. We especially loved the island excursion.',
+    textAz: 'Phuketdə ən yaxşı turlar! Mükəmməl təşkilat, bələdçi çox məlumatlı idi. Xüsusilə ada ekskursiyası çox xoşumuza gəldi.',
+    textKk: 'Пхукеттегі ең жақсы турлар! Тамаша ұйымдастыру, гид өте ақпараттық болды. Біз әсіресе аралдарға экскурсияны ұнаттық.',
+    textKy: 'Пхукеттеги эң мыкты турлар! Эң сонун уюштуруу, гид өтө маалыматтуу болду. Биз өзгөчө аралдарга экскурсияны жакшы көрдүк.',
     locationRu: 'Париж, Франция',
-    locationEn: 'Paris, France'
+    locationEn: 'Paris, France',
+    locationAz: 'Paris, Fransa',
+    locationKk: 'Париж, Франция',
+    locationKy: 'Париж, Франция'
   },
   {
     id: 3,
@@ -36,8 +54,14 @@ const testimonials: Testimonial[] = [
     rating: 5,
     textRu: 'Прекрасный опыт аренды байка. Все документы оформили быстро, техника в отличном состоянии. Обязательно вернёмся снова!',
     textEn: 'Great bike rental experience. All documents were processed quickly, the bike was in excellent condition. Will definitely come back again!',
+    textAz: 'Motosiklet icarəsi üzrə əla təcrübə. Bütün sənədlər tez hazırlandı, motosiklet əla vəziyyətdə idi. Mütləq yenidən gələcəyik!',
+    textKk: 'Мотоцикл жалдаудың керемет тәжірибесі. Барлық құжаттар тез рәсімделді, мотоцикл тамаша жағдайда болды. Міндетті түрде қайта оралармыз!',
+    textKy: 'Мотоцикл ижарага алуунун мыкты тажрыйбасы. Бардык документтер тез даярдалды, мотоцикл эң сонун абалда болгон. Сөзсүз кайра келебиз!',
     locationRu: 'Алматы, Казахстан',
-    locationEn: 'Almaty, Kazakhstan'
+    locationEn: 'Almaty, Kazakhstan',
+    locationAz: 'Almatı, Qazaxıstan',
+    locationKk: 'Алматы, Қазақстан',
+    locationKy: 'Алматы, Казакстан'
   },
   {
     id: 4,
@@ -45,8 +69,14 @@ const testimonials: Testimonial[] = [
     rating: 5,
     textRu: 'Профессиональный подход к каждому клиенту. Помогли с выбором тура, учли все наши пожелания. Рекомендую всем!',
     textEn: 'Professional approach to every client. They helped us choose the right tour and accommodated all our requests. Highly recommend!',
+    textAz: 'Hər bir müştəriyə peşəkar yanaşma. Tur seçməyə kömək etdilər və bütün istəklərimizi nəzərə aldılar. Hamıya tövsiyə edirəm!',
+    textKk: 'Әрбір клиентке кәсіби көзқарас. Турды таңдауға көмектесті және барлық тілектерімізді ескерді. Барлығына ұсынамын!',
+    textKy: 'Ар бир кардарга кесипкөй мамиле. Турду тандоого жардам беришти жана бардык каалообузду эске алышты. Баарына сунуштайм!',
     locationRu: 'Нью-Йорк, США',
-    locationEn: 'New York, USA'
+    locationEn: 'New York, USA',
+    locationAz: 'Nyu-York, ABŞ',
+    locationKk: 'Нью-Йорк, АҚШ',
+    locationKy: 'Нью-Йорк, АКШ'
   }
 ];
 
@@ -82,7 +112,11 @@ export function Testimonials() {
               </div>
 
               <p className="text-sm text-gray-700 mb-4 leading-relaxed">
-                "{language === 'ru' ? testimonial.textRu : testimonial.textEn}"
+                "{language === 'en' ? testimonial.textEn :
+                  language === 'az' ? testimonial.textAz :
+                  language === 'kk' ? testimonial.textKk :
+                  language === 'ky' ? testimonial.textKy :
+                  testimonial.textRu}"
               </p>
 
               <div className="border-t border-gray-200 pt-4">
@@ -90,7 +124,11 @@ export function Testimonials() {
                   {testimonial.name}
                 </p>
                 <p className="text-xs text-gray-500 mt-1">
-                  {language === 'ru' ? testimonial.locationRu : testimonial.locationEn}
+                  {language === 'en' ? testimonial.locationEn :
+                   language === 'az' ? testimonial.locationAz :
+                   language === 'kk' ? testimonial.locationKk :
+                   language === 'ky' ? testimonial.locationKy :
+                   testimonial.locationRu}
                 </p>
               </div>
             </div>
