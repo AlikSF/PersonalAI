@@ -28,6 +28,21 @@ export interface Product {
   location_en?: string | null;
   features_en?: string[] | null;
   category_en?: string | null;
+  name_kk?: string | null;
+  description_kk?: string | null;
+  location_kk?: string | null;
+  features_kk?: string[] | null;
+  category_kk?: string | null;
+  name_ky?: string | null;
+  description_ky?: string | null;
+  location_ky?: string | null;
+  features_ky?: string[] | null;
+  category_ky?: string | null;
+  name_az?: string | null;
+  description_az?: string | null;
+  location_az?: string | null;
+  features_az?: string[] | null;
+  category_az?: string | null;
   priority?: number | null;
 }
 
