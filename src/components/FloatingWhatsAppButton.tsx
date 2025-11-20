@@ -5,9 +5,14 @@ export function FloatingWhatsAppButton() {
   const whatsappNumber = '33788603290';
 
   const handleClick = () => {
-    const message = language === 'ru'
-      ? 'Здравствуйте! Я хочу узнать подробнее о доступных турах в Пхукете.'
-      : 'Hello! I would like to get more information about available tours in Phuket.';
+    let message = '';
+
+    if (language === 'en') {
+      message = 'Hello! I would like to get more information about available tours in Phuket.';
+    } else {
+      // For ru, kk, ky, az - use Russian message
+      message = 'Здравствуйте! Я хочу узнать подробнее о доступных турах в Пхукете.';
+    }
 
     const encodedMessage = encodeURIComponent(message);
     const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;

@@ -1,34 +1,54 @@
 import { Product } from './supabase';
 
-type Language = 'ru' | 'en';
+type Language = 'ru' | 'en' | 'kk' | 'ky' | 'az';
 type TranslationFunction = (key: string) => string;
 
 export function getDisplayName(product: Product, language: Language): string {
-  if (language === 'en' && product.name_en?.trim()) {
-    return product.name_en.trim();
+  // Try language-specific field first
+  const langField = `name_${language}` as keyof Product;
+  const langValue = product[langField];
+  if (langValue && typeof langValue === 'string' && langValue.trim()) {
+    return langValue.trim();
   }
-  return product.name;
+
+  // Fallback to Russian
+  return product.name || '';
 }
 
 export function getDisplayDescription(product: Product, language: Language): string {
-  if (language === 'en' && product.description_en?.trim()) {
-    return product.description_en.trim();
+  // Try language-specific field first
+  const langField = `description_${language}` as keyof Product;
+  const langValue = product[langField];
+  if (langValue && typeof langValue === 'string' && langValue.trim()) {
+    return langValue.trim();
   }
-  return product.description;
+
+  // Fallback to Russian
+  return product.description || '';
 }
 
 export function getDisplayLocation(product: Product, language: Language): string {
-  if (language === 'en' && product.location_en?.trim()) {
-    return product.location_en.trim();
+  // Try language-specific field first
+  const langField = `location_${language}` as keyof Product;
+  const langValue = product[langField];
+  if (langValue && typeof langValue === 'string' && langValue.trim()) {
+    return langValue.trim();
   }
-  return product.location;
+
+  // Fallback to Russian
+  return product.location || '';
 }
 
 export function getDisplayFeatures(product: Product, language: Language): string[] {
-  if (language === 'en' && product.features_en && product.features_en.length > 0) {
-    return product.features_en;
+  // Try language-specific field first
+  const langField = `features_${language}` as keyof Product;
+  const langValue = product[langField];
+  if (langValue && Array.isArray(langValue) && langValue.length > 0) {
+    return langValue;
   }
-  return product.features;
+
+  // Fallback to Russian
+  return product.features || [];
 }
 
 export function getDisplayCategory(
@@ -36,9 +56,11 @@ export function getDisplayCategory(
   language: Language,
   t: TranslationFunction
 ): string {
-  // If English mode and category_en is provided, use it
-  if (language === 'en' && product.category_en?.trim()) {
-    return product.category_en.trim();
+  // Try language-specific field first
+  const langField = `category_${language}` as keyof Product;
+  const langValue = product[langField];
+  if (langValue && typeof langValue === 'string' && langValue.trim()) {
+    return langValue.trim();
   }
 
   // Otherwise fall back to translation or original category

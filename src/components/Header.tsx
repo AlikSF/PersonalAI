@@ -1,8 +1,8 @@
-import { Languages } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { LanguageSelector } from './LanguageSelector';
 
 export function Header() {
-  const { language, setLanguage, t } = useLanguage();
+  const { t } = useLanguage();
 
   const scrollToSection = (id: string) => {
     const element = document.getElementById(id);
@@ -50,16 +50,8 @@ export function Header() {
             </button>
           </nav>
 
-          <div className="flex items-center space-x-2 md:space-x-4">
-            <button
-              onClick={() => setLanguage(language === 'ru' ? 'en' : 'ru')}
-              className="flex items-center space-x-1 md:space-x-2 px-3 md:px-4 py-2 hover:bg-gray-100 rounded-lg transition"
-            >
-              <Languages className="h-4 w-4 md:h-5 md:w-5 text-gray-700" />
-              <span className="text-xs md:text-sm font-medium text-gray-700 uppercase">
-                {language}
-              </span>
-            </button>
+          <div className="flex items-center">
+            <LanguageSelector />
           </div>
         </div>
       </div>
