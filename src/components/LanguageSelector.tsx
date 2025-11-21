@@ -38,7 +38,7 @@ export function LanguageSelector() {
             <button
               key={lang.code}
               onClick={() => {
-                setLanguage(lang.code as 'ru' | 'en' | 'kk' | 'ky' | 'az');
+                setLanguage(lang.code as 'ru' | 'en' | 'kk' | 'ky' | 'az' | 'zh' | 'fr' | 'uz');
                 setIsOpen(false);
               }}
               className={`w-full flex items-center gap-2 px-3 py-2 hover:bg-gray-50 transition-colors ${

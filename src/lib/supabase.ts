@@ -43,6 +43,21 @@ export interface Product {
   location_az?: string | null;
   features_az?: string[] | null;
   category_az?: string | null;
+  name_zh?: string | null;
+  description_zh?: string | null;
+  location_zh?: string | null;
+  features_zh?: string[] | null;
+  category_zh?: string | null;
+  name_fr?: string | null;
+  description_fr?: string | null;
+  location_fr?: string | null;
+  features_fr?: string[] | null;
+  category_fr?: string | null;
+  name_uz?: string | null;
+  description_uz?: string | null;
+  location_uz?: string | null;
+  features_uz?: string[] | null;
+  category_uz?: string | null;
   priority?: number | null;
 }
 
@@ -97,6 +112,18 @@ export interface CompanyInfo {
   license_info_ky?: string | null;
   insurance_info_ky?: string | null;
   payment_info_ky?: string | null;
+  address_zh?: string | null;
+  license_info_zh?: string | null;
+  insurance_info_zh?: string | null;
+  payment_info_zh?: string | null;
+  address_fr?: string | null;
+  license_info_fr?: string | null;
+  insurance_info_fr?: string | null;
+  payment_info_fr?: string | null;
+  address_uz?: string | null;
+  license_info_uz?: string | null;
+  insurance_info_uz?: string | null;
+  payment_info_uz?: string | null;
   created_at: string;
   updated_at: string;
 }

@@ -48,7 +48,10 @@ export function Footer() {
     englishValue?: string | null,
     azValue?: string | null,
     kkValue?: string | null,
-    kyValue?: string | null
+    kyValue?: string | null,
+    zhValue?: string | null,
+    frValue?: string | null,
+    uzValue?: string | null
   ): string => {
     if (language === 'en' && englishValue?.trim()) {
       return englishValue.trim();
@@ -62,6 +65,15 @@ export function Footer() {
     if (language === 'ky' && kyValue?.trim()) {
       return kyValue.trim();
     }
+    if (language === 'zh' && zhValue?.trim()) {
+      return zhValue.trim();
+    }
+    if (language === 'fr' && frValue?.trim()) {
+      return frValue.trim();
+    }
+    if (language === 'uz' && uzValue?.trim()) {
+      return uzValue.trim();
+    }
     return russianValue;
   };
 
@@ -71,28 +83,40 @@ export function Footer() {
     companyInfo.address_en,
     companyInfo.address_az,
     companyInfo.address_kk,
-    companyInfo.address_ky
+    companyInfo.address_ky,
+    companyInfo.address_zh,
+    companyInfo.address_fr,
+    companyInfo.address_uz
   );
   const displayLicenseInfo = getDisplayValue(
     companyInfo.license_info,
     companyInfo.license_info_en,
     companyInfo.license_info_az,
     companyInfo.license_info_kk,
-    companyInfo.license_info_ky
+    companyInfo.license_info_ky,
+    companyInfo.license_info_zh,
+    companyInfo.license_info_fr,
+    companyInfo.license_info_uz
   );
   const displayInsuranceInfo = getDisplayValue(
     companyInfo.insurance_info,
     companyInfo.insurance_info_en,
     companyInfo.insurance_info_az,
     companyInfo.insurance_info_kk,
-    companyInfo.insurance_info_ky
+    companyInfo.insurance_info_ky,
+    companyInfo.insurance_info_zh,
+    companyInfo.insurance_info_fr,
+    companyInfo.insurance_info_uz
   );
   const displayPaymentInfo = getDisplayValue(
     companyInfo.payment_info,
     companyInfo.payment_info_en,
     companyInfo.payment_info_az,
     companyInfo.payment_info_kk,
-    companyInfo.payment_info_ky
+    companyInfo.payment_info_ky,
+    companyInfo.payment_info_zh,
+    companyInfo.payment_info_fr,
+    companyInfo.payment_info_uz
   );
 
   // Translations for section headings
@@ -125,6 +149,27 @@ export function Footer() {
           insurance: 'Камсыздандыруу',
           payment: 'Төлөм ыкмалары',
           rights: 'Бардык укуктар корголгон.'
+        };
+      case 'zh':
+        return {
+          licenses: '许可证和文件',
+          insurance: '保险',
+          payment: '支付方式',
+          rights: '版权所有。'
+        };
+      case 'fr':
+        return {
+          licenses: 'Licences et documents',
+          insurance: 'Assurance',
+          payment: 'Moyens de paiement',
+          rights: 'Tous droits réservés.'
+        };
+      case 'uz':
+        return {
+          licenses: 'Litsenziyalar va hujjatlar',
+          insurance: 'Sug\'urta',
+          payment: 'To\'lov usullari',
+          rights: 'Barcha huquqlar himoyalangan.'
         };
       default:
         return {

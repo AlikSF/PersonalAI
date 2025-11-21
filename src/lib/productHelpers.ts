@@ -1,6 +1,6 @@
 import { Product } from './supabase';
 
-type Language = 'ru' | 'en' | 'kk' | 'ky' | 'az';
+type Language = 'ru' | 'en' | 'kk' | 'ky' | 'az' | 'zh' | 'fr' | 'uz';
 type TranslationFunction = (key: string) => string;
 
 export function getDisplayName(product: Product, language: Language): string {
