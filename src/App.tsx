@@ -15,7 +15,7 @@ import { Loader2, Search, X } from 'lucide-react';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 
 function AppContent() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [currentPage, setCurrentPage] = useState('home');
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
@@ -52,7 +52,7 @@ function AppContent() {
 
   useEffect(() => {
     filterProducts();
-  }, [products, categoryFilter, searchQuery]);
+  }, [products, categoryFilter, searchQuery, language]);
 
   const fetchProducts = async () => {
     setLoading(true);
@@ -78,11 +78,38 @@ function AppContent() {
 
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
-      filtered = filtered.filter((p) =>
-        p.name.toLowerCase().includes(query) ||
-        p.location.toLowerCase().includes(query) ||
-        p.category.toLowerCase().includes(query)
-      );
+      filtered = filtered.filter((p) => {
+        const name = language === 'en' ? (p.name_en || p.name) :
+                     language === 'az' ? (p.name_az || p.name) :
+                     language === 'kk' ? (p.name_kk || p.name) :
+                     language === 'ky' ? (p.name_ky || p.name) :
+                     language === 'zh' ? (p.name_zh || p.name) :
+                     language === 'fr' ? (p.name_fr || p.name) :
+                     language === 'uz' ? (p.name_uz || p.name) :
+                     p.name;
+
+        const location = language === 'en' ? (p.location_en || p.location) :
+                         language === 'az' ? (p.location_az || p.location) :
+                         language === 'kk' ? (p.location_kk || p.location) :
+                         language === 'ky' ? (p.location_ky || p.location) :
+                         language === 'zh' ? (p.location_zh || p.location) :
+                         language === 'fr' ? (p.location_fr || p.location) :
+                         language === 'uz' ? (p.location_uz || p.location) :
+                         p.location;
+
+        const category = language === 'en' ? (p.category_en || p.category) :
+                         language === 'az' ? (p.category_az || p.category) :
+                         language === 'kk' ? (p.category_kk || p.category) :
+                         language === 'ky' ? (p.category_ky || p.category) :
+                         language === 'zh' ? (p.category_zh || p.category) :
+                         language === 'fr' ? (p.category_fr || p.category) :
+                         language === 'uz' ? (p.category_uz || p.category) :
+                         p.category;
+
+        return (name?.toLowerCase().includes(query) ||
+                location?.toLowerCase().includes(query) ||
+                category?.toLowerCase().includes(query));
+      });
     }
 
     setFilteredProducts(filtered);
