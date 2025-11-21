@@ -136,14 +136,14 @@ export function Testimonials() {
               </div>
 
               <p className="text-sm text-gray-700 mb-4 leading-relaxed">
-                "{language === 'en' ? testimonial.textEn :
+                {language === 'en' ? testimonial.textEn :
                   language === 'az' ? testimonial.textAz :
                   language === 'kk' ? testimonial.textKk :
                   language === 'ky' ? testimonial.textKy :
                   language === 'zh' ? testimonial.textZh :
                   language === 'fr' ? testimonial.textFr :
                   language === 'uz' ? testimonial.textUz :
-                  testimonial.textRu}"
+                  testimonial.textRu}
               </p>
 
               <div className="border-t border-gray-200 pt-4">
