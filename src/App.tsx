@@ -165,11 +165,12 @@ function AppContent() {
               { value: '', labelKey: 'products.filter.all' },
               { value: 'Трансфер', labelKey: 'products.filter.transfer' },
               { value: 'Острова', labelKey: 'products.filter.islands' },
-              { value: 'Сафари', labelKey: 'products.filter.safari' },
+              { value: 'Озеро', labelKey: 'products.filter.mainland' },
               { value: 'Экстрим', labelKey: 'products.filter.extreme' },
               { value: 'Клубы', labelKey: 'products.filter.clubs' },
-              { value: 'Озеро', labelKey: 'products.filter.lake' },
               { value: 'Шоу', labelKey: 'products.filter.show' },
+              { value: 'Инста туры', labelKey: 'products.filter.insta' },
+              { value: 'Приват туры', labelKey: 'products.filter.private' },
             ].map((category) => (
               <button
                 key={category.value}
