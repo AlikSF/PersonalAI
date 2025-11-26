@@ -126,10 +126,10 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
     }
 
     if (platform === 'telegram') {
-      const telegramUsername = import.meta.env.VITE_TELEGRAM_USERNAME || 'yourusername';
+      const telegramUsername = 'PhuketVibemanager';
       window.open(`https://t.me/${telegramUsername}?text=${encodeURIComponent(telegramMessage)}`, '_blank');
     } else {
-      const whatsappNumber = '33788603290';
+      const whatsappNumber = '66972137197';
       window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`, '_blank');
     }
   };
