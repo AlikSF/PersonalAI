@@ -50,10 +50,10 @@ export function ContactForm() {
       }
 
       if (platform === 'telegram') {
-        const telegramUsername = import.meta.env.VITE_TELEGRAM_USERNAME || 'yourusername';
+        const telegramUsername = 'PhuketVibemanager';
         window.open(`https://t.me/${telegramUsername}?text=${encodeURIComponent(message)}`, '_blank');
       } else {
-        const whatsappNumber = '33788603290';
+        const whatsappNumber = '66972137197';
         window.open(`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`, '_blank');
       }
 
@@ -180,7 +180,7 @@ export function ContactForm() {
           </h3>
           <div className="flex items-center justify-center gap-4">
             <a
-              href="https://www.instagram.com/instagram?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw=="
+              href="https://www.instagram.com/phuketvibetours?igsh=MThxNHpyYXl6bzBieg=="
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-purple-600 via-pink-600 to-orange-500 flex items-center justify-center text-white shadow-md hover:scale-110 transition-transform duration-300"
@@ -202,7 +202,7 @@ export function ContactForm() {
             </a>
 
             <a
-              href="https://wa.me/33788603290"
+              href="https://wa.me/66972137197"
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-green-500 flex items-center justify-center text-white shadow-md hover:scale-110 transition-transform duration-300"
