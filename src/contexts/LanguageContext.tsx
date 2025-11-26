@@ -720,6 +720,13 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     localStorage.setItem('lang', language);
+
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'language_change', {
+        language_code: language,
+        language_label: languageConfig[language].label
+      });
+    }
   }, [language]);
 
   const t = (key: string): string => {
