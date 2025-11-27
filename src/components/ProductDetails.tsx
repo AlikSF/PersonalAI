@@ -45,6 +45,21 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
 
     const totalPrice = product.price_per_day;
 
+    // Track lead event in Google Analytics
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'generate_lead', {
+        currency: 'THB',
+        value: totalPrice,
+        event_category: 'Booking',
+        event_label: `${platform === 'telegram' ? 'Telegram' : 'WhatsApp'} - ${getDisplayName(product, language)}`,
+        tour_name: getDisplayName(product, language),
+        tour_category: getDisplayCategory(product, language, t),
+        platform: platform,
+        adults: adults,
+        children: children
+      });
+    }
+
     // Save booking to database
     try {
       const { error: bookingError } = await supabase.from('bookings').insert({
@@ -296,7 +311,21 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
                   </div>
 
                   <button
-                    onClick={() => setShowBookingForm(true)}
+                    onClick={() => {
+                      // Track booking intent in Google Analytics
+                      if (typeof window !== 'undefined' && window.gtag) {
+                        window.gtag('event', 'begin_checkout', {
+                          currency: 'THB',
+                          value: product.price_per_day,
+                          event_category: 'Booking',
+                          event_label: `Book Now - ${getDisplayName(product, language)}`,
+                          tour_name: getDisplayName(product, language),
+                          tour_category: getDisplayCategory(product, language, t),
+                          tour_price: product.price_per_day
+                        });
+                      }
+                      setShowBookingForm(true);
+                    }}
                     className="w-full flex items-center justify-center space-x-2 bg-blue-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-lg text-base md:text-lg font-semibold hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
                   >
                     <MessageCircle className="h-5 w-5" />
