@@ -239,7 +239,7 @@ function AppContent() {
                 type="search"
                 enterKeyHint="search"
                 inputMode="search"
-                placeholder={t('products.filter.all')}
+                placeholder={t('products.searchPlaceholder')}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="w-full pl-10 md:pl-12 pr-10 md:pr-12 py-3 md:py-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent focus:outline-none text-gray-900 text-base md:text-lg"
