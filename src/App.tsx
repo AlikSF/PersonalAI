@@ -119,14 +119,16 @@ function AppContent() {
                          language === 'uz' ? (p.location_uz || p.location) :
                          p.location;
 
-        const category = language === 'en' ? (p.category_en || p.category) :
-                         language === 'az' ? (p.category_az || p.category) :
-                         language === 'kk' ? (p.category_kk || p.category) :
-                         language === 'ky' ? (p.category_ky || p.category) :
-                         language === 'zh' ? (p.category_zh || p.category) :
-                         language === 'fr' ? (p.category_fr || p.category) :
-                         language === 'uz' ? (p.category_uz || p.category) :
-                         p.category;
+        // For category, search in both the base category AND the translated category
+        // This ensures we catch matches in either language (e.g., "Insta Tours" or "Инста туры")
+        const categoryTranslated = language === 'en' ? (p.category_en || p.category) :
+                                    language === 'az' ? (p.category_az || p.category) :
+                                    language === 'kk' ? (p.category_kk || p.category) :
+                                    language === 'ky' ? (p.category_ky || p.category) :
+                                    language === 'zh' ? (p.category_zh || p.category) :
+                                    language === 'fr' ? (p.category_fr || p.category) :
+                                    language === 'uz' ? (p.category_uz || p.category) :
+                                    p.category;
 
         // Get features based on language (JSONB field)
         const features = language === 'en' ? (p.features_en || p.features) :
@@ -142,10 +144,13 @@ function AppContent() {
         const featuresText = features ? JSON.stringify(features).toLowerCase() : '';
 
         // Search across all fields (OR condition)
+        // For category, we search in BOTH the base category (Russian) and the translated category
+        // to ensure matches regardless of which field contains the search term
         return (name?.toLowerCase().includes(query) ||
                 description?.toLowerCase().includes(query) ||
                 location?.toLowerCase().includes(query) ||
-                category?.toLowerCase().includes(query) ||
+                categoryTranslated?.toLowerCase().includes(query) ||
+                p.category?.toLowerCase().includes(query) ||
                 featuresText.includes(query));
       });
 
