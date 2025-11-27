@@ -78,7 +78,20 @@ function AppContent() {
 
     if (searchQuery.trim()) {
       const query = searchQuery.toLowerCase();
+
+      // Multi-language search: searches in name, description, location, category, and features
+      // For each language, it uses the language-specific column if available, otherwise falls back to Russian (base)
       filtered = filtered.filter((p) => {
+        // Get language-specific fields with fallback to Russian (base columns)
+        // ru: name, description, location, category, features
+        // en: name_en, description_en, location_en, category_en, features_en (fallback to base)
+        // kk: name_kk, description_kk, location_kk, category_kk, features_kk (fallback to base)
+        // ky: name_ky, description_ky, location_ky, category_ky, features_ky (fallback to base)
+        // az: name_az, description_az, location_az, category_az, features_az (fallback to base)
+        // zh: name_zh, description_zh, location_zh, category_zh, features_zh (fallback to base)
+        // fr: name_fr, description_fr, location_fr, category_fr, features_fr (fallback to base)
+        // uz: name_uz, description_uz, location_uz, category_uz, features_uz (fallback to base)
+
         const name = language === 'en' ? (p.name_en || p.name) :
                      language === 'az' ? (p.name_az || p.name) :
                      language === 'kk' ? (p.name_kk || p.name) :
@@ -87,6 +100,15 @@ function AppContent() {
                      language === 'fr' ? (p.name_fr || p.name) :
                      language === 'uz' ? (p.name_uz || p.name) :
                      p.name;
+
+        const description = language === 'en' ? (p.description_en || p.description) :
+                            language === 'az' ? (p.description_az || p.description) :
+                            language === 'kk' ? (p.description_kk || p.description) :
+                            language === 'ky' ? (p.description_ky || p.description) :
+                            language === 'zh' ? (p.description_zh || p.description) :
+                            language === 'fr' ? (p.description_fr || p.description) :
+                            language === 'uz' ? (p.description_uz || p.description) :
+                            p.description;
 
         const location = language === 'en' ? (p.location_en || p.location) :
                          language === 'az' ? (p.location_az || p.location) :
@@ -106,9 +128,52 @@ function AppContent() {
                          language === 'uz' ? (p.category_uz || p.category) :
                          p.category;
 
+        // Get features based on language (JSONB field)
+        const features = language === 'en' ? (p.features_en || p.features) :
+                         language === 'az' ? (p.features_az || p.features) :
+                         language === 'kk' ? (p.features_kk || p.features) :
+                         language === 'ky' ? (p.features_ky || p.features) :
+                         language === 'zh' ? (p.features_zh || p.features) :
+                         language === 'fr' ? (p.features_fr || p.features) :
+                         language === 'uz' ? (p.features_uz || p.features) :
+                         p.features;
+
+        // Convert features JSONB to searchable text
+        const featuresText = features ? JSON.stringify(features).toLowerCase() : '';
+
+        // Search across all fields (OR condition)
         return (name?.toLowerCase().includes(query) ||
+                description?.toLowerCase().includes(query) ||
                 location?.toLowerCase().includes(query) ||
-                category?.toLowerCase().includes(query));
+                category?.toLowerCase().includes(query) ||
+                featuresText.includes(query));
+      });
+
+      // Sort results: prioritize title matches first, then other matches
+      filtered.sort((a, b) => {
+        const aName = language === 'en' ? (a.name_en || a.name) :
+                      language === 'az' ? (a.name_az || a.name) :
+                      language === 'kk' ? (a.name_kk || a.name) :
+                      language === 'ky' ? (a.name_ky || a.name) :
+                      language === 'zh' ? (a.name_zh || a.name) :
+                      language === 'fr' ? (a.name_fr || a.name) :
+                      language === 'uz' ? (a.name_uz || a.name) :
+                      a.name;
+
+        const bName = language === 'en' ? (b.name_en || b.name) :
+                      language === 'az' ? (b.name_az || b.name) :
+                      language === 'kk' ? (b.name_kk || b.name) :
+                      language === 'ky' ? (b.name_ky || b.name) :
+                      language === 'zh' ? (b.name_zh || b.name) :
+                      language === 'fr' ? (b.name_fr || b.name) :
+                      language === 'uz' ? (b.name_uz || b.name) :
+                      b.name;
+
+        const aNameMatch = aName?.toLowerCase().includes(query) ? 1 : 0;
+        const bNameMatch = bName?.toLowerCase().includes(query) ? 1 : 0;
+
+        // Products with name matches appear first
+        return bNameMatch - aNameMatch;
       });
     }
 
