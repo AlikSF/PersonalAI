@@ -398,7 +398,7 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
 
                     <div className="grid grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2 min-h-[32px] flex items-center">
                           <span>{t('booking.adults')}</span>
                         </label>
                         <div className="flex items-center justify-center gap-3 border border-gray-300 rounded-lg py-2 md:py-3">
@@ -433,7 +433,7 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
                       </div>
 
                       <div>
-                        <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
+                        <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2 min-h-[32px] flex items-center">
                           <span>{t('booking.children')}</span>
                         </label>
                         <div className="flex items-center justify-center gap-3 border border-gray-300 rounded-lg py-2 md:py-3">
