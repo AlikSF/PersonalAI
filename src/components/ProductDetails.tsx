@@ -100,13 +100,25 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
     }
 
     // CRITICAL: Open window BEFORE any async operations for Safari iOS compatibility
+    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
     let url: string;
+
     if (platform === 'telegram') {
       const telegramUsername = 'PhuketVibemanager';
-      url = `https://t.me/${telegramUsername}?text=${encodeURIComponent(telegramMessage)}`;
+      // Use tg:// deep link for direct app opening on mobile
+      if (isMobile) {
+        url = `tg://resolve?domain=${telegramUsername}&text=${encodeURIComponent(telegramMessage)}`;
+      } else {
+        url = `https://t.me/${telegramUsername}?text=${encodeURIComponent(telegramMessage)}`;
+      }
     } else {
       const whatsappNumber = '66972137197';
-      url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+      // Use whatsapp:// deep link for direct app opening on mobile
+      if (isMobile) {
+        url = `whatsapp://send?phone=${whatsappNumber}&text=${encodeURIComponent(whatsappMessage)}`;
+      } else {
+        url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+      }
     }
 
     // Open immediately - Safari blocks window.open() if it's not called synchronously
