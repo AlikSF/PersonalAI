@@ -3,6 +3,7 @@ import { X, MapPin, Calendar, MessageCircle, User, ChevronLeft, ChevronRight, Mi
 import { Product, supabase } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Lightbox } from './Lightbox';
+import { PhoneInput } from './PhoneInput';
 import { getDisplayName, getDisplayDescription, getDisplayLocation, getDisplayFeatures, getDisplayCategory } from '../lib/productHelpers';
 
 interface ProductDetailsProps {
@@ -21,6 +22,8 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
+    countryCode: 'RU',
+    dialCode: '+7',
     tourDate: '',
     adults: 1,
     children: 0
@@ -36,7 +39,7 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
   };
 
   const handleConfirmBooking = (platform: 'telegram' | 'whatsapp') => {
-    const { name, phone, tourDate, adults, children } = formData;
+    const { name, phone, dialCode, countryCode, tourDate, adults, children } = formData;
 
     if (!name || !phone || !tourDate || !adults) {
       alert(t('booking.fillFields'));
@@ -46,6 +49,7 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
     const totalPrice = product.price_per_day;
     const displayName = getDisplayName(product, language);
     const displayLocation = getDisplayLocation(product, language);
+    const fullPhone = `${dialCode} ${phone}`;
 
     // Build message based on current language
     let telegramMessage: string;
@@ -56,7 +60,7 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
       telegramMessage =
         `🎯 TOUR BOOKING REQUEST\n\n` +
         `👤 Client: ${name}\n` +
-        `📞 Phone: ${phone}\n` +
+        `📞 Phone: ${fullPhone}\n` +
         `🎯 Tour: ${displayName}\n` +
         `📍 Location: ${displayLocation}\n\n` +
         `📅 Tour date: ${new Date(tourDate).toLocaleDateString()}\n` +
@@ -67,7 +71,7 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
       whatsappMessage =
         `TOUR BOOKING REQUEST\n\n` +
         `Client: ${name}\n` +
-        `Phone: ${phone}\n` +
+        `Phone: ${fullPhone}\n` +
         `Tour: ${displayName}\n` +
         `Location: ${displayLocation}\n\n` +
         `Tour date: ${new Date(tourDate).toLocaleDateString()}\n` +
@@ -79,7 +83,7 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
       telegramMessage =
         `🎯 ЗАПРОС НА БРОНИРОВАНИЕ ТУРА\n\n` +
         `👤 Клиент: ${name}\n` +
-        `📞 Телефон: ${phone}\n` +
+        `📞 Телефон: ${fullPhone}\n` +
         `🎯 Тур: ${displayName}\n` +
         `📍 Местоположение: ${displayLocation}\n\n` +
         `📅 Дата тура: ${new Date(tourDate).toLocaleDateString()}\n` +
@@ -90,7 +94,7 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
       whatsappMessage =
         `ЗАПРОС НА БРОНИРОВАНИЕ ТУРА\n\n` +
         `Клиент: ${name}\n` +
-        `Телефон: ${phone}\n` +
+        `Телефон: ${fullPhone}\n` +
         `Тур: ${displayName}\n` +
         `Местоположение: ${displayLocation}\n\n` +
         `Дата тура: ${new Date(tourDate).toLocaleDateString()}\n` +
@@ -357,20 +361,15 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
                       />
                     </div>
 
-                    <div>
-                      <label htmlFor="phone" className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
-                        <span>{t('booking.phone')}</span>
-                      </label>
-                      <input
-                        type="tel"
-                        id="phone"
-                        name="phone"
-                        value={formData.phone}
-                        onChange={handleInputChange}
-                        placeholder={t('booking.phonePlaceholder')}
-                        className="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition text-sm md:text-base"
-                      />
-                    </div>
+                    <PhoneInput
+                      value={formData.phone}
+                      onChange={(phone, countryCode, dialCode) =>
+                        setFormData({ ...formData, phone, countryCode, dialCode })
+                      }
+                      label={t('booking.phone')}
+                      placeholder={t('booking.phonePlaceholder')}
+                      id="phone"
+                    />
 
                     <div>
                       <label htmlFor="tourDate" className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
