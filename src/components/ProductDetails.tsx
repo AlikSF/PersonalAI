@@ -113,8 +113,13 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
       url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
     }
 
-    // Open immediately - Safari blocks window.open() if it's not called synchronously
-    window.location.href = url;
+    // Try to open in a new tab/window first, with fallback to same window
+    const newWindow = window.open(url, '_blank');
+
+    // Fallback: if popup was blocked or failed, use location.href
+    if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+      window.location.href = url;
+    }
 
     // Track lead event in Google Analytics (after opening, non-blocking)
     if (typeof window !== 'undefined' && window.gtag) {
