@@ -12,7 +12,7 @@ interface PhoneInputProps {
 }
 
 export function PhoneInput({ value, onChange, label, placeholder, id = 'phone' }: PhoneInputProps) {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const [selectedCountry, setSelectedCountry] = useState<CountryCode>(countryCodes[0]);
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
@@ -68,6 +68,7 @@ export function PhoneInput({ value, onChange, label, placeholder, id = 'phone' }
   };
 
   const getCountryName = (country: CountryCode) => {
+    if (country.code === 'OTHER') return t('booking.phoneOther');
     if (language === 'en') return country.name;
     return country.nameRu;
   };
@@ -100,7 +101,7 @@ export function PhoneInput({ value, onChange, label, placeholder, id = 'phone' }
                     type="text"
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder={language === 'en' ? 'Search country...' : 'Поиск страны...'}
+                    placeholder={t('booking.phoneSearchCountry')}
                     className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     autoFocus
                   />
@@ -127,14 +128,14 @@ export function PhoneInput({ value, onChange, label, placeholder, id = 'phone' }
                   ))
                 ) : (
                   <div className="px-3 py-6 text-center text-sm text-gray-500">
-                    {language === 'en' ? 'No countries found' : 'Страны не найдены'}
+                    {t('booking.phoneNoCountries')}
                   </div>
                 )}
               </div>
               {selectedCountry.code === 'OTHER' && (
                 <div className="p-3 border-t border-gray-200 bg-gray-50">
                   <label className="block text-xs font-medium text-gray-700 mb-1">
-                    {language === 'en' ? 'Enter country code' : 'Введите код страны'}
+                    {t('booking.phoneEnterCode')}
                   </label>
                   <input
                     type="text"
@@ -164,7 +165,7 @@ export function PhoneInput({ value, onChange, label, placeholder, id = 'phone' }
           />
           {selectedCountry.code === 'OTHER' && (
             <p className="text-xs text-gray-500 mt-1">
-              {language === 'en' ? 'Select "Other" from dropdown and enter your country code' : 'Выберите "Другое" из списка и введите код страны'}
+              {t('booking.phoneOtherHelper')}
             </p>
           )}
         </div>
