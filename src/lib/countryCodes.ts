@@ -7,9 +7,9 @@ export interface CountryCode {
 }
 
 export const countryCodes: CountryCode[] = [
+  { code: 'TH', name: 'Thailand', nameRu: 'Таиланд', dial: '+66', flag: '🇹🇭' },
   { code: 'RU', name: 'Russia', nameRu: 'Россия', dial: '+7', flag: '🇷🇺' },
   { code: 'KZ', name: 'Kazakhstan', nameRu: 'Казахстан', dial: '+7', flag: '🇰🇿' },
-  { code: 'TH', name: 'Thailand', nameRu: 'Таиланд', dial: '+66', flag: '🇹🇭' },
   { code: 'US', name: 'United States', nameRu: 'США', dial: '+1', flag: '🇺🇸' },
   { code: 'CN', name: 'China', nameRu: 'Китай', dial: '+86', flag: '🇨🇳' },
   { code: 'KG', name: 'Kyrgyzstan', nameRu: 'Кыргызстан', dial: '+996', flag: '🇰🇬' },
@@ -33,4 +33,5 @@ export const countryCodes: CountryCode[] = [
   { code: 'MY', name: 'Malaysia', nameRu: 'Малайзия', dial: '+60', flag: '🇲🇾' },
   { code: 'VN', name: 'Vietnam', nameRu: 'Вьетнам', dial: '+84', flag: '🇻🇳' },
   { code: 'ID', name: 'Indonesia', nameRu: 'Индонезия', dial: '+62', flag: '🇮🇩' },
+  { code: 'OTHER', name: 'Other', nameRu: 'Другое', dial: '+', flag: '🌍' },
 ];

@@ -16,6 +16,7 @@ export function PhoneInput({ value, onChange, label, placeholder, id = 'phone' }
   const [selectedCountry, setSelectedCountry] = useState<CountryCode>(countryCodes[0]);
   const [isOpen, setIsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [customDialCode, setCustomDialCode] = useState('+');
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -44,7 +45,21 @@ export function PhoneInput({ value, onChange, label, placeholder, id = 'phone' }
     setSelectedCountry(country);
     setIsOpen(false);
     setSearchQuery('');
-    onChange(value, country.code, country.dial);
+    if (country.code === 'OTHER') {
+      setCustomDialCode('+');
+    }
+    onChange(value, country.code, country.code === 'OTHER' ? customDialCode : country.dial);
+  };
+
+  const handleCustomDialCodeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    let dialValue = e.target.value;
+    if (!dialValue.startsWith('+')) {
+      dialValue = '+' + dialValue.replace(/[^\d]/g, '');
+    } else {
+      dialValue = '+' + dialValue.substring(1).replace(/[^\d]/g, '');
+    }
+    setCustomDialCode(dialValue);
+    onChange(value, selectedCountry.code, dialValue);
   };
 
   const handlePhoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,12 +85,14 @@ export function PhoneInput({ value, onChange, label, placeholder, id = 'phone' }
             className="h-11 md:h-12 px-3 flex items-center gap-2 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition-colors focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
             <span className="text-2xl">{selectedCountry.flag}</span>
-            <span className="text-sm font-medium text-gray-700">{selectedCountry.dial}</span>
+            <span className="text-sm font-medium text-gray-700">
+              {selectedCountry.code === 'OTHER' ? customDialCode : selectedCountry.dial}
+            </span>
             <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
           </button>
 
           {isOpen && (
-            <div className="absolute top-full left-0 mt-1 w-72 bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-80 overflow-hidden flex flex-col">
+            <div className="absolute top-full left-0 mt-1 w-72 bg-white border border-gray-300 rounded-lg shadow-lg z-50 max-h-96 overflow-hidden flex flex-col">
               <div className="p-2 border-b border-gray-200">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -89,7 +106,7 @@ export function PhoneInput({ value, onChange, label, placeholder, id = 'phone' }
                   />
                 </div>
               </div>
-              <div className="overflow-y-auto">
+              <div className="overflow-y-auto flex-1">
                 {filteredCountries.length > 0 ? (
                   filteredCountries.map((country) => (
                     <button
@@ -103,7 +120,7 @@ export function PhoneInput({ value, onChange, label, placeholder, id = 'phone' }
                         <div className="text-sm font-medium text-gray-900 truncate">
                           {getCountryName(country)}
                         </div>
-                        <div className="text-xs text-gray-500">{country.code}</div>
+                        <div className="text-xs text-gray-500">{country.code !== 'OTHER' ? country.code : ''}</div>
                       </div>
                       <span className="text-sm font-medium text-gray-700">{country.dial}</span>
                     </button>
@@ -114,22 +131,43 @@ export function PhoneInput({ value, onChange, label, placeholder, id = 'phone' }
                   </div>
                 )}
               </div>
+              {selectedCountry.code === 'OTHER' && (
+                <div className="p-3 border-t border-gray-200 bg-gray-50">
+                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                    {language === 'en' ? 'Enter country code' : 'Введите код страны'}
+                  </label>
+                  <input
+                    type="text"
+                    value={customDialCode}
+                    onChange={handleCustomDialCodeChange}
+                    placeholder="+1"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                  />
+                </div>
+              )}
             </div>
           )}
         </div>
 
-        <input
-          type="tel"
-          id={id}
-          value={value}
-          onChange={handlePhoneChange}
-          placeholder={placeholder}
-          className="flex-1 px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm md:text-base"
-          style={{
-            minHeight: '44px',
-            height: 'auto'
-          }}
-        />
+        <div className="flex-1">
+          <input
+            type="tel"
+            id={id}
+            value={value}
+            onChange={handlePhoneChange}
+            placeholder={placeholder}
+            className="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm md:text-base"
+            style={{
+              minHeight: '44px',
+              height: 'auto'
+            }}
+          />
+          {selectedCountry.code === 'OTHER' && (
+            <p className="text-xs text-gray-500 mt-1">
+              {language === 'en' ? 'Select "Other" from dropdown and enter your country code' : 'Выберите "Другое" из списка и введите код страны'}
+            </p>
+          )}
+        </div>
       </div>
     </div>
   );

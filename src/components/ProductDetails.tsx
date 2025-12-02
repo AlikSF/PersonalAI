@@ -22,8 +22,8 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
-    countryCode: 'RU',
-    dialCode: '+7',
+    countryCode: 'TH',
+    dialCode: '+66',
     tourDate: '',
     adults: 1,
     children: 0
