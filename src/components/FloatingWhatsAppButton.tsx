@@ -14,7 +14,7 @@ export function FloatingWhatsAppButton() {
       message = 'Здравствуйте! Я хочу узнать подробнее о доступных турах в Пхукете.';
     }
 
-    const telegramUrl = `https://t.me/${telegramUsername}?start=${encodeURIComponent(message)}`;
+    const telegramUrl = `https://t.me/${telegramUsername}?text=${encodeURIComponent(message)}`;
     window.open(telegramUrl, '_blank');
   };
 
