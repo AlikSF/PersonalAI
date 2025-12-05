@@ -114,6 +114,8 @@ export function Testimonials() {
   const [slidesPerView, setSlidesPerView] = useState(1);
   const autoPlayRef = useRef<NodeJS.Timeout>();
 
+  const extendedTestimonials = [...testimonials, ...testimonials, ...testimonials];
+
   useEffect(() => {
     const updateSlidesPerView = () => {
       if (window.innerWidth >= 1024) {
@@ -131,13 +133,22 @@ export function Testimonials() {
   }, []);
 
   const nextSlide = () => {
-    setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
+    setCurrentIndex((prevIndex) => {
+      const nextIndex = prevIndex + 1;
+      if (nextIndex >= testimonials.length * 2) {
+        setTimeout(() => setCurrentIndex(prevIndex + 1 - testimonials.length), 700);
+      }
+      return nextIndex;
+    });
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? testimonials.length - 1 : prevIndex - 1
-    );
+    setCurrentIndex((prevIndex) => {
+      if (prevIndex <= 0) {
+        return testimonials.length - 1;
+      }
+      return prevIndex - 1;
+    });
   };
 
   const goToSlide = (index: number) => {
@@ -207,9 +218,9 @@ export function Testimonials() {
                 transform: `translateX(-${currentIndex * (100 / slidesPerView)}%)`
               }}
             >
-              {testimonials.map((testimonial) => (
+              {extendedTestimonials.map((testimonial, index) => (
                 <div
-                  key={testimonial.id}
+                  key={`${testimonial.id}-${index}`}
                   className="w-full md:w-1/2 lg:w-1/3 flex-shrink-0 px-3"
                 >
                   <div className="bg-gray-50 rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300 h-full">
@@ -279,7 +290,7 @@ export function Testimonials() {
               key={index}
               onClick={() => goToSlide(index)}
               className={`h-2 rounded-full transition-all duration-300 ${
-                index === currentIndex
+                index === (currentIndex % testimonials.length)
                   ? 'w-8 bg-blue-600'
                   : 'w-2 bg-gray-300 hover:bg-gray-400'
               }`}
