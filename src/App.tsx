@@ -8,14 +8,17 @@ import { ProductDetails } from './components/ProductDetails';
 import { Testimonials } from './components/Testimonials';
 import { ContactForm } from './components/ContactForm';
 import { AdminPanel } from './components/AdminPanel';
+import { AdminLogin } from './components/AdminLogin';
 import { Footer } from './components/Footer';
 import { FloatingWhatsAppButton } from './components/FloatingWhatsAppButton';
 import { Product, supabase } from './lib/supabase';
 import { Loader2, Search, X } from 'lucide-react';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
+import { AuthProvider, useAuth } from './contexts/AuthContext';
 
 function AppContent() {
   const { t, language } = useLanguage();
+  const { user, loading: authLoading } = useAuth();
   const [currentPage, setCurrentPage] = useState('home');
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
@@ -206,7 +209,14 @@ function AppContent() {
 
 
   if (currentPage === 'admin') {
-    return <AdminPanel />;
+    if (authLoading) {
+      return (
+        <div className="min-h-screen flex items-center justify-center bg-gray-50">
+          <Loader2 className="h-12 w-12 text-blue-600 animate-spin" />
+        </div>
+      );
+    }
+    return user ? <AdminPanel /> : <AdminLogin />;
   }
 
   const scrollToContact = () => {
@@ -341,9 +351,11 @@ function AppContent() {
 
 function App() {
   return (
-    <LanguageProvider>
-      <AppContent />
-    </LanguageProvider>
+    <AuthProvider>
+      <LanguageProvider>
+        <AppContent />
+      </LanguageProvider>
+    </AuthProvider>
   );
 }
 

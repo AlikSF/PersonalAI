@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, X } from 'lucide-react';
+import { Plus, Edit, Trash2, X, LogOut } from 'lucide-react';
 import { supabase, Product } from '../lib/supabase';
+import { useAuth } from '../contexts/AuthContext';
 
 export function AdminPanel() {
+  const { signOut, user } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
@@ -151,14 +153,28 @@ export function AdminPanel() {
     <div className="min-h-screen bg-gray-50 py-8">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">Admin Panel</h1>
-          <button
-            onClick={() => setIsFormOpen(true)}
-            className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition"
-          >
-            <Plus className="h-5 w-5" />
-            <span>Add Product</span>
-          </button>
+          <div>
+            <h1 className="text-3xl font-bold text-gray-900">Admin Panel</h1>
+            {user?.email && (
+              <p className="text-sm text-gray-600 mt-1">Logged in as: {user.email}</p>
+            )}
+          </div>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setIsFormOpen(true)}
+              className="bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-blue-700 transition"
+            >
+              <Plus className="h-5 w-5" />
+              <span>Add Product</span>
+            </button>
+            <button
+              onClick={signOut}
+              className="bg-gray-600 text-white px-4 py-2 rounded-lg flex items-center space-x-2 hover:bg-gray-700 transition"
+            >
+              <LogOut className="h-5 w-5" />
+              <span>Logout</span>
+            </button>
+          </div>
         </div>
 
         <div className="bg-white rounded-lg shadow overflow-hidden">
