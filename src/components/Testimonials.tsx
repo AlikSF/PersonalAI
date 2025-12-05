@@ -107,11 +107,12 @@ const testimonials: Testimonial[] = [
 
 export function Testimonials() {
   const { language, t } = useLanguage();
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const [currentIndex, setCurrentIndex] = useState(testimonials.length);
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
   const [slidesPerView, setSlidesPerView] = useState(1);
+  const [isTransitioning, setIsTransitioning] = useState(true);
   const autoPlayRef = useRef<NodeJS.Timeout>();
 
   const extendedTestimonials = [...testimonials, ...testimonials, ...testimonials];
@@ -133,27 +134,36 @@ export function Testimonials() {
   }, []);
 
   const nextSlide = () => {
-    setCurrentIndex((prevIndex) => {
-      const nextIndex = prevIndex + 1;
-      if (nextIndex >= testimonials.length * 2) {
-        setTimeout(() => setCurrentIndex(prevIndex + 1 - testimonials.length), 700);
-      }
-      return nextIndex;
-    });
+    setCurrentIndex((prevIndex) => prevIndex + 1);
   };
 
   const prevSlide = () => {
-    setCurrentIndex((prevIndex) => {
-      if (prevIndex <= 0) {
-        return testimonials.length - 1;
-      }
-      return prevIndex - 1;
-    });
+    setCurrentIndex((prevIndex) => prevIndex - 1);
   };
 
   const goToSlide = (index: number) => {
-    setCurrentIndex(index);
+    setCurrentIndex(testimonials.length + index);
   };
+
+  useEffect(() => {
+    if (currentIndex >= testimonials.length * 2) {
+      setTimeout(() => {
+        setIsTransitioning(false);
+        setCurrentIndex(testimonials.length);
+      }, 700);
+      setTimeout(() => {
+        setIsTransitioning(true);
+      }, 750);
+    } else if (currentIndex <= 0) {
+      setTimeout(() => {
+        setIsTransitioning(false);
+        setCurrentIndex(testimonials.length);
+      }, 700);
+      setTimeout(() => {
+        setIsTransitioning(true);
+      }, 750);
+    }
+  }, [currentIndex]);
 
   useEffect(() => {
     if (isAutoPlaying) {
@@ -213,7 +223,7 @@ export function Testimonials() {
         >
           <div className="overflow-hidden">
             <div
-              className="flex transition-transform duration-700 ease-in-out"
+              className={`flex ${isTransitioning ? 'transition-transform duration-700 ease-in-out' : ''}`}
               style={{
                 transform: `translateX(-${currentIndex * (100 / slidesPerView)}%)`
               }}
