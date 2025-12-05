@@ -83,13 +83,13 @@ export function PhoneInput({ value, onChange, label, placeholder, id = 'phone' }
           <button
             type="button"
             onClick={() => setIsOpen(!isOpen)}
-            className="h-11 md:h-12 px-3 flex items-center gap-2 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition-colors focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="h-10 md:h-11 px-2 md:px-3 flex items-center gap-1.5 md:gap-2 border border-gray-300 rounded-lg bg-white hover:bg-gray-50 transition-colors focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
           >
-            <span className="text-2xl">{selectedCountry.flag}</span>
-            <span className="text-sm font-medium text-gray-700">
+            <span className="text-lg md:text-xl">{selectedCountry.flag}</span>
+            <span className="text-xs md:text-sm font-medium text-gray-700">
               {selectedCountry.code === 'OTHER' ? customDialCode : selectedCountry.dial}
             </span>
-            <ChevronDown className={`h-4 w-4 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
+            <ChevronDown className={`h-3.5 w-3.5 md:h-4 md:w-4 text-gray-500 transition-transform ${isOpen ? 'rotate-180' : ''}`} />
           </button>
 
           {isOpen && (
@@ -157,11 +157,7 @@ export function PhoneInput({ value, onChange, label, placeholder, id = 'phone' }
             value={value}
             onChange={handlePhoneChange}
             placeholder={placeholder}
-            className="w-full px-3 md:px-4 py-2 md:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm md:text-base"
-            style={{
-              minHeight: '44px',
-              height: 'auto'
-            }}
+            className="w-full h-10 md:h-11 px-3 md:px-4 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm md:text-base"
           />
           {selectedCountry.code === 'OTHER' && (
             <p className="text-xs text-gray-500 mt-1">
