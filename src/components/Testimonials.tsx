@@ -187,7 +187,7 @@ export function Testimonials() {
             <div
               className="flex transition-transform duration-700 ease-in-out"
               style={{
-                transform: `translateX(-${currentIndex * (100 / testimonials.length)}%)`
+                transform: `translateX(-${currentIndex * 33.333}%)`
               }}
             >
               {testimonials.map((testimonial) => (
