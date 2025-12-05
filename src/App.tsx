@@ -209,6 +209,7 @@ function AppContent() {
 
 
   if (currentPage === 'admin') {
+    console.log('Admin page - Auth Loading:', authLoading, 'User:', user ? user.email : 'No user');
     if (authLoading) {
       return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50">
