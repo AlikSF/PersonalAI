@@ -209,15 +209,9 @@ function AppContent() {
 
 
   if (currentPage === 'admin') {
-    console.log('Admin page - Auth Loading:', authLoading, 'User:', user ? user.email : 'No user');
-    if (authLoading) {
-      return (
-        <div className="min-h-screen flex items-center justify-center bg-gray-50">
-          <Loader2 className="h-12 w-12 text-blue-600 animate-spin" />
-        </div>
-      );
-    }
-    return user ? <AdminPanel /> : <AdminLogin />;
+    window.history.pushState({}, '', '/');
+    setCurrentPage('home');
+    return null;
   }
 
   const scrollToContact = () => {

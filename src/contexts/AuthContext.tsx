@@ -17,14 +17,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data: { session } }) => {
-      console.log('Auth Session:', session ? 'User logged in' : 'No session');
       setUser(session?.user ?? null);
       setLoading(false);
     });
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
       (async () => {
-        console.log('Auth State Changed:', session ? 'User logged in' : 'User logged out');
         setUser(session?.user ?? null);
       })();
     });
