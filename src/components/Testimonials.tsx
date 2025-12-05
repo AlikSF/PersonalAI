@@ -1,5 +1,6 @@
-import { Star } from 'lucide-react';
+import { Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
+import { useState, useEffect, useRef } from 'react';
 
 interface Testimonial {
   id: number;
@@ -106,8 +107,64 @@ const testimonials: Testimonial[] = [
 
 export function Testimonials() {
   const { language, t } = useLanguage();
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isAutoPlaying, setIsAutoPlaying] = useState(true);
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
+  const autoPlayRef = useRef<NodeJS.Timeout>();
+
+  const nextSlide = () => {
+    setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentIndex((prevIndex) =>
+      prevIndex === 0 ? testimonials.length - 1 : prevIndex - 1
+    );
+  };
+
+  const goToSlide = (index: number) => {
+    setCurrentIndex(index);
+  };
+
+  useEffect(() => {
+    if (isAutoPlaying) {
+      autoPlayRef.current = setInterval(nextSlide, 3500);
+    }
+    return () => {
+      if (autoPlayRef.current) {
+        clearInterval(autoPlayRef.current);
+      }
+    };
+  }, [isAutoPlaying, currentIndex]);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStart - touchEnd > 75) {
+      nextSlide();
+    }
+    if (touchStart - touchEnd < -75) {
+      prevSlide();
+    }
+  };
+
+  const handleMouseEnter = () => {
+    setIsAutoPlaying(false);
+  };
+
+  const handleMouseLeave = () => {
+    setIsAutoPlaying(true);
+  };
+
   return (
-    <section className="py-12 md:py-16 bg-white">
+    <section className="py-12 md:py-16 bg-white overflow-hidden">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-8 md:mb-12">
           <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-3">
@@ -118,50 +175,99 @@ export function Testimonials() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-          {testimonials.map((testimonial) => (
+        <div
+          className="relative"
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
+          <div className="overflow-hidden">
             <div
-              key={testimonial.id}
-              className="bg-gray-50 rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow duration-300"
+              className="flex transition-transform duration-700 ease-in-out"
+              style={{
+                transform: `translateX(-${currentIndex * (100 / testimonials.length)}%)`
+              }}
             >
-              <div className="flex items-center justify-between mb-4">
-                <div className="flex gap-1">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className="h-4 w-4 fill-yellow-400 text-yellow-400"
-                    />
-                  ))}
+              {testimonials.map((testimonial) => (
+                <div
+                  key={testimonial.id}
+                  className="w-full md:w-1/2 lg:w-1/3 flex-shrink-0 px-3"
+                >
+                  <div className="bg-gray-50 rounded-xl p-6 shadow-md hover:shadow-xl transition-shadow duration-300 h-full">
+                    <div className="flex items-center justify-between mb-4">
+                      <div className="flex gap-1">
+                        {[...Array(testimonial.rating)].map((_, i) => (
+                          <Star
+                            key={i}
+                            className="h-5 w-5 fill-yellow-400 text-yellow-400"
+                          />
+                        ))}
+                      </div>
+                    </div>
+
+                    <p className="text-sm text-gray-700 mb-4 leading-relaxed min-h-[120px]">
+                      {language === 'en' ? testimonial.textEn :
+                        language === 'az' ? testimonial.textAz :
+                        language === 'kk' ? testimonial.textKk :
+                        language === 'ky' ? testimonial.textKy :
+                        language === 'zh' ? testimonial.textZh :
+                        language === 'fr' ? testimonial.textFr :
+                        language === 'uz' ? testimonial.textUz :
+                        testimonial.textRu}
+                    </p>
+
+                    <div className="border-t border-gray-200 pt-4">
+                      <p className="font-semibold text-gray-900 text-sm">
+                        {testimonial.name}
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        {language === 'en' ? testimonial.locationEn :
+                         language === 'az' ? testimonial.locationAz :
+                         language === 'kk' ? testimonial.locationKk :
+                         language === 'ky' ? testimonial.locationKy :
+                         language === 'zh' ? testimonial.locationZh :
+                         language === 'fr' ? testimonial.locationFr :
+                         language === 'uz' ? testimonial.locationUz :
+                         testimonial.locationRu}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-
-              <p className="text-sm text-gray-700 mb-4 leading-relaxed">
-                {language === 'en' ? testimonial.textEn :
-                  language === 'az' ? testimonial.textAz :
-                  language === 'kk' ? testimonial.textKk :
-                  language === 'ky' ? testimonial.textKy :
-                  language === 'zh' ? testimonial.textZh :
-                  language === 'fr' ? testimonial.textFr :
-                  language === 'uz' ? testimonial.textUz :
-                  testimonial.textRu}
-              </p>
-
-              <div className="border-t border-gray-200 pt-4">
-                <p className="font-semibold text-gray-900 text-sm">
-                  {testimonial.name}
-                </p>
-                <p className="text-xs text-gray-500 mt-1">
-                  {language === 'en' ? testimonial.locationEn :
-                   language === 'az' ? testimonial.locationAz :
-                   language === 'kk' ? testimonial.locationKk :
-                   language === 'ky' ? testimonial.locationKy :
-                   language === 'zh' ? testimonial.locationZh :
-                   language === 'fr' ? testimonial.locationFr :
-                   language === 'uz' ? testimonial.locationUz :
-                   testimonial.locationRu}
-                </p>
-              </div>
+              ))}
             </div>
+          </div>
+
+          <button
+            onClick={prevSlide}
+            className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 transition-colors z-10"
+            aria-label="Previous testimonial"
+          >
+            <ChevronLeft className="h-6 w-6 text-gray-600" />
+          </button>
+
+          <button
+            onClick={nextSlide}
+            className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 bg-white rounded-full p-2 shadow-lg hover:bg-gray-100 transition-colors z-10"
+            aria-label="Next testimonial"
+          >
+            <ChevronRight className="h-6 w-6 text-gray-600" />
+          </button>
+        </div>
+
+        <div className="flex justify-center gap-2 mt-8">
+          {testimonials.map((_, index) => (
+            <button
+              key={index}
+              onClick={() => goToSlide(index)}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                index === currentIndex
+                  ? 'w-8 bg-blue-600'
+                  : 'w-2 bg-gray-300 hover:bg-gray-400'
+              }`}
+              aria-label={`Go to testimonial ${index + 1}`}
+            />
           ))}
         </div>
       </div>
