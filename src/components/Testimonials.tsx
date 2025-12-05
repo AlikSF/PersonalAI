@@ -111,7 +111,24 @@ export function Testimonials() {
   const [isAutoPlaying, setIsAutoPlaying] = useState(true);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
+  const [slidesPerView, setSlidesPerView] = useState(1);
   const autoPlayRef = useRef<NodeJS.Timeout>();
+
+  useEffect(() => {
+    const updateSlidesPerView = () => {
+      if (window.innerWidth >= 1024) {
+        setSlidesPerView(3);
+      } else if (window.innerWidth >= 768) {
+        setSlidesPerView(2);
+      } else {
+        setSlidesPerView(1);
+      }
+    };
+
+    updateSlidesPerView();
+    window.addEventListener('resize', updateSlidesPerView);
+    return () => window.removeEventListener('resize', updateSlidesPerView);
+  }, []);
 
   const nextSlide = () => {
     setCurrentIndex((prevIndex) => (prevIndex + 1) % testimonials.length);
@@ -187,7 +204,7 @@ export function Testimonials() {
             <div
               className="flex transition-transform duration-700 ease-in-out"
               style={{
-                transform: `translateX(-${currentIndex * 33.333}%)`
+                transform: `translateX(-${currentIndex * (100 / slidesPerView)}%)`
               }}
             >
               {testimonials.map((testimonial) => (
