@@ -7,19 +7,14 @@ import { ProductCard } from './components/ProductCard';
 import { ProductDetails } from './components/ProductDetails';
 import { Testimonials } from './components/Testimonials';
 import { ContactForm } from './components/ContactForm';
-import { AdminPanel } from './components/AdminPanel';
-import { AdminLogin } from './components/AdminLogin';
 import { Footer } from './components/Footer';
 import { FloatingWhatsAppButton } from './components/FloatingWhatsAppButton';
 import { Product, supabase } from './lib/supabase';
 import { Loader2, Search, X } from 'lucide-react';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
-import { AuthProvider, useAuth } from './contexts/AuthContext';
 
 function AppContent() {
   const { t, language } = useLanguage();
-  const { user, loading: authLoading } = useAuth();
-  const [currentPage, setCurrentPage] = useState('home');
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -27,27 +22,6 @@ function AppContent() {
   const [showProductDetails, setShowProductDetails] = useState(false);
   const [categoryFilter, setCategoryFilter] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
-
-  useEffect(() => {
-    const path = window.location.pathname;
-    if (path === '/admin') {
-      setCurrentPage('admin');
-    } else {
-      setCurrentPage('home');
-    }
-
-    const handlePopState = () => {
-      const path = window.location.pathname;
-      if (path === '/admin') {
-        setCurrentPage('admin');
-      } else {
-        setCurrentPage('home');
-      }
-    };
-
-    window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
-  }, []);
 
   useEffect(() => {
     fetchProducts();
@@ -207,13 +181,6 @@ function AppContent() {
     }
   };
 
-
-  if (currentPage === 'admin') {
-    window.history.pushState({}, '', '/');
-    setCurrentPage('home');
-    return null;
-  }
-
   const scrollToContact = () => {
     const contactSection = document.getElementById('contact');
     if (contactSection) {
@@ -346,11 +313,9 @@ function AppContent() {
 
 function App() {
   return (
-    <AuthProvider>
-      <LanguageProvider>
-        <AppContent />
-      </LanguageProvider>
-    </AuthProvider>
+    <LanguageProvider>
+      <AppContent />
+    </LanguageProvider>
   );
 }
 
