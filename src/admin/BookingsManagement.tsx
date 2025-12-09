@@ -121,7 +121,7 @@ export function BookingsManagement() {
     try {
       let query = supabase
         .from('bookings')
-        .select('id, product_id, customer_name, customer_email, customer_phone, country_code, dial_code, start_date, end_date, tour_date, adults, children, total_price, payment_status, booking_status, special_requests, created_at, product:products(name)', { count: 'exact' })
+        .select('*, product:products(name)', { count: 'exact' })
         .order(bookingSortField, { ascending: bookingSortDirection === 'asc' });
 
       if (bookingFilters.dateFrom) {
