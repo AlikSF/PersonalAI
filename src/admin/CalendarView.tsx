@@ -17,14 +17,27 @@ interface Booking {
   };
 }
 
+interface FullBooking {
+  id: string;
+  customer_name: string;
+  customer_email: string;
+  customer_phone: string;
+  country_code: string;
+  tour_date: string;
+  adults: number;
+  children: number;
+  booking_status: string;
+  payment_status: string;
+  special_requests?: string;
+}
+
 export function CalendarView() {
   const { t, lang } = useAdminLang();
   const [currentDate, setCurrentDate] = useState(new Date());
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [selectedBookingId, setSelectedBookingId] = useState<string | null>(null);
-  const [showEditModal, setShowEditModal] = useState(false);
+  const [editingBooking, setEditingBooking] = useState<FullBooking | null>(null);
 
   useEffect(() => {
     fetchBookings();
@@ -49,6 +62,22 @@ export function CalendarView() {
       console.error('Error fetching bookings:', error);
     } finally {
       setLoading(false);
+    }
+  }
+
+  async function fetchFullBooking(bookingId: string) {
+    try {
+      const { data, error } = await supabase
+        .from('bookings')
+        .select('id, customer_name, customer_email, customer_phone, country_code, tour_date, adults, children, booking_status, payment_status, special_requests')
+        .eq('id', bookingId)
+        .single();
+
+      if (error) throw error;
+      return data as FullBooking;
+    } catch (error) {
+      console.error('Error fetching booking:', error);
+      return null;
     }
   }
 
@@ -237,9 +266,11 @@ export function CalendarView() {
               {selectedBookings.map((booking) => (
                 <div
                   key={booking.id}
-                  onDoubleClick={() => {
-                    setSelectedBookingId(booking.id);
-                    setShowEditModal(true);
+                  onDoubleClick={async () => {
+                    const fullBooking = await fetchFullBooking(booking.id);
+                    if (fullBooking) {
+                      setEditingBooking(fullBooking);
+                    }
                   }}
                   className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200 hover:border-slate-300 transition-colors cursor-pointer"
                   title={lang === 'ru' ? 'Дважды щелкните для редактирования' : 'Double-click to edit'}
@@ -286,17 +317,13 @@ export function CalendarView() {
         </div>
       )}
 
-      {showEditModal && selectedBookingId && (
+      {editingBooking && (
         <BookingEditModal
-          bookingId={selectedBookingId}
-          onClose={() => {
-            setShowEditModal(false);
-            setSelectedBookingId(null);
-          }}
-          onSave={() => {
+          booking={editingBooking}
+          onClose={() => setEditingBooking(null)}
+          onUpdate={() => {
             fetchBookings();
-            setShowEditModal(false);
-            setSelectedBookingId(null);
+            setEditingBooking(null);
           }}
         />
       )}
