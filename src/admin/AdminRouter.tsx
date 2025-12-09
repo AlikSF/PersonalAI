@@ -7,6 +7,7 @@ import { AdminDashboard } from './AdminDashboard';
 import { ProductsList } from './ProductsList';
 import { ProductForm } from './ProductForm';
 import { BookingsManagement } from './BookingsManagement';
+import { CalendarView } from './CalendarView';
 import { Loader2 } from 'lucide-react';
 
 export function AdminRouter() {
@@ -38,6 +39,10 @@ export function AdminRouter() {
   const renderContent = () => {
     if (path === '/admin/dashboard') {
       return <AdminDashboard />;
+    }
+
+    if (path === '/admin/calendar') {
+      return <CalendarView />;
     }
 
     if (path === '/admin/bookings') {

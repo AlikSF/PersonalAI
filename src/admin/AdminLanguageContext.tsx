@@ -118,6 +118,28 @@ interface AdminTranslations {
   viewBookings: string;
   deleteItems: string;
   cannotDelete: string;
+  calendar: string;
+  bookingStatistics: string;
+  totalBookings: string;
+  thisMonth: string;
+  thisWeek: string;
+  allTime: string;
+  bookingsPerWeek: string;
+  bookingsPerMonth: string;
+  messageStatistics: string;
+  totalMessages: string;
+  messagesPerDay: string;
+  messagesPerWeek: string;
+  messagesPerMonth: string;
+  scheduleCalendar: string;
+  viewSchedule: string;
+  bookingsFor: string;
+  noBookingsForDate: string;
+  today: string;
+  monthView: string;
+  previousMonth: string;
+  nextMonth: string;
+  bookingsCount: string;
 }
 
 const translations: Record<AdminLang, AdminTranslations> = {
@@ -237,6 +259,28 @@ const translations: Record<AdminLang, AdminTranslations> = {
     viewBookings: 'View and manage bookings',
     deleteItems: 'Delete products and bookings',
     cannotDelete: 'Cannot delete items (Admin only)',
+    calendar: 'Calendar',
+    bookingStatistics: 'Booking Statistics',
+    totalBookings: 'Total Bookings',
+    thisMonth: 'This Month',
+    thisWeek: 'This Week',
+    allTime: 'All Time',
+    bookingsPerWeek: 'Bookings per Week',
+    bookingsPerMonth: 'Bookings per Month',
+    messageStatistics: 'Message Statistics',
+    totalMessages: 'Total Messages',
+    messagesPerDay: 'Messages per Day',
+    messagesPerWeek: 'Messages per Week',
+    messagesPerMonth: 'Messages per Month',
+    scheduleCalendar: 'Schedule Calendar',
+    viewSchedule: 'View your tour schedule at a glance',
+    bookingsFor: 'Bookings for',
+    noBookingsForDate: 'No bookings for this date',
+    today: 'Today',
+    monthView: 'Month View',
+    previousMonth: 'Previous Month',
+    nextMonth: 'Next Month',
+    bookingsCount: 'bookings',
   },
   ru: {
     adminPanel: 'Панель администратора',
@@ -354,6 +398,28 @@ const translations: Record<AdminLang, AdminTranslations> = {
     viewBookings: 'Просмотр и управление бронированиями',
     deleteItems: 'Удаление продуктов и бронирований',
     cannotDelete: 'Невозможно удалять элементы (только для администратора)',
+    calendar: 'Календарь',
+    bookingStatistics: 'Статистика бронирований',
+    totalBookings: 'Всего бронирований',
+    thisMonth: 'В этом месяце',
+    thisWeek: 'На этой неделе',
+    allTime: 'За все время',
+    bookingsPerWeek: 'Бронирований в неделю',
+    bookingsPerMonth: 'Бронирований в месяц',
+    messageStatistics: 'Статистика сообщений',
+    totalMessages: 'Всего сообщений',
+    messagesPerDay: 'Сообщений в день',
+    messagesPerWeek: 'Сообщений в неделю',
+    messagesPerMonth: 'Сообщений в месяц',
+    scheduleCalendar: 'Календарь расписания',
+    viewSchedule: 'Просмотр расписания туров',
+    bookingsFor: 'Бронирования на',
+    noBookingsForDate: 'Нет бронирований на эту дату',
+    today: 'Сегодня',
+    monthView: 'Вид месяца',
+    previousMonth: 'Предыдущий месяц',
+    nextMonth: 'Следующий месяц',
+    bookingsCount: 'бронирований',
   },
 };
 
