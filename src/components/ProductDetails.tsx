@@ -137,18 +137,23 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
     }
 
     // Save booking to database (non-blocking)
+    const specialRequestsText = language === 'en'
+      ? `Adults: ${adults}, Children: ${children}, Platform: ${platform}`
+      : `Взрослых: ${adults}, Детей: ${children}, Платформа: ${platform}`;
+
     supabase.from('bookings').insert({
       product_id: product.id,
       customer_name: name,
       customer_email: 'no-email@provided.com',
       customer_phone: phone,
+      country_code: dialCode,
       tour_date: tourDate,
       start_date: tourDate,
       end_date: tourDate,
       total_price: totalPrice,
       payment_status: 'pending',
-      booking_status: 'confirmed',
-      special_requests: `Взрослых: ${adults}, Детей: ${children}, Платформа: ${platform}`,
+      booking_status: 'pending',
+      special_requests: specialRequestsText,
     }).then(({ error }) => {
       if (error) {
         console.error('Error saving booking:', error);
