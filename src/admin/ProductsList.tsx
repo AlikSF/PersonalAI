@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Product, supabase } from '../lib/supabase';
 import { useAdminLang } from './AdminLanguageContext';
-import { Plus, Edit2, Trash2, Loader2, AlertTriangle, X, CheckCircle, XCircle } from 'lucide-react';
+import { Plus, Edit2, Trash2, Loader2, AlertTriangle, X, CheckCircle, XCircle, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+
+type SortField = 'name' | 'created_at' | null;
+type SortDirection = 'asc' | 'desc';
 
 export function ProductsList() {
   const { t } = useAdminLang();
@@ -9,6 +12,8 @@ export function ProductsList() {
   const [loading, setLoading] = useState(true);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const [sortField, setSortField] = useState<SortField>(null);
+  const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
   const [notification, setNotification] = useState<{
     type: 'success' | 'error';
     message: string;
@@ -16,7 +21,7 @@ export function ProductsList() {
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [sortField, sortDirection]);
 
   useEffect(() => {
     if (notification) {
@@ -27,11 +32,19 @@ export function ProductsList() {
 
   const fetchProducts = async () => {
     setLoading(true);
-    const { data, error } = await supabase
+    let query = supabase
       .from('products')
-      .select('*')
-      .order('priority', { ascending: true, nullsLast: true })
-      .order('created_at', { ascending: false });
+      .select('*');
+
+    if (sortField) {
+      query = query.order(sortField, { ascending: sortDirection === 'asc' });
+    } else {
+      query = query
+        .order('priority', { ascending: true, nullsLast: true })
+        .order('created_at', { ascending: false });
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       setNotification({ type: 'error', message: error.message });
@@ -77,6 +90,26 @@ export function ProductsList() {
     if (!features || features.length === 0) return '-';
     const text = features.join(', ');
     return truncate(text, 50);
+  };
+
+  const handleSort = (field: SortField) => {
+    if (sortField === field) {
+      setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
+  const getSortIcon = (field: SortField) => {
+    if (sortField !== field) {
+      return <ArrowUpDown className="w-4 h-4 opacity-30" />;
+    }
+    return sortDirection === 'asc' ? (
+      <ArrowUp className="w-4 h-4" />
+    ) : (
+      <ArrowDown className="w-4 h-4" />
+    );
   };
 
   return (
@@ -132,8 +165,14 @@ export function ProductsList() {
             <table className="w-full">
               <thead className="bg-slate-50 border-b border-slate-200">
                 <tr>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                    {t.name}
+                  <th
+                    className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider cursor-pointer hover:bg-slate-100 transition-colors"
+                    onClick={() => handleSort('name')}
+                  >
+                    <div className="flex items-center gap-2">
+                      {t.name}
+                      {getSortIcon('name')}
+                    </div>
                   </th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider hidden md:table-cell">
                     {t.description}
@@ -141,8 +180,14 @@ export function ProductsList() {
                   <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider hidden lg:table-cell">
                     {t.features}
                   </th>
-                  <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider hidden sm:table-cell">
-                    {t.created}
+                  <th
+                    className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider hidden sm:table-cell cursor-pointer hover:bg-slate-100 transition-colors"
+                    onClick={() => handleSort('created_at')}
+                  >
+                    <div className="flex items-center gap-2">
+                      {t.created}
+                      {getSortIcon('created_at')}
+                    </div>
                   </th>
                   <th className="px-4 py-3 text-right text-xs font-semibold text-slate-600 uppercase tracking-wider">
                     {t.actions}

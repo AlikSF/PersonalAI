@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAdminLang } from './AdminLanguageContext';
+import { CompanyInfoEditor } from './CompanyInfoEditor';
 import {
   Calendar,
   Mail,
@@ -17,6 +18,10 @@ import {
   Clock,
   XCircle,
   RefreshCw,
+  Building2,
+  ArrowUpDown,
+  ArrowUp,
+  ArrowDown,
 } from 'lucide-react';
 
 interface Booking {
@@ -51,7 +56,10 @@ interface ContactMessage {
   product?: { name: string };
 }
 
-type ActiveTab = 'bookings' | 'messages';
+type ActiveTab = 'bookings' | 'messages' | 'companyInfo';
+type BookingSortField = 'customer_name' | 'total_price' | 'payment_status' | 'booking_status' | 'tour_date' | 'created_at';
+type MessageSortField = 'name' | 'created_at';
+type SortDirection = 'asc' | 'desc';
 
 const ITEMS_PER_PAGE = 15;
 
@@ -67,6 +75,10 @@ export function BookingsManagement() {
   const [messagesTotal, setMessagesTotal] = useState(0);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [selectedMessage, setSelectedMessage] = useState<ContactMessage | null>(null);
+  const [bookingSortField, setBookingSortField] = useState<BookingSortField>('created_at');
+  const [bookingSortDirection, setBookingSortDirection] = useState<SortDirection>('desc');
+  const [messageSortField, setMessageSortField] = useState<MessageSortField>('created_at');
+  const [messageSortDirection, setMessageSortDirection] = useState<SortDirection>('desc');
 
   const [bookingFilters, setBookingFilters] = useState({
     dateFrom: '',
@@ -92,7 +104,7 @@ export function BookingsManagement() {
     } else {
       fetchMessages();
     }
-  }, [activeTab, bookingsPage, messagesPage, bookingFilters, messageFilters]);
+  }, [activeTab, bookingsPage, messagesPage, bookingFilters, messageFilters, bookingSortField, bookingSortDirection, messageSortField, messageSortDirection]);
 
   const fetchBookings = async () => {
     setLoading(true);
@@ -100,7 +112,7 @@ export function BookingsManagement() {
       let query = supabase
         .from('bookings')
         .select('*, product:products(name)', { count: 'exact' })
-        .order('created_at', { ascending: false });
+        .order(bookingSortField, { ascending: bookingSortDirection === 'asc' });
 
       if (bookingFilters.dateFrom) {
         query = query.gte('created_at', bookingFilters.dateFrom);
@@ -142,7 +154,7 @@ export function BookingsManagement() {
       let query = supabase
         .from('contact_messages')
         .select('*, product:products(name)', { count: 'exact' })
-        .order('created_at', { ascending: false });
+        .order(messageSortField, { ascending: messageSortDirection === 'asc' });
 
       if (messageFilters.dateFrom) {
         query = query.gte('created_at', messageFilters.dateFrom);
@@ -252,6 +264,46 @@ export function BookingsManagement() {
 
   const totalBookingPages = Math.ceil(bookingsTotal / ITEMS_PER_PAGE);
   const totalMessagePages = Math.ceil(messagesTotal / ITEMS_PER_PAGE);
+
+  const handleBookingSort = (field: BookingSortField) => {
+    if (bookingSortField === field) {
+      setBookingSortDirection(bookingSortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setBookingSortField(field);
+      setBookingSortDirection('asc');
+    }
+  };
+
+  const handleMessageSort = (field: MessageSortField) => {
+    if (messageSortField === field) {
+      setMessageSortDirection(messageSortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      setMessageSortField(field);
+      setMessageSortDirection('asc');
+    }
+  };
+
+  const getBookingSortIcon = (field: BookingSortField) => {
+    if (bookingSortField !== field) {
+      return <ArrowUpDown className="w-4 h-4 opacity-30" />;
+    }
+    return bookingSortDirection === 'asc' ? (
+      <ArrowUp className="w-4 h-4" />
+    ) : (
+      <ArrowDown className="w-4 h-4" />
+    );
+  };
+
+  const getMessageSortIcon = (field: MessageSortField) => {
+    if (messageSortField !== field) {
+      return <ArrowUpDown className="w-4 h-4 opacity-30" />;
+    }
+    return messageSortDirection === 'asc' ? (
+      <ArrowUp className="w-4 h-4" />
+    ) : (
+      <ArrowDown className="w-4 h-4" />
+    );
+  };
 
   const renderBookingsTable = () => (
     <div className="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
@@ -375,13 +427,61 @@ export function BookingsManagement() {
         <table className="w-full">
           <thead className="bg-slate-50 border-b border-slate-200">
             <tr>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">{t.customer}</th>
+              <th
+                className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider cursor-pointer hover:bg-slate-100 transition-colors"
+                onClick={() => handleBookingSort('customer_name')}
+              >
+                <div className="flex items-center gap-2">
+                  {t.customer}
+                  {getBookingSortIcon('customer_name')}
+                </div>
+              </th>
               <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">{t.product}</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">{t.tourDate}</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">{t.price}</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">{t.paymentStatus}</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">{t.status}</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">{t.created}</th>
+              <th
+                className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider cursor-pointer hover:bg-slate-100 transition-colors"
+                onClick={() => handleBookingSort('tour_date')}
+              >
+                <div className="flex items-center gap-2">
+                  {t.tourDate}
+                  {getBookingSortIcon('tour_date')}
+                </div>
+              </th>
+              <th
+                className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider cursor-pointer hover:bg-slate-100 transition-colors"
+                onClick={() => handleBookingSort('total_price')}
+              >
+                <div className="flex items-center gap-2">
+                  {t.price}
+                  {getBookingSortIcon('total_price')}
+                </div>
+              </th>
+              <th
+                className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider cursor-pointer hover:bg-slate-100 transition-colors"
+                onClick={() => handleBookingSort('payment_status')}
+              >
+                <div className="flex items-center gap-2">
+                  {t.paymentStatus}
+                  {getBookingSortIcon('payment_status')}
+                </div>
+              </th>
+              <th
+                className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider cursor-pointer hover:bg-slate-100 transition-colors"
+                onClick={() => handleBookingSort('booking_status')}
+              >
+                <div className="flex items-center gap-2">
+                  {t.status}
+                  {getBookingSortIcon('booking_status')}
+                </div>
+              </th>
+              <th
+                className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider cursor-pointer hover:bg-slate-100 transition-colors"
+                onClick={() => handleBookingSort('created_at')}
+              >
+                <div className="flex items-center gap-2">
+                  {t.created}
+                  {getBookingSortIcon('created_at')}
+                </div>
+              </th>
               <th className="px-4 py-3 text-center text-xs font-semibold text-slate-600 uppercase tracking-wider">{t.actions}</th>
             </tr>
           </thead>
@@ -563,11 +663,27 @@ export function BookingsManagement() {
         <table className="w-full">
           <thead className="bg-slate-50 border-b border-slate-200">
             <tr>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">{t.contact}</th>
+              <th
+                className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider cursor-pointer hover:bg-slate-100 transition-colors"
+                onClick={() => handleMessageSort('name')}
+              >
+                <div className="flex items-center gap-2">
+                  {t.contact}
+                  {getMessageSortIcon('name')}
+                </div>
+              </th>
               <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">{t.message}</th>
               <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">{t.product}</th>
               <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">{t.telegram}</th>
-              <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">{t.created}</th>
+              <th
+                className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider cursor-pointer hover:bg-slate-100 transition-colors"
+                onClick={() => handleMessageSort('created_at')}
+              >
+                <div className="flex items-center gap-2">
+                  {t.created}
+                  {getMessageSortIcon('created_at')}
+                </div>
+              </th>
               <th className="px-4 py-3 text-center text-xs font-semibold text-slate-600 uppercase tracking-wider">{t.actions}</th>
             </tr>
           </thead>
@@ -820,16 +936,34 @@ export function BookingsManagement() {
             <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600" />
           )}
         </button>
+        <button
+          onClick={() => setActiveTab('companyInfo')}
+          className={`px-4 py-3 font-medium text-sm transition-colors relative ${
+            activeTab === 'companyInfo'
+              ? 'text-blue-600'
+              : 'text-slate-600 hover:text-slate-900'
+          }`}
+        >
+          <span className="flex items-center gap-2">
+            <Building2 className="w-4 h-4" />
+            {t.companyInfo || 'Company Info'}
+          </span>
+          {activeTab === 'companyInfo' && (
+            <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600" />
+          )}
+        </button>
       </div>
 
-      {loading ? (
+      {loading && activeTab !== 'companyInfo' ? (
         <div className="flex items-center justify-center py-12">
           <Loader2 className="w-8 h-8 text-blue-500 animate-spin" />
         </div>
       ) : activeTab === 'bookings' ? (
         renderBookingsTable()
-      ) : (
+      ) : activeTab === 'messages' ? (
         renderMessagesTable()
+      ) : (
+        <CompanyInfoEditor />
       )}
 
       {renderBookingModal()}
