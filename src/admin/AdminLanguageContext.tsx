@@ -109,6 +109,15 @@ interface AdminTranslations {
   details: string;
   phone: string;
   country: string;
+  yourRole: string;
+  adminRole: string;
+  userRole: string;
+  permissions: string;
+  viewProducts: string;
+  editProducts: string;
+  viewBookings: string;
+  deleteItems: string;
+  cannotDelete: string;
 }
 
 const translations: Record<AdminLang, AdminTranslations> = {
@@ -219,6 +228,15 @@ const translations: Record<AdminLang, AdminTranslations> = {
     details: 'Details',
     phone: 'Phone',
     country: 'Country',
+    yourRole: 'Your Role',
+    adminRole: 'Admin',
+    userRole: 'User',
+    permissions: 'Permissions',
+    viewProducts: 'View all products',
+    editProducts: 'Create and edit products',
+    viewBookings: 'View and manage bookings',
+    deleteItems: 'Delete products and bookings',
+    cannotDelete: 'Cannot delete items (Admin only)',
   },
   ru: {
     adminPanel: 'Панель администратора',
@@ -327,6 +345,15 @@ const translations: Record<AdminLang, AdminTranslations> = {
     details: 'Детали',
     phone: 'Телефон',
     country: 'Страна',
+    yourRole: 'Ваша роль',
+    adminRole: 'Администратор',
+    userRole: 'Пользователь',
+    permissions: 'Разрешения',
+    viewProducts: 'Просмотр всех продуктов',
+    editProducts: 'Создание и редактирование продуктов',
+    viewBookings: 'Просмотр и управление бронированиями',
+    deleteItems: 'Удаление продуктов и бронирований',
+    cannotDelete: 'Невозможно удалять элементы (только для администратора)',
   },
 };
 
