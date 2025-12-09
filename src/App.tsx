@@ -12,6 +12,8 @@ import { FloatingWhatsAppButton } from './components/FloatingWhatsAppButton';
 import { Product, supabase } from './lib/supabase';
 import { Loader2, Search, X } from 'lucide-react';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
+import { AuthProvider } from './contexts/AuthContext';
+import { AdminRouter } from './admin/AdminRouter';
 
 function AppContent() {
   const { t, language } = useLanguage();
@@ -311,7 +313,30 @@ function AppContent() {
   );
 }
 
+function useRoute() {
+  const [path, setPath] = useState(window.location.pathname);
+
+  useEffect(() => {
+    const handlePopState = () => setPath(window.location.pathname);
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
+  return path;
+}
+
 function App() {
+  const path = useRoute();
+  const isAdmin = path.startsWith('/admin');
+
+  if (isAdmin) {
+    return (
+      <AuthProvider>
+        <AdminRouter />
+      </AuthProvider>
+    );
+  }
+
   return (
     <LanguageProvider>
       <AppContent />
