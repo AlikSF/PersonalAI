@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Product, supabase } from '../lib/supabase';
+import { useAdminLang } from './AdminLanguageContext';
 import { Plus, Edit2, Trash2, Loader2, AlertTriangle, X, CheckCircle, XCircle } from 'lucide-react';
 
 export function ProductsList() {
+  const { t } = useAdminLang();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
@@ -51,7 +53,7 @@ export function ProductsList() {
     if (error) {
       setNotification({ type: 'error', message: error.message });
     } else {
-      setNotification({ type: 'success', message: 'Product deleted successfully' });
+      setNotification({ type: 'success', message: t.productDeleted });
       fetchProducts();
     }
     setDeleteConfirm(null);
@@ -104,15 +106,15 @@ export function ProductsList() {
 
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-slate-900">Products</h1>
-          <p className="text-slate-600 mt-1">Manage your tour products ({products.length} total)</p>
+          <h1 className="text-2xl font-bold text-slate-900">{t.products}</h1>
+          <p className="text-slate-600 mt-1">{t.manageProducts} ({products.length} {t.total})</p>
         </div>
         <button
           onClick={() => navigate('/admin/products/new')}
           className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
         >
           <Plus className="w-5 h-5" />
-          Add Product
+          {t.addProduct}
         </button>
       </div>
 
@@ -123,7 +125,7 @@ export function ProductsList() {
           </div>
         ) : products.length === 0 ? (
           <div className="text-center py-20">
-            <p className="text-slate-500">No products found. Create your first product.</p>
+            <p className="text-slate-500">{t.noProducts}</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -131,19 +133,19 @@ export function ProductsList() {
               <thead className="bg-slate-50 border-b border-slate-200">
                 <tr>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                    Name
+                    {t.name}
                   </th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider hidden md:table-cell">
-                    Description
+                    {t.description}
                   </th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider hidden lg:table-cell">
-                    Features
+                    {t.features}
                   </th>
                   <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider hidden sm:table-cell">
-                    Created
+                    {t.created}
                   </th>
                   <th className="px-4 py-3 text-right text-xs font-semibold text-slate-600 uppercase tracking-wider">
-                    Actions
+                    {t.actions}
                   </th>
                 </tr>
               </thead>
@@ -167,7 +169,7 @@ export function ProductsList() {
                           </div>
                         )}
                         <span className="font-medium text-slate-900">
-                          {truncate(product.name, 30) || 'Untitled'}
+                          {truncate(product.name, 30) || t.untitled}
                         </span>
                       </div>
                     </td>
@@ -191,14 +193,14 @@ export function ProductsList() {
                         <button
                           onClick={() => navigate(`/admin/products/${product.id}`)}
                           className="p-2 text-slate-600 hover:bg-blue-50 hover:text-blue-600 rounded-lg transition-colors"
-                          title="Edit"
+                          title={t.edit}
                         >
                           <Edit2 className="w-4 h-4" />
                         </button>
                         <button
                           onClick={() => setDeleteConfirm(product.id)}
                           className="p-2 text-slate-600 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors"
-                          title="Delete"
+                          title={t.delete}
                         >
                           <Trash2 className="w-4 h-4" />
                         </button>
@@ -220,13 +222,12 @@ export function ProductsList() {
                 <AlertTriangle className="w-6 h-6 text-red-600" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-slate-900">Delete Product</h3>
-                <p className="text-sm text-slate-500">This action cannot be undone.</p>
+                <h3 className="text-lg font-semibold text-slate-900">{t.deleteProduct}</h3>
+                <p className="text-sm text-slate-500">{t.deleteConfirmTitle}</p>
               </div>
             </div>
             <p className="text-slate-600 mb-6">
-              Are you sure you want to delete this product? All associated data will be permanently
-              removed.
+              {t.deleteConfirmText}
             </p>
             <div className="flex items-center justify-end gap-3">
               <button
@@ -234,7 +235,7 @@ export function ProductsList() {
                 disabled={deleting}
                 className="px-4 py-2 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors disabled:opacity-50"
               >
-                Cancel
+                {t.cancel}
               </button>
               <button
                 onClick={() => handleDelete(deleteConfirm)}
@@ -242,7 +243,7 @@ export function ProductsList() {
                 className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors disabled:opacity-50 flex items-center gap-2"
               >
                 {deleting && <Loader2 className="w-4 h-4 animate-spin" />}
-                Delete
+                {t.delete}
               </button>
             </div>
           </div>

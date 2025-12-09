@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useAuth } from '../contexts/AuthContext';
+import { AdminLanguageProvider } from './AdminLanguageContext';
 import { AdminLogin } from './AdminLogin';
 import { AdminLayout } from './AdminLayout';
 import { AdminDashboard } from './AdminDashboard';
@@ -26,7 +27,11 @@ export function AdminRouter() {
   }
 
   if (!user) {
-    return <AdminLogin />;
+    return (
+      <AdminLanguageProvider>
+        <AdminLogin />
+      </AdminLanguageProvider>
+    );
   }
 
   const renderContent = () => {
@@ -50,5 +55,9 @@ export function AdminRouter() {
     return <ProductsList />;
   };
 
-  return <AdminLayout currentPath={path}>{renderContent()}</AdminLayout>;
+  return (
+    <AdminLanguageProvider>
+      <AdminLayout currentPath={path}>{renderContent()}</AdminLayout>
+    </AdminLanguageProvider>
+  );
 }

@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Product, supabase } from '../lib/supabase';
+import { useAdminLang } from './AdminLanguageContext';
 import { ArrowLeft, Loader2, CheckCircle, XCircle, X, ChevronDown, ChevronUp } from 'lucide-react';
 
 interface ProductFormProps {
@@ -37,6 +38,7 @@ const LANGUAGES: FieldGroup[] = [
 type FormData = Record<string, string | number | boolean | string[] | null>;
 
 export function ProductForm({ productId }: ProductFormProps) {
+  const { t } = useAdminLang();
   const isEdit = Boolean(productId);
   const [loading, setLoading] = useState(isEdit);
   const [saving, setSaving] = useState(false);
@@ -196,7 +198,7 @@ export function ProductForm({ productId }: ProductFormProps) {
       setNotification({ type: 'error', message: error.message });
       setSaving(false);
     } else {
-      setNotification({ type: 'success', message: isEdit ? 'Product updated' : 'Product created' });
+      setNotification({ type: 'success', message: isEdit ? t.productUpdated : t.productCreated });
       setTimeout(() => navigate('/admin/products'), 500);
     }
   };
@@ -227,7 +229,7 @@ export function ProductForm({ productId }: ProductFormProps) {
         {isExpanded && (
           <div className="p-4 space-y-4 bg-white">
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Name</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">{t.name}</label>
               <input
                 type="text"
                 value={(formData[nameField] as string) || ''}
@@ -238,7 +240,7 @@ export function ProductForm({ productId }: ProductFormProps) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Description</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">{t.description}</label>
               <textarea
                 value={(formData[descField] as string) || ''}
                 onChange={(e) => handleChange(descField, e.target.value)}
@@ -249,7 +251,7 @@ export function ProductForm({ productId }: ProductFormProps) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Location</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">{t.location}</label>
               <input
                 type="text"
                 value={(formData[locationField] as string) || ''}
@@ -260,14 +262,14 @@ export function ProductForm({ productId }: ProductFormProps) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Category</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1">{t.category}</label>
               {lang.code === 'ru' ? (
                 <select
                   value={(formData[categoryField] as string) || ''}
                   onChange={(e) => handleChange(categoryField, e.target.value)}
                   className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
                 >
-                  <option value="">Select category</option>
+                  <option value="">{t.selectCategory}</option>
                   {CATEGORIES.map((cat) => (
                     <option key={cat} value={cat}>
                       {cat}
@@ -287,7 +289,7 @@ export function ProductForm({ productId }: ProductFormProps) {
 
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">
-                Features (comma-separated)
+                {t.features}
               </label>
               <textarea
                 value={(formData[featuresField] as string) || ''}
@@ -296,7 +298,7 @@ export function ProductForm({ productId }: ProductFormProps) {
                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 resize-none"
                 placeholder="Feature 1, Feature 2, Feature 3"
               />
-              <p className="text-xs text-slate-500 mt-1">Enter features separated by commas</p>
+              <p className="text-xs text-slate-500 mt-1">{t.featuresHint}</p>
             </div>
           </div>
         )}
@@ -346,21 +348,21 @@ export function ProductForm({ productId }: ProductFormProps) {
         </button>
         <div>
           <h1 className="text-2xl font-bold text-slate-900">
-            {isEdit ? 'Edit Product' : 'Create Product'}
+            {isEdit ? t.editProduct : t.createProduct}
           </h1>
           <p className="text-slate-600 mt-1">
-            {isEdit ? 'Update product details' : 'Add a new product to your catalog'}
+            {isEdit ? t.updateProductDetails : t.addNewProduct}
           </p>
         </div>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-          <h2 className="text-lg font-semibold text-slate-900 mb-4">General Settings</h2>
+          <h2 className="text-lg font-semibold text-slate-900 mb-4">{t.generalSettings}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">
-                Price per day (THB)
+                {t.pricePerDay}
               </label>
               <input
                 type="number"
@@ -373,16 +375,20 @@ export function ProductForm({ productId }: ProductFormProps) {
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Priority</label>
-              <input
-                type="number"
+              <label className="block text-sm font-medium text-slate-700 mb-1">{t.priority}</label>
+              <select
                 value={formData.priority as string}
                 onChange={(e) => handleChange('priority', e.target.value)}
                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
-                placeholder="Empty = last"
-                min="1"
-              />
-              <p className="text-xs text-slate-500 mt-1">Lower = appears first</p>
+              >
+                <option value="">{t.priorityNotSet}</option>
+                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((num) => (
+                  <option key={num} value={num}>
+                    {num}
+                  </option>
+                ))}
+              </select>
+              <p className="text-xs text-slate-500 mt-1">{t.priorityHint}</p>
             </div>
           </div>
 
@@ -395,17 +401,17 @@ export function ProductForm({ productId }: ProductFormProps) {
               className="w-4 h-4 text-blue-600 border-slate-300 rounded focus:ring-blue-500"
             />
             <label htmlFor="is_active" className="text-sm font-medium text-slate-700">
-              Active (visible on website)
+              {t.activeHint}
             </label>
           </div>
         </div>
 
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-          <h2 className="text-lg font-semibold text-slate-900 mb-4">Images</h2>
+          <h2 className="text-lg font-semibold text-slate-900 mb-4">{t.images}</h2>
 
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
-              Image URLs (comma-separated)
+              {t.imageUrls}
             </label>
             <textarea
               value={arrayToCommaSeparated(formData.images as string[])}
@@ -414,7 +420,7 @@ export function ProductForm({ productId }: ProductFormProps) {
               className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 resize-none"
               placeholder="https://example.com/img1.jpg, https://example.com/img2.jpg"
             />
-            <p className="text-xs text-slate-500 mt-1">Enter image URLs separated by commas</p>
+            <p className="text-xs text-slate-500 mt-1">{t.imageUrlsHint}</p>
             {(formData.images as string[])?.length > 0 && (
               <div className="mt-2 flex flex-wrap gap-2">
                 {(formData.images as string[]).map((url, index) => (
@@ -434,7 +440,7 @@ export function ProductForm({ productId }: ProductFormProps) {
         </div>
 
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
-          <h2 className="text-lg font-semibold text-slate-900 mb-4">Translations</h2>
+          <h2 className="text-lg font-semibold text-slate-900 mb-4">{t.translations}</h2>
           <div className="space-y-3">
             {LANGUAGES.map((lang) => renderLanguageSection(lang))}
           </div>
@@ -446,7 +452,7 @@ export function ProductForm({ productId }: ProductFormProps) {
             onClick={() => navigate('/admin/products')}
             className="px-6 py-2 text-slate-700 hover:bg-slate-200 rounded-lg transition-colors"
           >
-            Cancel
+            {t.cancel}
           </button>
           <button
             type="submit"
@@ -454,7 +460,7 @@ export function ProductForm({ productId }: ProductFormProps) {
             className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors flex items-center gap-2"
           >
             {saving && <Loader2 className="w-4 h-4 animate-spin" />}
-            {isEdit ? 'Update Product' : 'Create Product'}
+            {isEdit ? t.updateProduct : t.createProduct}
           </button>
         </div>
       </form>
