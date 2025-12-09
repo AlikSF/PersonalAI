@@ -89,6 +89,11 @@ export function ImageUploader({ images, onChange, translations }: ImageUploaderP
       return false;
     }
 
+    if (!filePath.startsWith('Admin Panel Images/')) {
+      console.log('Image is not in Admin Panel Images folder, skipping storage deletion:', filePath);
+      return true;
+    }
+
     console.log('Deleting file from bucket:', BUCKET_NAME, 'path:', filePath);
     const { data, error } = await supabase.storage
       .from(BUCKET_NAME)
