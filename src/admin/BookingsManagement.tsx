@@ -44,7 +44,7 @@ interface Booking {
   children: number;
   total_price: number;
   payment_status: 'pending' | 'paid' | 'failed';
-  booking_status: 'confirmed' | 'cancelled' | 'completed';
+  booking_status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
   special_requests: string | null;
   created_at: string;
   product?: { name: string };
@@ -237,6 +237,7 @@ export function BookingsManagement() {
 
   const getBookingStatusBadge = (status: string) => {
     const styles = {
+      pending: 'bg-slate-100 text-slate-700 border-slate-200',
       confirmed: 'bg-blue-100 text-blue-700 border-blue-200',
       completed: 'bg-emerald-100 text-emerald-700 border-emerald-200',
       cancelled: 'bg-slate-100 text-slate-600 border-slate-200',
@@ -415,6 +416,7 @@ export function BookingsManagement() {
                 className="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="">{t.all}</option>
+                <option value="pending">{t.pending}</option>
                 <option value="confirmed">{t.confirmed}</option>
                 <option value="completed">{t.completed}</option>
                 <option value="cancelled">{t.cancelled}</option>
@@ -886,9 +888,15 @@ export function BookingsManagement() {
                       <p className="text-sm"><span className="text-slate-500">{t.adultsCount}:</span> <span className="font-medium">{selectedBooking.adults || 0}</span></p>
                       <p className="text-sm"><span className="text-slate-500">{t.childrenCount}:</span> <span className="font-medium">{selectedBooking.children || 0}</span></p>
                       <p className="text-sm"><span className="text-slate-500">{t.price}:</span> <span className="font-medium">{selectedBooking.total_price?.toLocaleString()} THB</span></p>
-                      <div className="flex gap-2">
-                        {getPaymentStatusBadge(selectedBooking.payment_status)}
-                        {getBookingStatusBadge(selectedBooking.booking_status)}
+                      <div className="space-y-2">
+                        <p className="text-sm">
+                          <span className="text-slate-500">{t.paymentStatus}:</span>{' '}
+                          {getPaymentStatusBadge(selectedBooking.payment_status)}
+                        </p>
+                        <p className="text-sm">
+                          <span className="text-slate-500">{t.bookingStatus}:</span>{' '}
+                          {getBookingStatusBadge(selectedBooking.booking_status)}
+                        </p>
                       </div>
                     </div>
                   </div>
