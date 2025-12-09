@@ -6,6 +6,7 @@ import { AdminLayout } from './AdminLayout';
 import { AdminDashboard } from './AdminDashboard';
 import { ProductsList } from './ProductsList';
 import { ProductForm } from './ProductForm';
+import { BookingsManagement } from './BookingsManagement';
 import { Loader2 } from 'lucide-react';
 
 export function AdminRouter() {
@@ -37,6 +38,10 @@ export function AdminRouter() {
   const renderContent = () => {
     if (path === '/admin/dashboard') {
       return <AdminDashboard />;
+    }
+
+    if (path === '/admin/bookings') {
+      return <BookingsManagement />;
     }
 
     if (path === '/admin/products/new') {

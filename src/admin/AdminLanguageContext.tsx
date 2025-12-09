@@ -65,6 +65,50 @@ interface AdminTranslations {
   deleteImageConfirm: string;
   deleteImageTitle: string;
   deleting: string;
+  bookings: string;
+  bookingsAndMessages: string;
+  manageBookingsAndMessages: string;
+  bookingsList: string;
+  contactMessages: string;
+  filters: string;
+  search: string;
+  searchPlaceholder: string;
+  dateFrom: string;
+  dateTo: string;
+  paymentStatus: string;
+  bookingStatus: string;
+  all: string;
+  pending: string;
+  paid: string;
+  failed: string;
+  confirmed: string;
+  completed: string;
+  cancelled: string;
+  clearFilters: string;
+  customer: string;
+  product: string;
+  tourDate: string;
+  price: string;
+  status: string;
+  noBookingsFound: string;
+  noMessagesFound: string;
+  showing: string;
+  of: string;
+  contact: string;
+  message: string;
+  telegram: string;
+  telegramStatus: string;
+  sent: string;
+  notSent: string;
+  bookingDetails: string;
+  messageDetails: string;
+  customerInfo: string;
+  bookingInfo: string;
+  specialRequests: string;
+  contactInfo: string;
+  details: string;
+  phone: string;
+  country: string;
 }
 
 const translations: Record<AdminLang, AdminTranslations> = {
@@ -131,6 +175,50 @@ const translations: Record<AdminLang, AdminTranslations> = {
     deleteImageConfirm: 'Are you sure you want to delete this image? This action cannot be undone.',
     deleteImageTitle: 'Delete Image',
     deleting: 'Deleting...',
+    bookings: 'Bookings',
+    bookingsAndMessages: 'Bookings & Messages',
+    manageBookingsAndMessages: 'Manage customer bookings and contact messages',
+    bookingsList: 'Bookings List',
+    contactMessages: 'Contact Messages',
+    filters: 'Filters',
+    search: 'Search',
+    searchPlaceholder: 'Search by name, email, phone...',
+    dateFrom: 'Date From',
+    dateTo: 'Date To',
+    paymentStatus: 'Payment Status',
+    bookingStatus: 'Booking Status',
+    all: 'All',
+    pending: 'Pending',
+    paid: 'Paid',
+    failed: 'Failed',
+    confirmed: 'Confirmed',
+    completed: 'Completed',
+    cancelled: 'Cancelled',
+    clearFilters: 'Clear filters',
+    customer: 'Customer',
+    product: 'Product',
+    tourDate: 'Tour Date',
+    price: 'Price',
+    status: 'Status',
+    noBookingsFound: 'No bookings found',
+    noMessagesFound: 'No messages found',
+    showing: 'Showing',
+    of: 'of',
+    contact: 'Contact',
+    message: 'Message',
+    telegram: 'Telegram',
+    telegramStatus: 'Telegram Status',
+    sent: 'Sent',
+    notSent: 'Not Sent',
+    bookingDetails: 'Booking Details',
+    messageDetails: 'Message Details',
+    customerInfo: 'Customer Information',
+    bookingInfo: 'Booking Information',
+    specialRequests: 'Special Requests',
+    contactInfo: 'Contact Information',
+    details: 'Details',
+    phone: 'Phone',
+    country: 'Country',
   },
   ru: {
     adminPanel: 'Панель администратора',
@@ -195,6 +283,50 @@ const translations: Record<AdminLang, AdminTranslations> = {
     deleteImageConfirm: 'Вы уверены, что хотите удалить это изображение? Это действие нельзя отменить.',
     deleteImageTitle: 'Удалить изображение',
     deleting: 'Удаление...',
+    bookings: 'Бронирования',
+    bookingsAndMessages: 'Бронирования и сообщения',
+    manageBookingsAndMessages: 'Управление бронированиями и сообщениями клиентов',
+    bookingsList: 'Список бронирований',
+    contactMessages: 'Сообщения',
+    filters: 'Фильтры',
+    search: 'Поиск',
+    searchPlaceholder: 'Поиск по имени, email, телефону...',
+    dateFrom: 'Дата от',
+    dateTo: 'Дата до',
+    paymentStatus: 'Статус оплаты',
+    bookingStatus: 'Статус бронирования',
+    all: 'Все',
+    pending: 'Ожидает',
+    paid: 'Оплачено',
+    failed: 'Ошибка',
+    confirmed: 'Подтверждено',
+    completed: 'Завершено',
+    cancelled: 'Отменено',
+    clearFilters: 'Очистить фильтры',
+    customer: 'Клиент',
+    product: 'Продукт',
+    tourDate: 'Дата тура',
+    price: 'Цена',
+    status: 'Статус',
+    noBookingsFound: 'Бронирования не найдены',
+    noMessagesFound: 'Сообщения не найдены',
+    showing: 'Показано',
+    of: 'из',
+    contact: 'Контакт',
+    message: 'Сообщение',
+    telegram: 'Telegram',
+    telegramStatus: 'Статус Telegram',
+    sent: 'Отправлено',
+    notSent: 'Не отправлено',
+    bookingDetails: 'Детали бронирования',
+    messageDetails: 'Детали сообщения',
+    customerInfo: 'Информация о клиенте',
+    bookingInfo: 'Информация о бронировании',
+    specialRequests: 'Особые пожелания',
+    contactInfo: 'Контактная информация',
+    details: 'Детали',
+    phone: 'Телефон',
+    country: 'Страна',
   },
 };
 

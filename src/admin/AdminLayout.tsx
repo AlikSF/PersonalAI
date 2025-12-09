@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { useAuth } from '../contexts/AuthContext';
 import { useAdminLang } from './AdminLanguageContext';
-import { LayoutDashboard, Package, LogOut, Home, Menu, X, Globe } from 'lucide-react';
+import { LayoutDashboard, Package, LogOut, Home, Menu, X, Globe, CalendarDays } from 'lucide-react';
 import { useState } from 'react';
 
 interface AdminLayoutProps {
@@ -30,11 +30,15 @@ export function AdminLayout({ children, currentPath }: AdminLayoutProps) {
     if (path === '/admin/products') {
       return currentPath.startsWith('/admin/products');
     }
+    if (path === '/admin/bookings') {
+      return currentPath.startsWith('/admin/bookings');
+    }
     return currentPath === path;
   };
 
   const navItems = [
     { path: '/admin/products', label: t.products, icon: Package },
+    { path: '/admin/bookings', label: t.bookings, icon: CalendarDays },
     { path: '/admin/dashboard', label: t.dashboard, icon: LayoutDashboard },
   ];
 
