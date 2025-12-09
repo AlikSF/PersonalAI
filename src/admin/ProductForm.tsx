@@ -51,48 +51,46 @@ export function ProductForm({ productId }: ProductFormProps) {
     description: '',
     category: '',
     price_per_day: '',
-    image_url: '',
     images: [],
     location: '',
-    capacity: '',
-    features: [],
+    features: '',
     is_active: true,
     priority: '',
     name_en: '',
     description_en: '',
     location_en: '',
     category_en: '',
-    features_en: [],
+    features_en: '',
     name_kk: '',
     description_kk: '',
     location_kk: '',
     category_kk: '',
-    features_kk: [],
+    features_kk: '',
     name_ky: '',
     description_ky: '',
     location_ky: '',
     category_ky: '',
-    features_ky: [],
+    features_ky: '',
     name_az: '',
     description_az: '',
     location_az: '',
     category_az: '',
-    features_az: [],
+    features_az: '',
     name_zh: '',
     description_zh: '',
     location_zh: '',
     category_zh: '',
-    features_zh: [],
+    features_zh: '',
     name_fr: '',
     description_fr: '',
     location_fr: '',
     category_fr: '',
-    features_fr: [],
+    features_fr: '',
     name_uz: '',
     description_uz: '',
     location_uz: '',
     category_uz: '',
-    features_uz: [],
+    features_uz: '',
   });
 
   useEffect(() => {
@@ -121,9 +119,11 @@ export function ProductForm({ productId }: ProductFormProps) {
       const mapped: FormData = {};
       Object.keys(formData).forEach((key) => {
         const value = (data as Record<string, unknown>)[key];
-        if (key === 'price_per_day' || key === 'capacity' || key === 'priority') {
+        if (key === 'price_per_day' || key === 'priority') {
           mapped[key] = value !== null && value !== undefined ? String(value) : '';
-        } else if (Array.isArray(value)) {
+        } else if (key.startsWith('features') && Array.isArray(value)) {
+          mapped[key] = arrayToCommaSeparated(value);
+        } else if (key === 'images' && Array.isArray(value)) {
           mapped[key] = value;
         } else if (typeof value === 'boolean') {
           mapped[key] = value;
@@ -168,12 +168,14 @@ export function ProductForm({ productId }: ProductFormProps) {
     const payload: Record<string, unknown> = {};
 
     Object.entries(formData).forEach(([key, value]) => {
-      if (key === 'price_per_day' || key === 'capacity' || key === 'priority') {
+      if (key === 'price_per_day' || key === 'priority') {
         payload[key] = value !== '' ? Number(value) : null;
       } else if (key === 'is_active') {
         payload[key] = value;
-      } else if (key === 'images' || key.startsWith('features')) {
+      } else if (key === 'images') {
         payload[key] = value;
+      } else if (key.startsWith('features')) {
+        payload[key] = commaSeparatedToArray(value as string);
       } else {
         payload[key] = value !== '' ? value : null;
       }
@@ -288,8 +290,8 @@ export function ProductForm({ productId }: ProductFormProps) {
                 Features (comma-separated)
               </label>
               <textarea
-                value={arrayToCommaSeparated(formData[featuresField] as string[])}
-                onChange={(e) => handleChange(featuresField, commaSeparatedToArray(e.target.value))}
+                value={(formData[featuresField] as string) || ''}
+                onChange={(e) => handleChange(featuresField, e.target.value)}
                 rows={3}
                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 resize-none"
                 placeholder="Feature 1, Feature 2, Feature 3"
@@ -355,7 +357,7 @@ export function ProductForm({ productId }: ProductFormProps) {
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
           <h2 className="text-lg font-semibold text-slate-900 mb-4">General Settings</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">
                 Price per day (THB)
@@ -364,18 +366,6 @@ export function ProductForm({ productId }: ProductFormProps) {
                 type="number"
                 value={formData.price_per_day as string}
                 onChange={(e) => handleChange('price_per_day', e.target.value)}
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
-                placeholder="0"
-                min="0"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Capacity</label>
-              <input
-                type="number"
-                value={formData.capacity as string}
-                onChange={(e) => handleChange('capacity', e.target.value)}
                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
                 placeholder="0"
                 min="0"
@@ -413,57 +403,33 @@ export function ProductForm({ productId }: ProductFormProps) {
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
           <h2 className="text-lg font-semibold text-slate-900 mb-4">Images</h2>
 
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">Main Image URL</label>
-              <input
-                type="url"
-                value={(formData.image_url as string) || ''}
-                onChange={(e) => handleChange('image_url', e.target.value)}
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
-                placeholder="https://example.com/image.jpg"
-              />
-              {formData.image_url && (
-                <div className="mt-2">
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              Image URLs (comma-separated)
+            </label>
+            <textarea
+              value={arrayToCommaSeparated(formData.images as string[])}
+              onChange={(e) => handleChange('images', commaSeparatedToArray(e.target.value))}
+              rows={3}
+              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 resize-none"
+              placeholder="https://example.com/img1.jpg, https://example.com/img2.jpg"
+            />
+            <p className="text-xs text-slate-500 mt-1">Enter image URLs separated by commas</p>
+            {(formData.images as string[])?.length > 0 && (
+              <div className="mt-2 flex flex-wrap gap-2">
+                {(formData.images as string[]).map((url, index) => (
                   <img
-                    src={formData.image_url as string}
-                    alt="Preview"
-                    className="w-32 h-24 object-cover rounded-lg border border-slate-200"
+                    key={index}
+                    src={url}
+                    alt={`Image ${index + 1}`}
+                    className="w-20 h-16 object-cover rounded-lg border border-slate-200"
                     onError={(e) => {
                       (e.target as HTMLImageElement).style.display = 'none';
                     }}
                   />
-                </div>
-              )}
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
-                Additional Images (comma-separated URLs)
-              </label>
-              <textarea
-                value={arrayToCommaSeparated(formData.images as string[])}
-                onChange={(e) => handleChange('images', commaSeparatedToArray(e.target.value))}
-                rows={3}
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 resize-none"
-                placeholder="https://example.com/img1.jpg, https://example.com/img2.jpg"
-              />
-              {(formData.images as string[])?.length > 0 && (
-                <div className="mt-2 flex flex-wrap gap-2">
-                  {(formData.images as string[]).map((url, index) => (
-                    <img
-                      key={index}
-                      src={url}
-                      alt={`Image ${index + 1}`}
-                      className="w-20 h-16 object-cover rounded-lg border border-slate-200"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).style.display = 'none';
-                      }}
-                    />
-                  ))}
-                </div>
-              )}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
 
