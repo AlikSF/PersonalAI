@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Product, supabase } from '../lib/supabase';
 import { useAdminLang } from './AdminLanguageContext';
-import { Plus, Edit2, Trash2, Loader2, AlertTriangle, X, CheckCircle, XCircle, ArrowUpDown, ArrowUp, ArrowDown } from 'lucide-react';
+import { Plus, Edit2, Trash2, Loader2, AlertTriangle, X, CheckCircle, XCircle, ArrowUpDown, ArrowUp, ArrowDown, Package } from 'lucide-react';
 
 type SortField = 'name' | 'created_at' | null;
 type SortDirection = 'asc' | 'desc';
@@ -199,14 +199,17 @@ export function ProductsList() {
                   <tr key={product.id} className="hover:bg-slate-50 transition-colors">
                     <td className="px-4 py-4">
                       <div className="flex items-center gap-3">
-                        <img
-                          src={product.image_url || '/image copy.png'}
-                          alt={product.name || ''}
-                          className="w-10 h-10 object-cover rounded-lg border border-slate-200 flex-shrink-0"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).src = '/image copy.png';
-                          }}
-                        />
+                        {product.image_url ? (
+                          <img
+                            src={product.image_url}
+                            alt={product.name || ''}
+                            className="w-10 h-10 object-cover rounded-lg border border-slate-200 flex-shrink-0"
+                          />
+                        ) : (
+                          <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center flex-shrink-0">
+                            <Package className="w-5 h-5 text-slate-400" />
+                          </div>
+                        )}
                         <span className="font-medium text-slate-900">
                           {truncate(product.name, 30) || t.untitled}
                         </span>
