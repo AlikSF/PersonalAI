@@ -10,7 +10,7 @@ interface Booking {
   tour_date: string;
   booking_status: string;
   payment_status: string;
-  products: {
+  product: {
     name: string;
     name_ru?: string;
   };
@@ -35,18 +35,7 @@ export function CalendarView() {
 
       const { data, error } = await supabase
         .from('bookings')
-        .select(`
-          id,
-          customer_name,
-          customer_email,
-          tour_date,
-          booking_status,
-          payment_status,
-          products (
-            name,
-            name_ru
-          )
-        `)
+        .select('*, product:products(name, name_ru)')
         .gte('tour_date', firstDay.toISOString().split('T')[0])
         .lte('tour_date', lastDay.toISOString().split('T')[0])
         .order('tour_date', { ascending: true });
@@ -250,9 +239,9 @@ export function CalendarView() {
                   <div className="flex-1">
                     <p className="font-medium text-slate-900">{booking.customer_name}</p>
                     <p className="text-sm text-slate-600">
-                      {lang === 'ru' && booking.products?.name_ru
-                        ? booking.products.name_ru
-                        : booking.products?.name}
+                      {lang === 'ru' && booking.product?.name_ru
+                        ? booking.product.name_ru
+                        : booking.product?.name}
                     </p>
                     <p className="text-xs text-slate-500">{booking.customer_email}</p>
                   </div>
