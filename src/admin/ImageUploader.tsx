@@ -61,34 +61,46 @@ export function ImageUploader({ images, onChange, translations }: ImageUploaderP
       const urlObj = new URL(url);
       const pathParts = urlObj.pathname.split('/storage/v1/object/public/');
       if (pathParts.length > 1) {
-        const fullPath = pathParts[1];
-        const bucketAndPath = fullPath.split('/');
-        if (bucketAndPath[0] === BUCKET_NAME) {
-          return bucketAndPath.slice(1).join('/');
+        const fullPath = decodeURIComponent(pathParts[1]);
+        const firstSlashIndex = fullPath.indexOf('/');
+        if (firstSlashIndex > 0) {
+          const bucket = fullPath.substring(0, firstSlashIndex);
+          const filePath = fullPath.substring(firstSlashIndex + 1);
+          if (bucket === BUCKET_NAME) {
+            console.log('Extracted file path:', filePath);
+            return filePath;
+          }
         }
       }
+      console.warn('Could not parse URL structure:', url);
       return null;
-    } catch {
+    } catch (error) {
+      console.error('Error parsing URL:', error, url);
       return null;
     }
   };
 
   const deleteFromStorage = async (url: string): Promise<boolean> => {
+    console.log('Attempting to delete image from storage:', url);
     const filePath = extractFilePathFromUrl(url);
     if (!filePath) {
-      console.warn('Could not extract file path from URL:', url);
-      return true;
+      console.error('Could not extract file path from URL:', url);
+      alert('Error: Could not determine file path to delete');
+      return false;
     }
 
-    const { error } = await supabase.storage
+    console.log('Deleting file from bucket:', BUCKET_NAME, 'path:', filePath);
+    const { data, error } = await supabase.storage
       .from(BUCKET_NAME)
       .remove([filePath]);
 
     if (error) {
       console.error('Delete error:', error);
+      alert(`Error deleting image: ${error.message}`);
       return false;
     }
 
+    console.log('Successfully deleted file:', data);
     return true;
   };
 
@@ -149,11 +161,14 @@ export function ImageUploader({ images, onChange, translations }: ImageUploaderP
     setDeleting(index);
     setConfirmDelete(null);
 
-    await deleteFromStorage(url);
+    const success = await deleteFromStorage(url);
 
-    const newImages = [...images];
-    newImages.splice(index, 1);
-    onChange(newImages);
+    if (success) {
+      const newImages = [...images];
+      newImages.splice(index, 1);
+      onChange(newImages);
+    }
+
     setDeleting(null);
   };
 
