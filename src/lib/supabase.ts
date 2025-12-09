@@ -67,11 +67,14 @@ export interface Booking {
   customer_name: string;
   customer_email: string;
   customer_phone: string;
+  country_code?: string;
+  dial_code?: string;
+  tour_date?: string;
   start_date: string;
   end_date: string;
   total_price: number;
   payment_status: 'pending' | 'paid' | 'failed';
-  booking_status: 'confirmed' | 'cancelled' | 'completed';
+  booking_status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
   special_requests: string;
   created_at: string;
   updated_at: string;
