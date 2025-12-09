@@ -166,6 +166,11 @@ interface AdminTranslations {
   viewActivity: string;
   updated: string;
   closeDetails: string;
+  newBooking: string;
+  createBooking: string;
+  selectProduct: string;
+  totalPrice: string;
+  loading: string;
 }
 
 const translations: Record<AdminLang, AdminTranslations> = {
@@ -333,6 +338,11 @@ const translations: Record<AdminLang, AdminTranslations> = {
     viewActivity: 'View Activity',
     updated: 'Updated',
     closeDetails: 'Close Details',
+    newBooking: 'New Booking',
+    createBooking: 'Create Booking',
+    selectProduct: 'Select Product',
+    totalPrice: 'Total Price',
+    loading: 'Loading...',
   },
   ru: {
     adminPanel: 'Панель администратора',
@@ -498,6 +508,11 @@ const translations: Record<AdminLang, AdminTranslations> = {
     viewActivity: 'Просмотреть активность',
     updated: 'Обновлено',
     closeDetails: 'Закрыть детали',
+    newBooking: 'Новое бронирование',
+    createBooking: 'Создать бронирование',
+    selectProduct: 'Выберите продукт',
+    totalPrice: 'Общая цена',
+    loading: 'Загрузка...',
   },
 };
 

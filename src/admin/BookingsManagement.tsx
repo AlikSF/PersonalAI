@@ -3,6 +3,7 @@ import { supabase } from '../lib/supabase';
 import { useAdminLang } from './AdminLanguageContext';
 import { CompanyInfoEditor } from './CompanyInfoEditor';
 import { BookingEditModal } from './BookingEditModal';
+import { BookingCreateModal } from './BookingCreateModal';
 import { BookingComments } from './BookingComments';
 import { BookingActivityLog } from './BookingActivityLog';
 import {
@@ -27,6 +28,7 @@ import {
   ArrowDown,
   Edit,
   History,
+  Plus,
 } from 'lucide-react';
 
 interface Booking {
@@ -84,6 +86,7 @@ export function BookingsManagement() {
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [selectedMessage, setSelectedMessage] = useState<ContactMessage | null>(null);
   const [editingBooking, setEditingBooking] = useState<Booking | null>(null);
+  const [creatingBooking, setCreatingBooking] = useState(false);
   const [bookingDetailsTab, setBookingDetailsTab] = useState<BookingDetailsTab>('details');
   const [bookingSortField, setBookingSortField] = useState<BookingSortField>('created_at');
   const [bookingSortDirection, setBookingSortDirection] = useState<SortDirection>('desc');
@@ -326,6 +329,13 @@ export function BookingsManagement() {
           </span>
         </div>
         <div className="flex items-center gap-2">
+          <button
+            onClick={() => setCreatingBooking(true)}
+            className="flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            <Plus className="w-4 h-4" />
+            {t.newBooking}
+          </button>
           <button
             onClick={() => fetchBookings()}
             className="p-2 text-slate-500 hover:text-slate-700 hover:bg-slate-100 rounded-lg transition-colors"
@@ -1077,6 +1087,16 @@ export function BookingsManagement() {
             if (selectedBooking) {
               setSelectedBooking({ ...editingBooking });
             }
+          }}
+        />
+      )}
+
+      {creatingBooking && (
+        <BookingCreateModal
+          onClose={() => setCreatingBooking(false)}
+          onCreated={() => {
+            fetchBookings();
+            setCreatingBooking(false);
           }}
         />
       )}
