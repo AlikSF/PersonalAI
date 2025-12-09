@@ -56,6 +56,12 @@ interface AdminTranslations {
   dashboardDescription: string;
   welcomeToDashboard: string;
   untitled: string;
+  uploadImages: string;
+  dragToReorder: string;
+  uploading: string;
+  dropHere: string;
+  orClickToSelect: string;
+  firstImageMain: string;
 }
 
 const translations: Record<AdminLang, AdminTranslations> = {
@@ -113,6 +119,12 @@ const translations: Record<AdminLang, AdminTranslations> = {
     dashboardDescription: 'This dashboard will be expanded with analytics, charts, and more management tools. For now, you can manage your products using the Products tab.',
     welcomeToDashboard: 'Welcome to your admin dashboard',
     untitled: 'Untitled',
+    uploadImages: 'Upload Images',
+    dragToReorder: 'Drag images to reorder. First image will be the main image.',
+    uploading: 'Uploading...',
+    dropHere: 'Drop images here',
+    orClickToSelect: 'or click to select files',
+    firstImageMain: 'The first image (marked "Main") will be displayed as the primary image.',
   },
   ru: {
     adminPanel: 'Панель администратора',
@@ -168,6 +180,12 @@ const translations: Record<AdminLang, AdminTranslations> = {
     dashboardDescription: 'Эта панель будет расширена аналитикой, графиками и другими инструментами управления. Пока вы можете управлять продуктами во вкладке Продукты.',
     welcomeToDashboard: 'Добро пожаловать в панель администратора',
     untitled: 'Без названия',
+    uploadImages: 'Загрузить изображения',
+    dragToReorder: 'Перетащите изображения для изменения порядка. Первое изображение будет главным.',
+    uploading: 'Загрузка...',
+    dropHere: 'Перетащите изображения сюда',
+    orClickToSelect: 'или нажмите для выбора файлов',
+    firstImageMain: 'Первое изображение (отмечено "Main") будет отображаться как главное.',
   },
 };
 

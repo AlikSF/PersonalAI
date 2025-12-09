@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { Product, supabase } from '../lib/supabase';
+import { supabase } from '../lib/supabase';
 import { useAdminLang } from './AdminLanguageContext';
 import { ArrowLeft, Loader2, CheckCircle, XCircle, X, ChevronDown, ChevronUp } from 'lucide-react';
+import { ImageUploader } from './ImageUploader';
 
 interface ProductFormProps {
   productId?: string;
@@ -477,35 +478,18 @@ export function ProductForm({ productId }: ProductFormProps) {
 
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
           <h2 className="text-lg font-semibold text-slate-900 mb-4">{t.images}</h2>
-
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
-              {t.imageUrls}
-            </label>
-            <textarea
-              value={arrayToCommaSeparated(formData.images as string[])}
-              onChange={(e) => handleChange('images', commaSeparatedToArray(e.target.value))}
-              rows={3}
-              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 resize-none"
-              placeholder="https://example.com/img1.jpg, https://example.com/img2.jpg"
-            />
-            <p className="text-xs text-slate-500 mt-1">{t.imageUrlsHint}</p>
-            {(formData.images as string[])?.length > 0 && (
-              <div className="mt-2 flex flex-wrap gap-2">
-                {(formData.images as string[]).map((url, index) => (
-                  <img
-                    key={index}
-                    src={url}
-                    alt={`Image ${index + 1}`}
-                    className="w-20 h-16 object-cover rounded-lg border border-slate-200"
-                    onError={(e) => {
-                      (e.target as HTMLImageElement).style.display = 'none';
-                    }}
-                  />
-                ))}
-              </div>
-            )}
-          </div>
+          <ImageUploader
+            images={(formData.images as string[]) || []}
+            onChange={(newImages) => handleChange('images', newImages)}
+            translations={{
+              uploadImages: t.uploadImages,
+              dragToReorder: t.dragToReorder,
+              uploading: t.uploading,
+              dropHere: t.dropHere,
+              orClickToSelect: t.orClickToSelect,
+              firstImageMain: t.firstImageMain,
+            }}
+          />
         </div>
 
         <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
