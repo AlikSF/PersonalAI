@@ -488,6 +488,11 @@ export function ProductForm({ productId }: ProductFormProps) {
               dropHere: t.dropHere,
               orClickToSelect: t.orClickToSelect,
               firstImageMain: t.firstImageMain,
+              deleteImageConfirm: t.deleteImageConfirm,
+              deleteImageTitle: t.deleteImageTitle,
+              cancel: t.cancel,
+              delete: t.delete,
+              deleting: t.deleting,
             }}
           />
         </div>

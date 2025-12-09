@@ -62,6 +62,9 @@ interface AdminTranslations {
   dropHere: string;
   orClickToSelect: string;
   firstImageMain: string;
+  deleteImageConfirm: string;
+  deleteImageTitle: string;
+  deleting: string;
 }
 
 const translations: Record<AdminLang, AdminTranslations> = {
@@ -125,6 +128,9 @@ const translations: Record<AdminLang, AdminTranslations> = {
     dropHere: 'Drop images here',
     orClickToSelect: 'or click to select files',
     firstImageMain: 'The first image (marked "Main") will be displayed as the primary image.',
+    deleteImageConfirm: 'Are you sure you want to delete this image? This action cannot be undone.',
+    deleteImageTitle: 'Delete Image',
+    deleting: 'Deleting...',
   },
   ru: {
     adminPanel: 'Панель администратора',
@@ -186,6 +192,9 @@ const translations: Record<AdminLang, AdminTranslations> = {
     dropHere: 'Перетащите изображения сюда',
     orClickToSelect: 'или нажмите для выбора файлов',
     firstImageMain: 'Первое изображение (отмечено "Main") будет отображаться как главное.',
+    deleteImageConfirm: 'Вы уверены, что хотите удалить это изображение? Это действие нельзя отменить.',
+    deleteImageTitle: 'Удалить изображение',
+    deleting: 'Удаление...',
   },
 };
 

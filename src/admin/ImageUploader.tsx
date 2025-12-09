@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { supabase } from '../lib/supabase';
-import { Upload, X, GripVertical, Loader2, ImageIcon } from 'lucide-react';
+import { Upload, X, GripVertical, Loader2, ImageIcon, AlertTriangle } from 'lucide-react';
 
 interface ImageUploaderProps {
   images: string[];
@@ -12,6 +12,11 @@ interface ImageUploaderProps {
     dropHere: string;
     orClickToSelect: string;
     firstImageMain: string;
+    deleteImageConfirm: string;
+    deleteImageTitle: string;
+    cancel: string;
+    delete: string;
+    deleting: string;
   };
 }
 
@@ -20,6 +25,8 @@ const FOLDER_NAME = 'Admin Panel Images';
 
 export function ImageUploader({ images, onChange, translations }: ImageUploaderProps) {
   const [uploading, setUploading] = useState(false);
+  const [deleting, setDeleting] = useState<number | null>(null);
+  const [confirmDelete, setConfirmDelete] = useState<{ index: number; url: string } | null>(null);
   const [dragOver, setDragOver] = useState(false);
   const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
@@ -47,6 +54,42 @@ export function ImageUploader({ images, onChange, translations }: ImageUploaderP
       .getPublicUrl(filePath);
 
     return urlData.publicUrl;
+  };
+
+  const extractFilePathFromUrl = (url: string): string | null => {
+    try {
+      const urlObj = new URL(url);
+      const pathParts = urlObj.pathname.split('/storage/v1/object/public/');
+      if (pathParts.length > 1) {
+        const fullPath = pathParts[1];
+        const bucketAndPath = fullPath.split('/');
+        if (bucketAndPath[0] === BUCKET_NAME) {
+          return bucketAndPath.slice(1).join('/');
+        }
+      }
+      return null;
+    } catch {
+      return null;
+    }
+  };
+
+  const deleteFromStorage = async (url: string): Promise<boolean> => {
+    const filePath = extractFilePathFromUrl(url);
+    if (!filePath) {
+      console.warn('Could not extract file path from URL:', url);
+      return true;
+    }
+
+    const { error } = await supabase.storage
+      .from(BUCKET_NAME)
+      .remove([filePath]);
+
+    if (error) {
+      console.error('Delete error:', error);
+      return false;
+    }
+
+    return true;
   };
 
   const handleFileSelect = async (files: FileList | null) => {
@@ -93,10 +136,29 @@ export function ImageUploader({ images, onChange, translations }: ImageUploaderP
     setDragOver(false);
   };
 
-  const removeImage = (index: number) => {
+  const handleDeleteClick = (e: React.MouseEvent, index: number, url: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setConfirmDelete({ index, url });
+  };
+
+  const confirmDeleteImage = async () => {
+    if (!confirmDelete) return;
+
+    const { index, url } = confirmDelete;
+    setDeleting(index);
+    setConfirmDelete(null);
+
+    await deleteFromStorage(url);
+
     const newImages = [...images];
     newImages.splice(index, 1);
     onChange(newImages);
+    setDeleting(null);
+  };
+
+  const cancelDelete = () => {
+    setConfirmDelete(null);
   };
 
   const handleImageDragStart = (e: React.DragEvent, index: number) => {
@@ -143,6 +205,45 @@ export function ImageUploader({ images, onChange, translations }: ImageUploaderP
 
   return (
     <div className="space-y-4">
+      {confirmDelete && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-white rounded-xl shadow-2xl p-6 max-w-md mx-4 animate-in fade-in zoom-in duration-200">
+            <div className="flex items-start gap-4">
+              <div className="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center flex-shrink-0">
+                <AlertTriangle className="w-6 h-6 text-red-600" />
+              </div>
+              <div className="flex-1">
+                <h3 className="text-lg font-semibold text-slate-900">{translations.deleteImageTitle}</h3>
+                <p className="text-slate-600 mt-1">{translations.deleteImageConfirm}</p>
+                <div className="mt-4 p-2 bg-slate-100 rounded-lg">
+                  <img
+                    src={confirmDelete.url}
+                    alt="Image to delete"
+                    className="w-full h-24 object-cover rounded"
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="flex justify-end gap-3 mt-6">
+              <button
+                type="button"
+                onClick={cancelDelete}
+                className="px-4 py-2 text-slate-700 hover:bg-slate-100 rounded-lg transition-colors font-medium"
+              >
+                {translations.cancel}
+              </button>
+              <button
+                type="button"
+                onClick={confirmDeleteImage}
+                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors font-medium"
+              >
+                {translations.delete}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div
         onDrop={handleDrop}
         onDragOver={handleDragOver}
@@ -193,26 +294,34 @@ export function ImageUploader({ images, onChange, translations }: ImageUploaderP
             {images.map((url, index) => (
               <div
                 key={`${url}-${index}`}
-                draggable
+                draggable={deleting !== index}
                 onDragStart={(e) => handleImageDragStart(e, index)}
                 onDragOver={(e) => handleImageDragOver(e, index)}
                 onDragLeave={handleImageDragLeave}
                 onDrop={(e) => handleImageDrop(e, index)}
                 onDragEnd={handleImageDragEnd}
-                className={`relative group aspect-square rounded-lg overflow-hidden border-2 transition-all cursor-move ${
-                  draggedIndex === index
-                    ? 'opacity-50 border-blue-400'
+                className={`relative group aspect-square rounded-lg overflow-hidden border-2 transition-all ${
+                  deleting === index
+                    ? 'opacity-50'
+                    : draggedIndex === index
+                    ? 'opacity-50 border-blue-400 cursor-move'
                     : dragOverIndex === index
-                    ? 'border-blue-500 scale-105'
+                    ? 'border-blue-500 scale-105 cursor-move'
                     : index === 0
-                    ? 'border-emerald-400 ring-2 ring-emerald-200'
-                    : 'border-slate-200 hover:border-slate-300'
+                    ? 'border-emerald-400 ring-2 ring-emerald-200 cursor-move'
+                    : 'border-slate-200 hover:border-slate-300 cursor-move'
                 }`}
               >
+                {deleting === index && (
+                  <div className="absolute inset-0 z-20 flex items-center justify-center bg-white/80">
+                    <Loader2 className="w-6 h-6 text-red-500 animate-spin" />
+                  </div>
+                )}
+
                 <img
                   src={url}
                   alt={`Image ${index + 1}`}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover pointer-events-none"
                   onError={(e) => {
                     const target = e.target as HTMLImageElement;
                     target.style.display = 'none';
@@ -224,26 +333,26 @@ export function ImageUploader({ images, onChange, translations }: ImageUploaderP
                 </div>
 
                 {index === 0 && (
-                  <div className="absolute top-1 left-1 bg-emerald-500 text-white text-xs px-2 py-0.5 rounded-full font-medium">
+                  <div className="absolute top-1 left-1 bg-emerald-500 text-white text-xs px-2 py-0.5 rounded-full font-medium pointer-events-none">
                     Main
                   </div>
                 )}
 
-                <div className="absolute top-1 right-1 flex gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                  <button
-                    type="button"
-                    onClick={() => removeImage(index)}
-                    className="p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 transition-colors shadow-lg"
-                  >
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                </div>
+                <button
+                  type="button"
+                  onClick={(e) => handleDeleteClick(e, index, url)}
+                  onMouseDown={(e) => e.stopPropagation()}
+                  className="absolute top-1 right-1 z-10 p-1.5 bg-red-500 text-white rounded-full hover:bg-red-600 transition-all shadow-lg opacity-0 group-hover:opacity-100 cursor-pointer"
+                  disabled={deleting === index}
+                >
+                  <X className="w-3.5 h-3.5" />
+                </button>
 
-                <div className="absolute bottom-1 left-1 bg-black/60 text-white text-xs px-2 py-0.5 rounded-full">
+                <div className="absolute bottom-1 left-1 bg-black/60 text-white text-xs px-2 py-0.5 rounded-full pointer-events-none">
                   {index + 1}
                 </div>
 
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center">
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors flex items-center justify-center pointer-events-none">
                   <GripVertical className="w-6 h-6 text-white opacity-0 group-hover:opacity-70 transition-opacity drop-shadow-lg" />
                 </div>
               </div>
