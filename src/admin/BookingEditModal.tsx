@@ -14,6 +14,7 @@ interface Booking {
   children: number;
   booking_status: string;
   payment_status: string;
+  platform?: string;
   special_requests?: string;
 }
 
@@ -34,6 +35,7 @@ export function BookingEditModal({ booking, onClose, onUpdate }: BookingEditModa
     tour_date: booking.tour_date,
     booking_status: booking.booking_status,
     payment_status: booking.payment_status,
+    platform: booking.platform || 'telegram',
     special_requests: booking.special_requests || '',
   });
 
@@ -59,6 +61,7 @@ export function BookingEditModal({ booking, onClose, onUpdate }: BookingEditModa
           tour_date: formData.tour_date,
           booking_status: formData.booking_status,
           payment_status: formData.payment_status,
+          platform: formData.platform,
           special_requests: formData.special_requests || null,
         })
         .eq('id', booking.id);
@@ -193,6 +196,22 @@ export function BookingEditModal({ booking, onClose, onUpdate }: BookingEditModa
                 <option value="pending">{t.pending}</option>
                 <option value="paid">{t.paid}</option>
                 <option value="failed">{t.failed}</option>
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                Platform
+              </label>
+              <select
+                value={formData.platform}
+                onChange={(e) =>
+                  setFormData({ ...formData, platform: e.target.value })
+                }
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="telegram">Telegram</option>
+                <option value="whatsapp">WhatsApp</option>
               </select>
             </div>
           </div>

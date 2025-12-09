@@ -47,6 +47,7 @@ interface Booking {
   total_price: number;
   payment_status: 'pending' | 'paid' | 'failed';
   booking_status: 'pending' | 'confirmed' | 'cancelled' | 'completed';
+  platform: string | null;
   special_requests: string | null;
   created_at: string;
   product?: { name: string };
@@ -897,6 +898,7 @@ export function BookingsManagement() {
                       <p className="text-sm"><span className="text-slate-500">{t.tourDate}:</span> <span className="font-medium">{formatDate(selectedBooking.tour_date)}</span></p>
                       <p className="text-sm"><span className="text-slate-500">{t.adultsCount}:</span> <span className="font-medium">{selectedBooking.adults || 0}</span></p>
                       <p className="text-sm"><span className="text-slate-500">{t.childrenCount}:</span> <span className="font-medium">{selectedBooking.children || 0}</span></p>
+                      <p className="text-sm"><span className="text-slate-500">Platform:</span> <span className="font-medium">{selectedBooking.platform || 'telegram'}</span></p>
                       <p className="text-sm"><span className="text-slate-500">{t.price}:</span> <span className="font-medium">{selectedBooking.total_price?.toLocaleString()} THB</span></p>
                       <div className="space-y-2">
                         <p className="text-sm">

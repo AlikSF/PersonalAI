@@ -31,6 +31,7 @@ export function BookingCreateModal({ onClose, onCreated }: BookingCreateModalPro
     children: 0,
     booking_status: 'pending',
     payment_status: 'pending',
+    platform: 'telegram',
     special_requests: '',
   });
 
@@ -91,6 +92,7 @@ export function BookingCreateModal({ onClose, onCreated }: BookingCreateModalPro
           total_price: totalPrice,
           booking_status: formData.booking_status,
           payment_status: formData.payment_status,
+          platform: formData.platform,
           special_requests: formData.special_requests || null,
         });
 
@@ -292,6 +294,22 @@ export function BookingCreateModal({ onClose, onCreated }: BookingCreateModalPro
                   <option value="pending">{t.pending}</option>
                   <option value="paid">{t.paid}</option>
                   <option value="failed">{t.failed}</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1">
+                  Platform
+                </label>
+                <select
+                  value={formData.platform}
+                  onChange={(e) =>
+                    setFormData({ ...formData, platform: e.target.value })
+                  }
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="telegram">Telegram</option>
+                  <option value="whatsapp">WhatsApp</option>
                 </select>
               </div>
 
