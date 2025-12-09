@@ -7,6 +7,7 @@ import { AdminDashboard } from './AdminDashboard';
 import { ProductsList } from './ProductsList';
 import { ProductForm } from './ProductForm';
 import { BookingsManagement } from './BookingsManagement';
+import { UserManagement } from './UserManagement';
 import { Loader2 } from 'lucide-react';
 
 export function AdminRouter() {
@@ -42,6 +43,10 @@ export function AdminRouter() {
 
     if (path === '/admin/bookings') {
       return <BookingsManagement />;
+    }
+
+    if (path === '/admin/users') {
+      return <UserManagement />;
     }
 
     if (path === '/admin/products/new') {

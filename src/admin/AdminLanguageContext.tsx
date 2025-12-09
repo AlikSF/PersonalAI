@@ -109,6 +109,19 @@ interface AdminTranslations {
   details: string;
   phone: string;
   country: string;
+  users: string;
+  manageUsers: string;
+  manageUserRoles: string;
+  usersList: string;
+  roleAssignment: string;
+  admin: string;
+  user: string;
+  role: string;
+  noUsers: string;
+  assignRole: string;
+  roleAssigned: string;
+  roleAssignmentFailed: string;
+  assigning: string;
 }
 
 const translations: Record<AdminLang, AdminTranslations> = {
@@ -219,6 +232,19 @@ const translations: Record<AdminLang, AdminTranslations> = {
     details: 'Details',
     phone: 'Phone',
     country: 'Country',
+    users: 'Users',
+    manageUsers: 'Manage Users',
+    manageUserRoles: 'Manage user roles and permissions',
+    usersList: 'Users List',
+    roleAssignment: 'Role Assignment',
+    admin: 'Admin',
+    user: 'User',
+    role: 'Role',
+    noUsers: 'No users found',
+    assignRole: 'Assign Role',
+    roleAssigned: 'Role assigned successfully',
+    roleAssignmentFailed: 'Failed to assign role',
+    assigning: 'Assigning...',
   },
   ru: {
     adminPanel: 'Панель администратора',
@@ -327,6 +353,19 @@ const translations: Record<AdminLang, AdminTranslations> = {
     details: 'Детали',
     phone: 'Телефон',
     country: 'Страна',
+    users: 'Пользователи',
+    manageUsers: 'Управление пользователями',
+    manageUserRoles: 'Управление ролями и разрешениями пользователей',
+    usersList: 'Список пользователей',
+    roleAssignment: 'Назначение роли',
+    admin: 'Администратор',
+    user: 'Пользователь',
+    role: 'Роль',
+    noUsers: 'Пользователи не найдены',
+    assignRole: 'Назначить роль',
+    roleAssigned: 'Роль успешно назначена',
+    roleAssignmentFailed: 'Не удалось назначить роль',
+    assigning: 'Назначение...',
   },
 };
 
