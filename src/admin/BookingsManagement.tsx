@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAdminLang } from './AdminLanguageContext';
 import { CompanyInfoEditor } from './CompanyInfoEditor';
+import { BookingEditModal } from './BookingEditModal';
+import { BookingComments } from './BookingComments';
+import { BookingActivityLog } from './BookingActivityLog';
 import {
   Calendar,
   Mail,
@@ -22,6 +25,8 @@ import {
   ArrowUpDown,
   ArrowUp,
   ArrowDown,
+  Edit,
+  History,
 } from 'lucide-react';
 
 interface Booking {
@@ -35,6 +40,8 @@ interface Booking {
   start_date: string | null;
   end_date: string | null;
   tour_date: string | null;
+  adults: number;
+  children: number;
   total_price: number;
   payment_status: 'pending' | 'paid' | 'failed';
   booking_status: 'confirmed' | 'cancelled' | 'completed';
@@ -60,6 +67,7 @@ type ActiveTab = 'bookings' | 'messages' | 'companyInfo';
 type BookingSortField = 'customer_name' | 'total_price' | 'payment_status' | 'booking_status' | 'tour_date' | 'created_at';
 type MessageSortField = 'name' | 'created_at';
 type SortDirection = 'asc' | 'desc';
+type BookingDetailsTab = 'details' | 'comments' | 'activity';
 
 const ITEMS_PER_PAGE = 15;
 
@@ -75,6 +83,8 @@ export function BookingsManagement() {
   const [messagesTotal, setMessagesTotal] = useState(0);
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [selectedMessage, setSelectedMessage] = useState<ContactMessage | null>(null);
+  const [editingBooking, setEditingBooking] = useState<Booking | null>(null);
+  const [bookingDetailsTab, setBookingDetailsTab] = useState<BookingDetailsTab>('details');
   const [bookingSortField, setBookingSortField] = useState<BookingSortField>('created_at');
   const [bookingSortDirection, setBookingSortDirection] = useState<SortDirection>('desc');
   const [messageSortField, setMessageSortField] = useState<MessageSortField>('created_at');
@@ -111,7 +121,7 @@ export function BookingsManagement() {
     try {
       let query = supabase
         .from('bookings')
-        .select('*, product:products(name)', { count: 'exact' })
+        .select('id, product_id, customer_name, customer_email, customer_phone, country_code, dial_code, start_date, end_date, tour_date, adults, children, total_price, payment_status, booking_status, special_requests, created_at, product:products(name)', { count: 'exact' })
         .order(bookingSortField, { ascending: bookingSortDirection === 'asc' });
 
       if (bookingFilters.dateFrom) {
@@ -771,60 +781,140 @@ export function BookingsManagement() {
 
     return (
       <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-        <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
           <div className="p-6 border-b border-slate-200 flex items-center justify-between">
             <h3 className="text-xl font-bold text-slate-900">{t.bookingDetails}</h3>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => {
+                  setEditingBooking(selectedBooking);
+                }}
+                className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              >
+                <Edit className="w-4 h-4" />
+                {t.editBooking}
+              </button>
+              <button
+                onClick={() => {
+                  setSelectedBooking(null);
+                  setBookingDetailsTab('details');
+                }}
+                className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+          </div>
+
+          <div className="flex border-b border-slate-200">
             <button
-              onClick={() => setSelectedBooking(null)}
-              className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+              onClick={() => setBookingDetailsTab('details')}
+              className={`px-6 py-3 font-medium text-sm transition-colors relative ${
+                bookingDetailsTab === 'details'
+                  ? 'text-blue-600'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
             >
-              <X className="w-5 h-5" />
+              <span className="flex items-center gap-2">
+                <Eye className="w-4 h-4" />
+                {t.details}
+              </span>
+              {bookingDetailsTab === 'details' && (
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600" />
+              )}
+            </button>
+            <button
+              onClick={() => setBookingDetailsTab('comments')}
+              className={`px-6 py-3 font-medium text-sm transition-colors relative ${
+                bookingDetailsTab === 'comments'
+                  ? 'text-blue-600'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <span className="flex items-center gap-2">
+                <MessageSquare className="w-4 h-4" />
+                {t.comments}
+              </span>
+              {bookingDetailsTab === 'comments' && (
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600" />
+              )}
+            </button>
+            <button
+              onClick={() => setBookingDetailsTab('activity')}
+              className={`px-6 py-3 font-medium text-sm transition-colors relative ${
+                bookingDetailsTab === 'activity'
+                  ? 'text-blue-600'
+                  : 'text-slate-600 hover:text-slate-900'
+              }`}
+            >
+              <span className="flex items-center gap-2">
+                <History className="w-4 h-4" />
+                {t.activityLog}
+              </span>
+              {bookingDetailsTab === 'activity' && (
+                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600" />
+              )}
             </button>
           </div>
-          <div className="p-6 space-y-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="space-y-4">
-                <h4 className="font-semibold text-slate-900 flex items-center gap-2">
-                  <User className="w-4 h-4" />
-                  {t.customerInfo}
-                </h4>
-                <div className="space-y-2">
-                  <p className="text-sm"><span className="text-slate-500">{t.name}:</span> <span className="font-medium">{selectedBooking.customer_name}</span></p>
-                  <p className="text-sm"><span className="text-slate-500">{t.email}:</span> <span className="font-medium">{selectedBooking.customer_email}</span></p>
-                  <p className="text-sm"><span className="text-slate-500">{t.phone}:</span> <span className="font-medium">{selectedBooking.dial_code || ''}{selectedBooking.customer_phone}</span></p>
-                  {selectedBooking.country_code && (
-                    <p className="text-sm"><span className="text-slate-500">{t.country}:</span> <span className="font-medium">{selectedBooking.country_code}</span></p>
-                  )}
-                </div>
-              </div>
-              <div className="space-y-4">
-                <h4 className="font-semibold text-slate-900 flex items-center gap-2">
-                  <Calendar className="w-4 h-4" />
-                  {t.bookingInfo}
-                </h4>
-                <div className="space-y-2">
-                  <p className="text-sm"><span className="text-slate-500">{t.product}:</span> <span className="font-medium">{selectedBooking.product?.name || '-'}</span></p>
-                  <p className="text-sm"><span className="text-slate-500">{t.tourDate}:</span> <span className="font-medium">{formatDate(selectedBooking.tour_date)}</span></p>
-                  <p className="text-sm"><span className="text-slate-500">{t.price}:</span> <span className="font-medium">{selectedBooking.total_price?.toLocaleString()} THB</span></p>
-                  <div className="flex gap-2">
-                    {getPaymentStatusBadge(selectedBooking.payment_status)}
-                    {getBookingStatusBadge(selectedBooking.booking_status)}
+
+          <div className="flex-1 overflow-y-auto p-6">
+            {bookingDetailsTab === 'details' && (
+              <div className="space-y-6">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div className="space-y-4">
+                    <h4 className="font-semibold text-slate-900 flex items-center gap-2">
+                      <User className="w-4 h-4" />
+                      {t.customerInfo}
+                    </h4>
+                    <div className="space-y-2">
+                      <p className="text-sm"><span className="text-slate-500">{t.name}:</span> <span className="font-medium">{selectedBooking.customer_name}</span></p>
+                      <p className="text-sm"><span className="text-slate-500">{t.email}:</span> <span className="font-medium">{selectedBooking.customer_email}</span></p>
+                      <p className="text-sm"><span className="text-slate-500">{t.phone}:</span> <span className="font-medium">{selectedBooking.dial_code || ''}{selectedBooking.customer_phone}</span></p>
+                      {selectedBooking.country_code && (
+                        <p className="text-sm"><span className="text-slate-500">{t.country}:</span> <span className="font-medium">{selectedBooking.country_code}</span></p>
+                      )}
+                    </div>
+                  </div>
+                  <div className="space-y-4">
+                    <h4 className="font-semibold text-slate-900 flex items-center gap-2">
+                      <Calendar className="w-4 h-4" />
+                      {t.bookingInfo}
+                    </h4>
+                    <div className="space-y-2">
+                      <p className="text-sm"><span className="text-slate-500">{t.product}:</span> <span className="font-medium">{selectedBooking.product?.name || '-'}</span></p>
+                      <p className="text-sm"><span className="text-slate-500">{t.tourDate}:</span> <span className="font-medium">{formatDate(selectedBooking.tour_date)}</span></p>
+                      <p className="text-sm"><span className="text-slate-500">{t.adultsCount}:</span> <span className="font-medium">{selectedBooking.adults || 0}</span></p>
+                      <p className="text-sm"><span className="text-slate-500">{t.childrenCount}:</span> <span className="font-medium">{selectedBooking.children || 0}</span></p>
+                      <p className="text-sm"><span className="text-slate-500">{t.price}:</span> <span className="font-medium">{selectedBooking.total_price?.toLocaleString()} THB</span></p>
+                      <div className="flex gap-2">
+                        {getPaymentStatusBadge(selectedBooking.payment_status)}
+                        {getBookingStatusBadge(selectedBooking.booking_status)}
+                      </div>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </div>
-            {selectedBooking.special_requests && (
-              <div className="space-y-2">
-                <h4 className="font-semibold text-slate-900 flex items-center gap-2">
-                  <MessageSquare className="w-4 h-4" />
-                  {t.specialRequests}
-                </h4>
-                <p className="text-sm text-slate-700 bg-slate-50 p-4 rounded-lg">{selectedBooking.special_requests}</p>
+                {selectedBooking.special_requests && (
+                  <div className="space-y-2">
+                    <h4 className="font-semibold text-slate-900 flex items-center gap-2">
+                      <MessageSquare className="w-4 h-4" />
+                      {t.specialRequests}
+                    </h4>
+                    <p className="text-sm text-slate-700 bg-slate-50 p-4 rounded-lg">{selectedBooking.special_requests}</p>
+                  </div>
+                )}
+                <div className="text-sm text-slate-500">
+                  {t.created}: {formatDateTime(selectedBooking.created_at)}
+                </div>
               </div>
             )}
-            <div className="text-sm text-slate-500">
-              {t.created}: {formatDateTime(selectedBooking.created_at)}
-            </div>
+
+            {bookingDetailsTab === 'comments' && (
+              <BookingComments bookingId={selectedBooking.id} />
+            )}
+
+            {bookingDetailsTab === 'activity' && (
+              <BookingActivityLog bookingId={selectedBooking.id} />
+            )}
           </div>
         </div>
       </div>
@@ -968,6 +1058,20 @@ export function BookingsManagement() {
 
       {renderBookingModal()}
       {renderMessageModal()}
+
+      {editingBooking && (
+        <BookingEditModal
+          booking={editingBooking}
+          onClose={() => setEditingBooking(null)}
+          onUpdate={() => {
+            fetchBookings();
+            setEditingBooking(null);
+            if (selectedBooking) {
+              setSelectedBooking({ ...editingBooking });
+            }
+          }}
+        />
+      )}
     </div>
   );
 }

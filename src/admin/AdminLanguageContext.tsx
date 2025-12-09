@@ -140,6 +140,32 @@ interface AdminTranslations {
   previousMonth: string;
   nextMonth: string;
   bookingsCount: string;
+  editBooking: string;
+  saveChanges: string;
+  saving: string;
+  comments: string;
+  addComment: string;
+  writeComment: string;
+  postComment: string;
+  posting: string;
+  activityLog: string;
+  noComments: string;
+  noActivity: string;
+  editHistory: string;
+  changedFrom: string;
+  changedTo: string;
+  commentAdded: string;
+  bookingUpdated: string;
+  bookingCreated: string;
+  createdBy: string;
+  updatedBy: string;
+  commentedBy: string;
+  adultsCount: string;
+  childrenCount: string;
+  viewComments: string;
+  viewActivity: string;
+  updated: string;
+  closeDetails: string;
 }
 
 const translations: Record<AdminLang, AdminTranslations> = {
@@ -281,6 +307,32 @@ const translations: Record<AdminLang, AdminTranslations> = {
     previousMonth: 'Previous Month',
     nextMonth: 'Next Month',
     bookingsCount: 'bookings',
+    editBooking: 'Edit Booking',
+    saveChanges: 'Save Changes',
+    saving: 'Saving...',
+    comments: 'Comments',
+    addComment: 'Add Comment',
+    writeComment: 'Write a comment...',
+    postComment: 'Post Comment',
+    posting: 'Posting...',
+    activityLog: 'Activity Log',
+    noComments: 'No comments yet',
+    noActivity: 'No activity recorded',
+    editHistory: 'Edit History',
+    changedFrom: 'Changed from',
+    changedTo: 'to',
+    commentAdded: 'Comment added',
+    bookingUpdated: 'Booking updated',
+    bookingCreated: 'Booking created',
+    createdBy: 'Created by',
+    updatedBy: 'Updated by',
+    commentedBy: 'Commented by',
+    adultsCount: 'Adults',
+    childrenCount: 'Children',
+    viewComments: 'View Comments',
+    viewActivity: 'View Activity',
+    updated: 'Updated',
+    closeDetails: 'Close Details',
   },
   ru: {
     adminPanel: 'Панель администратора',
@@ -420,6 +472,32 @@ const translations: Record<AdminLang, AdminTranslations> = {
     previousMonth: 'Предыдущий месяц',
     nextMonth: 'Следующий месяц',
     bookingsCount: 'бронирований',
+    editBooking: 'Редактировать бронирование',
+    saveChanges: 'Сохранить изменения',
+    saving: 'Сохранение...',
+    comments: 'Комментарии',
+    addComment: 'Добавить комментарий',
+    writeComment: 'Напишите комментарий...',
+    postComment: 'Опубликовать комментарий',
+    posting: 'Публикация...',
+    activityLog: 'Журнал активности',
+    noComments: 'Пока нет комментариев',
+    noActivity: 'Нет записанной активности',
+    editHistory: 'История изменений',
+    changedFrom: 'Изменено с',
+    changedTo: 'на',
+    commentAdded: 'Комментарий добавлен',
+    bookingUpdated: 'Бронирование обновлено',
+    bookingCreated: 'Бронирование создано',
+    createdBy: 'Создано',
+    updatedBy: 'Обновлено',
+    commentedBy: 'Прокомментировал',
+    adultsCount: 'Взрослые',
+    childrenCount: 'Дети',
+    viewComments: 'Просмотреть комментарии',
+    viewActivity: 'Просмотреть активность',
+    updated: 'Обновлено',
+    closeDetails: 'Закрыть детали',
   },
 };
 
