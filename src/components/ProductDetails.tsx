@@ -137,10 +137,6 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
     }
 
     // Save booking to database
-    const specialRequestsText = language === 'en'
-      ? `Adults: ${adults}, Children: ${children}, Platform: ${platform}`
-      : `Взрослых: ${adults}, Детей: ${children}, Платформа: ${platform}`;
-
     (async () => {
       try {
         const { data, error } = await supabase.from('bookings').insert({
@@ -153,10 +149,13 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
           tour_date: tourDate,
           start_date: tourDate,
           end_date: tourDate,
+          adults: adults,
+          children: children,
+          platform: platform,
           total_price: totalPrice,
           payment_status: 'pending',
           booking_status: 'pending',
-          special_requests: specialRequestsText,
+          special_requests: null,
         });
 
         if (error) {
