@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAdminLang } from './AdminLanguageContext';
+import { BookingEditModal } from './BookingEditModal';
 
 interface Booking {
   id: string;
@@ -22,6 +23,8 @@ export function CalendarView() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedBookingId, setSelectedBookingId] = useState<string | null>(null);
+  const [showEditModal, setShowEditModal] = useState(false);
 
   useEffect(() => {
     fetchBookings();
@@ -168,7 +171,7 @@ export function CalendarView() {
 
             {days.map((day, index) => {
               if (day === null) {
-                return <div key={`empty-${index}`} className="aspect-square" />;
+                return <div key={`empty-${index}`} className="h-16" />;
               }
 
               const date = new Date(year, month, day);
@@ -181,7 +184,7 @@ export function CalendarView() {
                 <button
                   key={day}
                   onClick={() => setSelectedDate(date)}
-                  className={`aspect-square p-2 rounded-lg border transition-all ${
+                  className={`h-16 p-1 rounded-lg border transition-all ${
                     isSelected
                       ? 'bg-blue-100 border-blue-300 shadow-sm'
                       : isToday
@@ -204,7 +207,7 @@ export function CalendarView() {
                       {day}
                     </span>
                     {dayBookings.length > 0 && (
-                      <span className="text-xs font-semibold text-emerald-600 mt-1">
+                      <span className="text-xs font-semibold text-emerald-600 mt-0.5">
                         {dayBookings.length}
                       </span>
                     )}
@@ -234,7 +237,12 @@ export function CalendarView() {
               {selectedBookings.map((booking) => (
                 <div
                   key={booking.id}
-                  className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200 hover:border-slate-300 transition-colors"
+                  onDoubleClick={() => {
+                    setSelectedBookingId(booking.id);
+                    setShowEditModal(true);
+                  }}
+                  className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200 hover:border-slate-300 transition-colors cursor-pointer"
+                  title={lang === 'ru' ? 'Дважды щелкните для редактирования' : 'Double-click to edit'}
                 >
                   <div className="flex-1">
                     <p className="font-medium text-slate-900">{booking.customer_name}</p>
@@ -276,6 +284,21 @@ export function CalendarView() {
             </div>
           )}
         </div>
+      )}
+
+      {showEditModal && selectedBookingId && (
+        <BookingEditModal
+          bookingId={selectedBookingId}
+          onClose={() => {
+            setShowEditModal(false);
+            setSelectedBookingId(null);
+          }}
+          onSave={() => {
+            fetchBookings();
+            setShowEditModal(false);
+            setSelectedBookingId(null);
+          }}
+        />
       )}
     </div>
   );
