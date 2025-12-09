@@ -32,8 +32,6 @@ export function BookingEditModal({ booking, onClose, onUpdate }: BookingEditModa
     customer_phone: booking.customer_phone,
     country_code: booking.country_code || '+1',
     tour_date: booking.tour_date,
-    adults: booking.adults,
-    children: booking.children,
     booking_status: booking.booking_status,
     payment_status: booking.payment_status,
     special_requests: booking.special_requests || '',
@@ -59,8 +57,6 @@ export function BookingEditModal({ booking, onClose, onUpdate }: BookingEditModa
           customer_phone: formData.customer_phone,
           country_code: formData.country_code,
           tour_date: formData.tour_date,
-          adults: formData.adults,
-          children: formData.children,
           booking_status: formData.booking_status,
           payment_status: formData.payment_status,
           special_requests: formData.special_requests || null,
@@ -159,38 +155,6 @@ export function BookingEditModal({ booking, onClose, onUpdate }: BookingEditModa
                 value={formData.tour_date}
                 onChange={(e) =>
                   setFormData({ ...formData, tour_date: e.target.value })
-                }
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
-                {t.adultsCount}
-              </label>
-              <input
-                type="number"
-                min="0"
-                value={formData.adults}
-                onChange={(e) =>
-                  setFormData({ ...formData, adults: parseInt(e.target.value) || 0 })
-                }
-                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                required
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1">
-                {t.childrenCount}
-              </label>
-              <input
-                type="number"
-                min="0"
-                value={formData.children}
-                onChange={(e) =>
-                  setFormData({ ...formData, children: parseInt(e.target.value) || 0 })
                 }
                 className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
