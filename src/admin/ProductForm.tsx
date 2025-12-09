@@ -320,8 +320,8 @@ export function ProductForm({ productId }: ProductFormProps) {
               <textarea
                 value={(formData[descField] as string) || ''}
                 onChange={(e) => handleChange(descField, e.target.value)}
-                rows={4}
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 resize-none"
+                rows={10}
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 resize-y min-h-[120px]"
                 placeholder={`Product description in ${lang.label}`}
               />
             </div>
@@ -364,8 +364,8 @@ export function ProductForm({ productId }: ProductFormProps) {
               <textarea
                 value={(formData[featuresField] as string) || ''}
                 onChange={(e) => handleChange(featuresField, e.target.value)}
-                rows={3}
-                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 resize-none"
+                rows={6}
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 resize-y min-h-[90px]"
                 placeholder="Feature 1, Feature 2, Feature 3"
               />
               <p className="text-xs text-slate-500 mt-1">{t.featuresHint}</p>
