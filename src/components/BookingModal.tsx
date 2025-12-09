@@ -41,8 +41,8 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
         start_date: formData.tour_date,
         end_date: formData.tour_date,
         total_price: totalPrice,
-        payment_status: 'paid',
-        booking_status: 'confirmed',
+        payment_status: 'pending',
+        booking_status: 'pending',
         special_requests: `Взрослых: ${formData.adults_count}, Детей: ${formData.children_count}`,
       });
 
