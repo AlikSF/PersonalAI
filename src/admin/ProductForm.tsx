@@ -18,6 +18,81 @@ const CATEGORIES = [
   'Приват туры',
 ];
 
+const CATEGORY_TRANSLATIONS: Record<string, Record<string, string>> = {
+  'Трансфер': {
+    en: 'Transfer',
+    kk: 'Трансфер',
+    ky: 'Трансфер',
+    az: 'Transfer',
+    zh: '接送服务',
+    fr: 'Transfert',
+    uz: 'Transfer',
+  },
+  'Острова': {
+    en: 'Islands',
+    kk: 'Аралдар',
+    ky: 'Аралдар',
+    az: 'Adalar',
+    zh: '岛屿',
+    fr: 'Îles',
+    uz: 'Orollar',
+  },
+  'Озеро': {
+    en: 'Lake',
+    kk: 'Көл',
+    ky: 'Көл',
+    az: 'Göl',
+    zh: '湖泊',
+    fr: 'Lac',
+    uz: 'Ko\'l',
+  },
+  'Экстрим': {
+    en: 'Extreme',
+    kk: 'Экстрим',
+    ky: 'Экстрим',
+    az: 'Ekstremal',
+    zh: '极限运动',
+    fr: 'Extrême',
+    uz: 'Ekstrim',
+  },
+  'Клубы': {
+    en: 'Clubs',
+    kk: 'Клубтар',
+    ky: 'Клубдар',
+    az: 'Klublar',
+    zh: '俱乐部',
+    fr: 'Clubs',
+    uz: 'Klublar',
+  },
+  'Шоу': {
+    en: 'Show',
+    kk: 'Шоу',
+    ky: 'Шоу',
+    az: 'Şou',
+    zh: '表演',
+    fr: 'Spectacle',
+    uz: 'Shou',
+  },
+  'Инста туры': {
+    en: 'Insta Tours',
+    kk: 'Инста турлар',
+    ky: 'Инста турлар',
+    az: 'İnsta Turlar',
+    zh: '网红打卡游',
+    fr: 'Tours Insta',
+    uz: 'Insta Turlar',
+  },
+  'Приват туры': {
+    en: 'Private Tours',
+    kk: 'Жеке турлар',
+    ky: 'Жеке турлар',
+    az: 'Xüsusi Turlar',
+    zh: '私人旅游',
+    fr: 'Tours Privés',
+    uz: 'Xususiy Turlar',
+  },
+};
+
 interface FieldGroup {
   code: string;
   label: string;
@@ -263,28 +338,22 @@ export function ProductForm({ productId }: ProductFormProps) {
 
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">{t.category}</label>
-              {lang.code === 'ru' ? (
-                <select
-                  value={(formData[categoryField] as string) || ''}
-                  onChange={(e) => handleChange(categoryField, e.target.value)}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
-                >
-                  <option value="">{t.selectCategory}</option>
-                  {CATEGORIES.map((cat) => (
-                    <option key={cat} value={cat}>
-                      {cat}
+              <select
+                value={(formData[categoryField] as string) || ''}
+                onChange={(e) => handleChange(categoryField, e.target.value)}
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+              >
+                <option value="">{t.selectCategory}</option>
+                {CATEGORIES.map((catRu) => {
+                  const translated = lang.code === 'ru' ? catRu : CATEGORY_TRANSLATIONS[catRu][lang.code];
+                  const displayText = lang.code === 'ru' ? catRu : `${translated} (${catRu})`;
+                  return (
+                    <option key={catRu} value={translated}>
+                      {displayText}
                     </option>
-                  ))}
-                </select>
-              ) : (
-                <input
-                  type="text"
-                  value={(formData[categoryField] as string) || ''}
-                  onChange={(e) => handleChange(categoryField, e.target.value)}
-                  className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
-                  placeholder={`Category in ${lang.label}`}
-                />
-              )}
+                  );
+                })}
+              </select>
             </div>
 
             <div>
