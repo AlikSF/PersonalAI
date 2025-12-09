@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Product, supabase } from '../lib/supabase';
 import { useAdminLang } from './AdminLanguageContext';
+import { useAuth } from '../contexts/AuthContext';
 import { Plus, Edit2, Trash2, Loader2, AlertTriangle, X, CheckCircle, XCircle, ArrowUpDown, ArrowUp, ArrowDown, Package } from 'lucide-react';
 
 type SortField = 'name' | 'created_at' | null;
@@ -8,6 +9,7 @@ type SortDirection = 'asc' | 'desc';
 
 export function ProductsList() {
   const { t } = useAdminLang();
+  const { isAdmin } = useAuth();
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
@@ -239,13 +241,15 @@ export function ProductsList() {
                         >
                           <Edit2 className="w-4 h-4" />
                         </button>
-                        <button
-                          onClick={() => setDeleteConfirm(product.id)}
-                          className="p-2 text-slate-600 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors"
-                          title={t.delete}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
+                        {isAdmin && (
+                          <button
+                            onClick={() => setDeleteConfirm(product.id)}
+                            className="p-2 text-slate-600 hover:bg-red-50 hover:text-red-600 rounded-lg transition-colors"
+                            title={t.delete}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </button>
+                        )}
                       </div>
                     </td>
                   </tr>

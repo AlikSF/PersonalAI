@@ -10,7 +10,7 @@ interface AdminLayoutProps {
 }
 
 export function AdminLayout({ children, currentPath }: AdminLayoutProps) {
-  const { user, signOut } = useAuth();
+  const { user, userRole, signOut } = useAuth();
   const { lang, setLang, t } = useAdminLang();
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
@@ -79,6 +79,17 @@ export function AdminLayout({ children, currentPath }: AdminLayoutProps) {
               </button>
             </div>
             <p className="text-sm text-slate-500 mt-1 truncate">{user?.email}</p>
+            {userRole && (
+              <div className="mt-2">
+                <span className={`inline-flex items-center px-2 py-1 text-xs font-medium rounded-full ${
+                  userRole === 'admin'
+                    ? 'bg-blue-500/20 text-blue-300 border border-blue-500/30'
+                    : 'bg-slate-700 text-slate-300 border border-slate-600'
+                }`}>
+                  {userRole === 'admin' ? t.adminRole || 'Admin' : t.userRole || 'User'}
+                </span>
+              </div>
+            )}
           </div>
 
           <nav className="flex-1 p-4 space-y-1">
