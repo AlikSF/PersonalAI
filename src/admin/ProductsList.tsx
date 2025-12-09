@@ -199,20 +199,14 @@ export function ProductsList() {
                   <tr key={product.id} className="hover:bg-slate-50 transition-colors">
                     <td className="px-4 py-4">
                       <div className="flex items-center gap-3">
-                        {product.image_url ? (
-                          <img
-                            src={product.image_url}
-                            alt={product.name || ''}
-                            className="w-10 h-10 object-cover rounded-lg border border-slate-200 flex-shrink-0"
-                            onError={(e) => {
-                              (e.target as HTMLImageElement).style.display = 'none';
-                            }}
-                          />
-                        ) : (
-                          <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                            <span className="text-slate-400 text-xs">N/A</span>
-                          </div>
-                        )}
+                        <img
+                          src={product.image_url || '/image copy.png'}
+                          alt={product.name || ''}
+                          className="w-10 h-10 object-cover rounded-lg border border-slate-200 flex-shrink-0"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = '/image copy.png';
+                          }}
+                        />
                         <span className="font-medium text-slate-900">
                           {truncate(product.name, 30) || t.untitled}
                         </span>
