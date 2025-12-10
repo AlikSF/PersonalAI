@@ -61,19 +61,19 @@ export function DashboardStats() {
   };
 
   return (
-    <div className="space-y-8">
-      <div className="bg-gradient-to-br from-blue-50 via-white to-cyan-50 rounded-2xl p-8 border border-slate-200 shadow-sm">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-3 bg-blue-600 rounded-xl shadow-lg">
-            <Calendar className="w-7 h-7 text-white" />
+    <div className="space-y-6">
+      <div className="bg-gradient-to-br from-blue-50 via-white to-cyan-50 rounded-2xl p-6 border border-slate-200 shadow-sm">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="p-2.5 bg-blue-600 rounded-xl shadow-lg">
+            <Calendar className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">{t.bookingStatistics}</h2>
-            <p className="text-sm text-slate-600">Track your booking performance</p>
+            <h2 className="text-xl font-bold text-slate-900">{t.bookingStatistics}</h2>
+            <p className="text-xs text-slate-600">Track your booking performance</p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
           <StatCard
             title={t.allTime}
             value={bookingStats.allTime}
@@ -108,13 +108,13 @@ export function DashboardStats() {
           />
         </div>
 
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200 mb-6">
-          <div className="flex items-center justify-between mb-6">
-            <h3 className="text-lg font-semibold text-slate-900">Status Overview</h3>
+        <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-200 mb-4">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-base font-semibold text-slate-900">Status Overview</h3>
             <div className="flex gap-2">
               <button
                 onClick={() => setBookingFilter('all')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                   bookingFilter === 'all'
                     ? 'bg-slate-900 text-white shadow-md'
                     : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
@@ -124,7 +124,7 @@ export function DashboardStats() {
               </button>
               <button
                 onClick={() => setBookingFilter('confirmed')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                   bookingFilter === 'confirmed'
                     ? 'bg-emerald-600 text-white shadow-md'
                     : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100'
@@ -134,7 +134,7 @@ export function DashboardStats() {
               </button>
               <button
                 onClick={() => setBookingFilter('pending')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                   bookingFilter === 'pending'
                     ? 'bg-amber-600 text-white shadow-md'
                     : 'bg-amber-50 text-amber-600 hover:bg-amber-100'
@@ -144,7 +144,7 @@ export function DashboardStats() {
               </button>
               <button
                 onClick={() => setBookingFilter('cancelled')}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                   bookingFilter === 'cancelled'
                     ? 'bg-red-600 text-white shadow-md'
                     : 'bg-red-50 text-red-600 hover:bg-red-100'
@@ -155,62 +155,62 @@ export function DashboardStats() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-lg p-4 border border-emerald-200">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+            <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-lg p-3 border border-emerald-200">
               <div className="flex items-center gap-3 mb-2">
                 <CheckCircle2 className="w-5 h-5 text-emerald-600" />
                 <span className="text-sm font-medium text-emerald-700">Confirmed</span>
               </div>
-              <p className="text-3xl font-bold text-emerald-900">{bookingStats.byStatus.confirmed}</p>
+              <p className="text-2xl font-bold text-emerald-900">{bookingStats.byStatus.confirmed}</p>
             </div>
-            <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-lg p-4 border border-amber-200">
+            <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-lg p-3 border border-amber-200">
               <div className="flex items-center gap-3 mb-2">
                 <Clock className="w-5 h-5 text-amber-600" />
                 <span className="text-sm font-medium text-amber-700">Pending</span>
               </div>
-              <p className="text-3xl font-bold text-amber-900">{bookingStats.byStatus.pending}</p>
+              <p className="text-2xl font-bold text-amber-900">{bookingStats.byStatus.pending}</p>
             </div>
-            <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-lg p-4 border border-red-200">
+            <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-lg p-3 border border-red-200">
               <div className="flex items-center gap-3 mb-2">
                 <XCircle className="w-5 h-5 text-red-600" />
                 <span className="text-sm font-medium text-red-700">Cancelled</span>
               </div>
-              <p className="text-3xl font-bold text-red-900">{bookingStats.byStatus.cancelled}</p>
+              <p className="text-2xl font-bold text-red-900">{bookingStats.byStatus.cancelled}</p>
             </div>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
-            <h3 className="text-lg font-semibold text-slate-900 mb-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-200">
+            <h3 className="text-base font-semibold text-slate-900 mb-3">
               Daily Bookings (Last 30 Days)
             </h3>
             <LineChart data={bookingStats.dailyData} color="#3b82f6" />
           </div>
 
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
-            <h3 className="text-lg font-semibold text-slate-900 mb-4">
+          <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-200">
+            <h3 className="text-base font-semibold text-slate-900 mb-3">
               Monthly Bookings (Last 12 Months)
             </h3>
-            <div className="max-h-[400px] overflow-y-auto pr-2">
+            <div className="max-h-[240px] overflow-y-auto pr-2">
               <BarChart data={bookingStats.monthlyData} color="#10b981" />
             </div>
           </div>
         </div>
       </div>
 
-      <div className="bg-gradient-to-br from-orange-50 via-white to-pink-50 rounded-2xl p-8 border border-slate-200 shadow-sm">
-        <div className="flex items-center gap-3 mb-6">
-          <div className="p-3 bg-orange-600 rounded-xl shadow-lg">
-            <MessageSquare className="w-7 h-7 text-white" />
+      <div className="bg-gradient-to-br from-orange-50 via-white to-pink-50 rounded-2xl p-6 border border-slate-200 shadow-sm">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="p-2.5 bg-orange-600 rounded-xl shadow-lg">
+            <MessageSquare className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">{t.messageStatistics}</h2>
-            <p className="text-sm text-slate-600">Monitor customer inquiries</p>
+            <h2 className="text-xl font-bold text-slate-900">{t.messageStatistics}</h2>
+            <p className="text-xs text-slate-600">Monitor customer inquiries</p>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
           <StatCard
             title={t.allTime}
             value={messageStats.allTime}
@@ -245,8 +245,8 @@ export function DashboardStats() {
           />
         </div>
 
-        <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
-          <h3 className="text-lg font-semibold text-slate-900 mb-4">
+        <div className="bg-white rounded-xl p-4 shadow-sm border border-slate-200">
+          <h3 className="text-base font-semibold text-slate-900 mb-3">
             Daily Messages (Last 30 Days)
           </h3>
           <LineChart data={messageStats.dailyData} color="#f97316" />
