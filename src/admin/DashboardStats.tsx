@@ -1,293 +1,255 @@
-import { useEffect, useState } from 'react';
-import { Calendar, MessageSquare, TrendingUp } from 'lucide-react';
-import { supabase } from '../lib/supabase';
+import { useState } from 'react';
+import {
+  Calendar,
+  MessageSquare,
+  TrendingUp,
+  CheckCircle2,
+  Clock,
+  XCircle,
+  BarChart3,
+  Activity,
+  AlertCircle,
+} from 'lucide-react';
 import { useAdminLang } from './AdminLanguageContext';
+import { useDashboardData } from './hooks/useDashboardData';
+import { StatCard } from './components/StatCard';
+import { LineChart } from './components/LineChart';
+import { BarChart } from './components/BarChart';
 
-interface BookingStats {
-  allTime: number;
-  thisMonth: number;
-  thisWeek: number;
-  weeklyData: { week: string; count: number }[];
-  monthlyData: { month: string; count: number }[];
-}
-
-interface MessageStats {
-  allTime: number;
-  thisMonth: number;
-  thisWeek: number;
-  today: number;
-  monthlyData: { month: string; count: number }[];
-}
+type BookingFilter = 'all' | 'confirmed' | 'pending' | 'cancelled';
 
 export function DashboardStats() {
   const { t } = useAdminLang();
-  const [bookingStats, setBookingStats] = useState<BookingStats>({
-    allTime: 0,
-    thisMonth: 0,
-    thisWeek: 0,
-    weeklyData: [],
-    monthlyData: [],
-  });
-  const [messageStats, setMessageStats] = useState<MessageStats>({
-    allTime: 0,
-    thisMonth: 0,
-    thisWeek: 0,
-    today: 0,
-    monthlyData: [],
-  });
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetchStats();
-  }, []);
-
-  async function fetchStats() {
-    try {
-      const now = new Date();
-      const startOfWeek = new Date(now);
-      startOfWeek.setDate(now.getDate() - now.getDay());
-      startOfWeek.setHours(0, 0, 0, 0);
-
-      const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-      const startOfToday = new Date(now);
-      startOfToday.setHours(0, 0, 0, 0);
-
-      const { data: bookings } = await supabase
-        .from('bookings')
-        .select('created_at, tour_date')
-        .order('created_at', { ascending: true });
-
-      const { data: messages } = await supabase
-        .from('contact_messages')
-        .select('created_at')
-        .order('created_at', { ascending: true });
-
-      if (bookings) {
-        const thisWeekBookings = bookings.filter(
-          (b) => new Date(b.created_at) >= startOfWeek
-        ).length;
-        const thisMonthBookings = bookings.filter(
-          (b) => new Date(b.created_at) >= startOfMonth
-        ).length;
-
-        const weeklyData = calculateWeeklyData(bookings);
-        const monthlyData = calculateMonthlyData(bookings);
-
-        setBookingStats({
-          allTime: bookings.length,
-          thisMonth: thisMonthBookings,
-          thisWeek: thisWeekBookings,
-          weeklyData,
-          monthlyData,
-        });
-      }
-
-      if (messages) {
-        const todayMessages = messages.filter(
-          (m) => new Date(m.created_at) >= startOfToday
-        ).length;
-        const thisWeekMessages = messages.filter(
-          (m) => new Date(m.created_at) >= startOfWeek
-        ).length;
-        const thisMonthMessages = messages.filter(
-          (m) => new Date(m.created_at) >= startOfMonth
-        ).length;
-
-        const monthlyData = calculateMonthlyData(messages);
-
-        setMessageStats({
-          allTime: messages.length,
-          thisMonth: thisMonthMessages,
-          thisWeek: thisWeekMessages,
-          today: todayMessages,
-          monthlyData,
-        });
-      }
-    } catch (error) {
-      console.error('Error fetching stats:', error);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  function calculateWeeklyData(data: any[]) {
-    const last8Weeks = [];
-    const now = new Date();
-
-    for (let i = 7; i >= 0; i--) {
-      const weekStart = new Date(now);
-      weekStart.setDate(now.getDate() - now.getDay() - (i * 7));
-      weekStart.setHours(0, 0, 0, 0);
-
-      const weekEnd = new Date(weekStart);
-      weekEnd.setDate(weekStart.getDate() + 7);
-
-      const count = data.filter((item) => {
-        const itemDate = new Date(item.created_at);
-        return itemDate >= weekStart && itemDate < weekEnd;
-      }).length;
-
-      last8Weeks.push({
-        week: weekStart.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-        count,
-      });
-    }
-
-    return last8Weeks;
-  }
-
-  function calculateMonthlyData(data: any[]) {
-    const last6Months = [];
-    const now = new Date();
-
-    for (let i = 5; i >= 0; i--) {
-      const monthDate = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      const nextMonth = new Date(now.getFullYear(), now.getMonth() - i + 1, 1);
-
-      const count = data.filter((item) => {
-        const itemDate = new Date(item.created_at);
-        return itemDate >= monthDate && itemDate < nextMonth;
-      }).length;
-
-      last6Months.push({
-        month: monthDate.toLocaleDateString('en-US', { month: 'short', year: '2-digit' }),
-        count,
-      });
-    }
-
-    return last6Months;
-  }
+  const { bookingStats, messageStats, loading, error } = useDashboardData();
+  const [bookingFilter, setBookingFilter] = useState<BookingFilter>('all');
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-12">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+      <div className="flex flex-col items-center justify-center py-20">
+        <div className="relative">
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-slate-200"></div>
+          <div className="animate-spin rounded-full h-16 w-16 border-4 border-blue-600 border-t-transparent absolute top-0 left-0"></div>
+        </div>
+        <p className="mt-4 text-slate-600 font-medium">Loading dashboard...</p>
       </div>
     );
   }
 
-  const maxWeeklyBookings = Math.max(...bookingStats.weeklyData.map((d) => d.count), 1);
-  const maxMonthlyBookings = Math.max(...bookingStats.monthlyData.map((d) => d.count), 1);
-  const maxMonthlyMessages = Math.max(...messageStats.monthlyData.map((d) => d.count), 1);
+  if (error) {
+    return (
+      <div className="bg-red-50 border border-red-200 rounded-xl p-6 flex items-start gap-4">
+        <AlertCircle className="w-6 h-6 text-red-600 flex-shrink-0 mt-1" />
+        <div>
+          <h3 className="text-red-900 font-semibold mb-1">Error Loading Dashboard</h3>
+          <p className="text-red-700 text-sm">{error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  const getFilteredBookingCount = () => {
+    switch (bookingFilter) {
+      case 'confirmed':
+        return bookingStats.byStatus.confirmed;
+      case 'pending':
+        return bookingStats.byStatus.pending;
+      case 'cancelled':
+        return bookingStats.byStatus.cancelled;
+      default:
+        return bookingStats.allTime;
+    }
+  };
 
   return (
-    <div className="space-y-6">
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+    <div className="space-y-8">
+      <div className="bg-gradient-to-br from-blue-50 via-white to-cyan-50 rounded-2xl p-8 border border-slate-200 shadow-sm">
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-blue-100 rounded-lg">
-            <Calendar className="w-5 h-5 text-blue-600" />
+          <div className="p-3 bg-blue-600 rounded-xl shadow-lg">
+            <Calendar className="w-7 h-7 text-white" />
           </div>
-          <h2 className="text-xl font-semibold text-slate-900">{t.bookingStatistics}</h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-          <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4 border border-blue-200">
-            <p className="text-sm text-blue-700 font-medium mb-1">{t.allTime}</p>
-            <p className="text-3xl font-bold text-blue-900">{bookingStats.allTime}</p>
-          </div>
-          <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-lg p-4 border border-emerald-200">
-            <p className="text-sm text-emerald-700 font-medium mb-1">{t.thisMonth}</p>
-            <p className="text-3xl font-bold text-emerald-900">{bookingStats.thisMonth}</p>
-          </div>
-          <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-4 border border-purple-200">
-            <p className="text-sm text-purple-700 font-medium mb-1">{t.thisWeek}</p>
-            <p className="text-3xl font-bold text-purple-900">{bookingStats.thisWeek}</p>
-          </div>
-        </div>
-
-        <div className="space-y-6">
           <div>
-            <h3 className="text-sm font-semibold text-slate-700 mb-3">{t.bookingsPerWeek}</h3>
-            <div className="space-y-2">
-              {bookingStats.weeklyData.map((item, index) => (
-                <div key={index} className="flex items-center gap-3">
-                  <span className="text-xs text-slate-600 w-16">{item.week}</span>
-                  <div className="flex-1 bg-slate-100 rounded-full h-6 overflow-hidden">
-                    <div
-                      className="bg-gradient-to-r from-blue-500 to-blue-600 h-full rounded-full flex items-center justify-end pr-2 transition-all duration-500"
-                      style={{ width: `${(item.count / maxWeeklyBookings) * 100}%` }}
-                    >
-                      {item.count > 0 && (
-                        <span className="text-xs font-medium text-white">{item.count}</span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
+            <h2 className="text-2xl font-bold text-slate-900">{t.bookingStatistics}</h2>
+            <p className="text-sm text-slate-600">Track your booking performance</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          <StatCard
+            title={t.allTime}
+            value={bookingStats.allTime}
+            icon={TrendingUp}
+            gradient="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200"
+            textColor="text-blue-700"
+            iconBg="bg-white"
+          />
+          <StatCard
+            title={t.thisMonth}
+            value={bookingStats.thisMonth}
+            icon={Calendar}
+            gradient="bg-gradient-to-br from-emerald-50 to-emerald-100 border-emerald-200"
+            textColor="text-emerald-700"
+            iconBg="bg-white"
+          />
+          <StatCard
+            title={t.thisWeek}
+            value={bookingStats.thisWeek}
+            icon={Activity}
+            gradient="bg-gradient-to-br from-cyan-50 to-cyan-100 border-cyan-200"
+            textColor="text-cyan-700"
+            iconBg="bg-white"
+          />
+          <StatCard
+            title={t.today}
+            value={bookingStats.today}
+            icon={BarChart3}
+            gradient="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200"
+            textColor="text-orange-700"
+            iconBg="bg-white"
+          />
+        </div>
+
+        <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200 mb-6">
+          <div className="flex items-center justify-between mb-6">
+            <h3 className="text-lg font-semibold text-slate-900">Status Overview</h3>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setBookingFilter('all')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  bookingFilter === 'all'
+                    ? 'bg-slate-900 text-white shadow-md'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                }`}
+              >
+                All
+              </button>
+              <button
+                onClick={() => setBookingFilter('confirmed')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  bookingFilter === 'confirmed'
+                    ? 'bg-emerald-600 text-white shadow-md'
+                    : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100'
+                }`}
+              >
+                Confirmed
+              </button>
+              <button
+                onClick={() => setBookingFilter('pending')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  bookingFilter === 'pending'
+                    ? 'bg-amber-600 text-white shadow-md'
+                    : 'bg-amber-50 text-amber-600 hover:bg-amber-100'
+                }`}
+              >
+                Pending
+              </button>
+              <button
+                onClick={() => setBookingFilter('cancelled')}
+                className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${
+                  bookingFilter === 'cancelled'
+                    ? 'bg-red-600 text-white shadow-md'
+                    : 'bg-red-50 text-red-600 hover:bg-red-100'
+                }`}
+              >
+                Cancelled
+              </button>
             </div>
           </div>
 
-          <div>
-            <h3 className="text-sm font-semibold text-slate-700 mb-3">{t.bookingsPerMonth}</h3>
-            <div className="space-y-2">
-              {bookingStats.monthlyData.map((item, index) => (
-                <div key={index} className="flex items-center gap-3">
-                  <span className="text-xs text-slate-600 w-16">{item.month}</span>
-                  <div className="flex-1 bg-slate-100 rounded-full h-6 overflow-hidden">
-                    <div
-                      className="bg-gradient-to-r from-emerald-500 to-emerald-600 h-full rounded-full flex items-center justify-end pr-2 transition-all duration-500"
-                      style={{ width: `${(item.count / maxMonthlyBookings) * 100}%` }}
-                    >
-                      {item.count > 0 && (
-                        <span className="text-xs font-medium text-white">{item.count}</span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-lg p-4 border border-emerald-200">
+              <div className="flex items-center gap-3 mb-2">
+                <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                <span className="text-sm font-medium text-emerald-700">Confirmed</span>
+              </div>
+              <p className="text-3xl font-bold text-emerald-900">{bookingStats.byStatus.confirmed}</p>
+            </div>
+            <div className="bg-gradient-to-br from-amber-50 to-amber-100 rounded-lg p-4 border border-amber-200">
+              <div className="flex items-center gap-3 mb-2">
+                <Clock className="w-5 h-5 text-amber-600" />
+                <span className="text-sm font-medium text-amber-700">Pending</span>
+              </div>
+              <p className="text-3xl font-bold text-amber-900">{bookingStats.byStatus.pending}</p>
+            </div>
+            <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-lg p-4 border border-red-200">
+              <div className="flex items-center gap-3 mb-2">
+                <XCircle className="w-5 h-5 text-red-600" />
+                <span className="text-sm font-medium text-red-700">Cancelled</span>
+              </div>
+              <p className="text-3xl font-bold text-red-900">{bookingStats.byStatus.cancelled}</p>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+            <h3 className="text-lg font-semibold text-slate-900 mb-4">
+              Daily Bookings (Last 30 Days)
+            </h3>
+            <LineChart data={bookingStats.dailyData} color="#3b82f6" />
+          </div>
+
+          <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+            <h3 className="text-lg font-semibold text-slate-900 mb-4">
+              Monthly Bookings (Last 12 Months)
+            </h3>
+            <div className="max-h-[400px] overflow-y-auto pr-2">
+              <BarChart data={bookingStats.monthlyData} color="#10b981" />
             </div>
           </div>
         </div>
       </div>
 
-      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+      <div className="bg-gradient-to-br from-orange-50 via-white to-pink-50 rounded-2xl p-8 border border-slate-200 shadow-sm">
         <div className="flex items-center gap-3 mb-6">
-          <div className="p-2 bg-orange-100 rounded-lg">
-            <MessageSquare className="w-5 h-5 text-orange-600" />
+          <div className="p-3 bg-orange-600 rounded-xl shadow-lg">
+            <MessageSquare className="w-7 h-7 text-white" />
           </div>
-          <h2 className="text-xl font-semibold text-slate-900">{t.messageStatistics}</h2>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-gradient-to-br from-orange-50 to-orange-100 rounded-lg p-4 border border-orange-200">
-            <p className="text-sm text-orange-700 font-medium mb-1">{t.allTime}</p>
-            <p className="text-3xl font-bold text-orange-900">{messageStats.allTime}</p>
-          </div>
-          <div className="bg-gradient-to-br from-pink-50 to-pink-100 rounded-lg p-4 border border-pink-200">
-            <p className="text-sm text-pink-700 font-medium mb-1">{t.thisMonth}</p>
-            <p className="text-3xl font-bold text-pink-900">{messageStats.thisMonth}</p>
-          </div>
-          <div className="bg-gradient-to-br from-cyan-50 to-cyan-100 rounded-lg p-4 border border-cyan-200">
-            <p className="text-sm text-cyan-700 font-medium mb-1">{t.thisWeek}</p>
-            <p className="text-3xl font-bold text-cyan-900">{messageStats.thisWeek}</p>
-          </div>
-          <div className="bg-gradient-to-br from-teal-50 to-teal-100 rounded-lg p-4 border border-teal-200">
-            <p className="text-sm text-teal-700 font-medium mb-1">{t.today}</p>
-            <p className="text-3xl font-bold text-teal-900">{messageStats.today}</p>
-          </div>
-        </div>
-
-        <div className="space-y-6">
           <div>
-            <h3 className="text-sm font-semibold text-slate-700 mb-3">{t.messagesPerMonth}</h3>
-            <div className="space-y-2">
-              {messageStats.monthlyData.map((item, index) => (
-                <div key={index} className="flex items-center gap-3">
-                  <span className="text-xs text-slate-600 w-16">{item.month}</span>
-                  <div className="flex-1 bg-slate-100 rounded-full h-6 overflow-hidden">
-                    <div
-                      className="bg-gradient-to-r from-cyan-500 to-cyan-600 h-full rounded-full flex items-center justify-end pr-2 transition-all duration-500"
-                      style={{ width: `${(item.count / maxMonthlyMessages) * 100}%` }}
-                    >
-                      {item.count > 0 && (
-                        <span className="text-xs font-medium text-white">{item.count}</span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <h2 className="text-2xl font-bold text-slate-900">{t.messageStatistics}</h2>
+            <p className="text-sm text-slate-600">Monitor customer inquiries</p>
           </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+          <StatCard
+            title={t.allTime}
+            value={messageStats.allTime}
+            icon={MessageSquare}
+            gradient="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200"
+            textColor="text-orange-700"
+            iconBg="bg-white"
+          />
+          <StatCard
+            title={t.thisMonth}
+            value={messageStats.thisMonth}
+            icon={TrendingUp}
+            gradient="bg-gradient-to-br from-pink-50 to-pink-100 border-pink-200"
+            textColor="text-pink-700"
+            iconBg="bg-white"
+          />
+          <StatCard
+            title={t.thisWeek}
+            value={messageStats.thisWeek}
+            icon={Activity}
+            gradient="bg-gradient-to-br from-fuchsia-50 to-fuchsia-100 border-fuchsia-200"
+            textColor="text-fuchsia-700"
+            iconBg="bg-white"
+          />
+          <StatCard
+            title={t.today}
+            value={messageStats.today}
+            icon={BarChart3}
+            gradient="bg-gradient-to-br from-rose-50 to-rose-100 border-rose-200"
+            textColor="text-rose-700"
+            iconBg="bg-white"
+          />
+        </div>
+
+        <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-200">
+          <h3 className="text-lg font-semibold text-slate-900 mb-4">
+            Daily Messages (Last 30 Days)
+          </h3>
+          <LineChart data={messageStats.dailyData} color="#f97316" />
         </div>
       </div>
     </div>
