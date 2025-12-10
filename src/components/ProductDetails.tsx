@@ -50,14 +50,10 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
   };
 
   const validateForm = (): string | null => {
-    const { name, phone, tourDate, adults } = formData;
+    const { name, tourDate, adults } = formData;
 
     if (!name || name.trim().length < 2) {
       return t('booking.invalidName') || 'Please enter a valid name (at least 2 characters)';
-    }
-
-    if (!phone) {
-      return t('booking.invalidPhone') || 'Please enter a phone number';
     }
 
     if (!tourDate) {
@@ -96,7 +92,7 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
     const totalPrice = product.price_per_day;
     const displayName = getDisplayName(product, language);
     const displayLocation = getDisplayLocation(product, language);
-    const fullPhone = `${dialCode} ${phone}`;
+    const fullPhone = phone ? `${dialCode} ${phone}` : '';
 
     // Build message based on current language
     let telegramMessage: string;
@@ -107,7 +103,7 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
       telegramMessage =
         `🎯 TOUR BOOKING REQUEST\n\n` +
         `👤 Client: ${name}\n` +
-        `📞 Phone: ${fullPhone}\n` +
+        (fullPhone ? `📞 Phone: ${fullPhone}\n` : '') +
         `🎯 Tour: ${displayName}\n` +
         `📍 Location: ${displayLocation}\n\n` +
         `📅 Tour date: ${new Date(tourDate).toLocaleDateString()}\n` +
@@ -118,7 +114,7 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
       whatsappMessage =
         `TOUR BOOKING REQUEST\n\n` +
         `Client: ${name}\n` +
-        `Phone: ${fullPhone}\n` +
+        (fullPhone ? `Phone: ${fullPhone}\n` : '') +
         `Tour: ${displayName}\n` +
         `Location: ${displayLocation}\n\n` +
         `Tour date: ${new Date(tourDate).toLocaleDateString()}\n` +
@@ -130,7 +126,7 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
       telegramMessage =
         `🎯 ЗАПРОС НА БРОНИРОВАНИЕ ТУРА\n\n` +
         `👤 Клиент: ${name}\n` +
-        `📞 Телефон: ${fullPhone}\n` +
+        (fullPhone ? `📞 Телефон: ${fullPhone}\n` : '') +
         `🎯 Тур: ${displayName}\n` +
         `📍 Местоположение: ${displayLocation}\n\n` +
         `📅 Дата тура: ${new Date(tourDate).toLocaleDateString()}\n` +
@@ -141,7 +137,7 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
       whatsappMessage =
         `ЗАПРОС НА БРОНИРОВАНИЕ ТУРА\n\n` +
         `Клиент: ${name}\n` +
-        `Телефон: ${fullPhone}\n` +
+        (fullPhone ? `Телефон: ${fullPhone}\n` : '') +
         `Тур: ${displayName}\n` +
         `Местоположение: ${displayLocation}\n\n` +
         `Дата тура: ${new Date(tourDate).toLocaleDateString()}\n` +
@@ -190,9 +186,9 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
           product_id: product.id,
           customer_name: name,
           customer_email: 'no-email@provided.com',
-          customer_phone: phone,
-          country_code: dialCode,
-          dial_code: dialCode,
+          customer_phone: phone || null,
+          country_code: phone ? dialCode : null,
+          dial_code: phone ? dialCode : null,
           tour_date: tourDate,
           adults: adults,
           children: children,
