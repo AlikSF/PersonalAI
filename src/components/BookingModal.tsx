@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { X, Calendar, AlertCircle, CheckCircle, Minus, Plus } from 'lucide-react';
 import { Product, supabase } from '../lib/supabase';
+import { useLanguage } from '../contexts/LanguageContext';
 
 interface BookingModalProps {
   product: Product | null;
@@ -9,6 +10,7 @@ interface BookingModalProps {
 }
 
 export function BookingModal({ product, onClose, onSuccess }: BookingModalProps) {
+  const { language } = useLanguage();
   const [formData, setFormData] = useState({
     customer_name: '',
     customer_email: '',
@@ -55,20 +57,41 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
 
       console.log('Booking created successfully:', bookingData);
 
-      const telegramMessage = `🎉 НОВОЕ БРОНИРОВАНИЕ!\n\n` +
-        `🎯 Тур: ${product.name}\n` +
-        `📂 Категория: ${product.category}\n` +
-        `📍 Локация: ${product.location}\n\n` +
-        `👤 Информация о клиенте:\n` +
-        `Имя: ${formData.customer_name}\n` +
-        (formData.customer_phone ? `Телефон: ${formData.customer_phone}\n` : '') +
-        `📱 Платформа: ${formData.platform === 'telegram' ? 'Telegram' : 'WhatsApp'}\n\n` +
-        `📅 Детали бронирования:\n` +
-        `Дата тура: ${formData.tour_date}\n` +
-        `Взрослых: ${formData.adults_count}\n` +
-        `Детей: ${formData.children_count}\n` +
-        `Цена: ฿${totalPrice}` +
-        (formData.special_requests ? `\n\n📝 Особые пожелания:\n${formData.special_requests}` : '');
+      let telegramMessage: string;
+
+      if (language === 'en' || language === 'fr') {
+        // English message template (for English and French)
+        telegramMessage = `🎉 NEW BOOKING!\n\n` +
+          `🎯 Tour: ${product.name}\n` +
+          `📂 Category: ${product.category}\n` +
+          `📍 Location: ${product.location}\n\n` +
+          `👤 Client Information:\n` +
+          `Name: ${formData.customer_name}\n` +
+          (formData.customer_phone ? `Phone: ${formData.customer_phone}\n` : '') +
+          `📱 Platform: ${formData.platform === 'telegram' ? 'Telegram' : 'WhatsApp'}\n\n` +
+          `📅 Booking Details:\n` +
+          `Tour date: ${formData.tour_date}\n` +
+          `Adults: ${formData.adults_count}\n` +
+          `Children: ${formData.children_count}\n` +
+          `Price: ฿${totalPrice}` +
+          (formData.special_requests ? `\n\n📝 Special Requests:\n${formData.special_requests}` : '');
+      } else {
+        // Russian message template (for ru, kk, ky, az, zh, uz)
+        telegramMessage = `🎉 НОВОЕ БРОНИРОВАНИЕ!\n\n` +
+          `🎯 Тур: ${product.name}\n` +
+          `📂 Категория: ${product.category}\n` +
+          `📍 Локация: ${product.location}\n\n` +
+          `👤 Информация о клиенте:\n` +
+          `Имя: ${formData.customer_name}\n` +
+          (formData.customer_phone ? `Телефон: ${formData.customer_phone}\n` : '') +
+          `📱 Платформа: ${formData.platform === 'telegram' ? 'Telegram' : 'WhatsApp'}\n\n` +
+          `📅 Детали бронирования:\n` +
+          `Дата тура: ${formData.tour_date}\n` +
+          `Взрослых: ${formData.adults_count}\n` +
+          `Детей: ${formData.children_count}\n` +
+          `Цена: ฿${totalPrice}` +
+          (formData.special_requests ? `\n\n📝 Особые пожелания:\n${formData.special_requests}` : '');
+      }
 
       await fetch(
         `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/send-telegram`,

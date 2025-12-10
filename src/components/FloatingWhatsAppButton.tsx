@@ -7,10 +7,10 @@ export function FloatingWhatsAppButton() {
   const handleClick = () => {
     let message = '';
 
-    if (language === 'en') {
+    if (language === 'en' || language === 'fr') {
       message = 'Hello! I would like to get more information about available tours in Phuket.';
     } else {
-      // For ru, kk, ky, az - use Russian message
+      // For ru, kk, ky, az, zh, uz - use Russian message
       message = 'Здравствуйте! Я хочу узнать подробнее о доступных турах в Пхукете.';
     }
 

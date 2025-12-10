@@ -98,8 +98,8 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
     let telegramMessage: string;
     let whatsappMessage: string;
 
-    if (language === 'en') {
-      // English message templates
+    if (language === 'en' || language === 'fr') {
+      // English message templates (for English and French)
       telegramMessage =
         `🎯 TOUR BOOKING REQUEST\n\n` +
         `👤 Client: ${name}\n` +
@@ -122,7 +122,7 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
         `Children: ${children}\n\n` +
         `Price: ฿${totalPrice.toFixed(2)}`;
     } else {
-      // Russian message templates (default)
+      // Russian message templates (for ru, kk, ky, az, zh, uz)
       telegramMessage =
         `🎯 ЗАПРОС НА БРОНИРОВАНИЕ ТУРА\n\n` +
         `👤 Клиент: ${name}\n` +

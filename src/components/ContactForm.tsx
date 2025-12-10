@@ -62,8 +62,8 @@ export function ContactForm() {
       // Build message based on current language
       let message: string;
 
-      if (language === 'en') {
-        // English message template
+      if (language === 'en' || language === 'fr') {
+        // English message template (for English and French)
         message =
           `📬 NEW CONTACT MESSAGE\n\n` +
           `👤 Name: ${formData.name}\n` +
@@ -71,7 +71,7 @@ export function ContactForm() {
           `📱 Phone: ${formData.phone}\n\n` +
           `💬 Message:\n${formData.message}`;
       } else {
-        // Russian message template (default)
+        // Russian message template (for ru, kk, ky, az, zh, uz)
         message =
           `📬 НОВОЕ КОНТАКТНОЕ СООБЩЕНИЕ\n\n` +
           `👤 Имя: ${formData.name}\n` +
