@@ -87,6 +87,8 @@ export function BookingCreateModal({ onClose, onCreated }: BookingCreateModalPro
           customer_phone: formData.customer_phone,
           country_code: formData.country_code || null,
           tour_date: formData.tour_date,
+          start_date: formData.tour_date,
+          end_date: formData.tour_date,
           adults: formData.adults,
           children: formData.children,
           total_price: totalPrice,
