@@ -8,10 +8,10 @@ import { ProductsList } from './ProductsList';
 import { ProductForm } from './ProductForm';
 import { BookingsManagement } from './BookingsManagement';
 import { CalendarView } from './CalendarView';
-import { Loader2 } from 'lucide-react';
+import { Loader2, ShieldAlert } from 'lucide-react';
 
 export function AdminRouter() {
-  const { user, loading } = useAuth();
+  const { user, loading, isAdmin, signOut } = useAuth();
   const [path, setPath] = useState(window.location.pathname);
 
   useEffect(() => {
@@ -33,6 +33,36 @@ export function AdminRouter() {
       <AdminLanguageProvider>
         <AdminLogin />
       </AdminLanguageProvider>
+    );
+  }
+
+  if (!isAdmin) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
+        <div className="max-w-md w-full bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 p-8 text-center">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-red-500/20 mb-4">
+            <ShieldAlert className="w-8 h-8 text-red-400" />
+          </div>
+          <h1 className="text-2xl font-bold text-white mb-2">Access Denied</h1>
+          <p className="text-slate-400 mb-6">
+            You don't have permission to access the admin panel. This area is restricted to administrators only.
+          </p>
+          <div className="space-y-3">
+            <button
+              onClick={signOut}
+              className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium"
+            >
+              Sign Out
+            </button>
+            <a
+              href="/"
+              className="block w-full px-6 py-3 border border-white/20 text-white rounded-lg hover:bg-white/5 transition font-medium"
+            >
+              Back to Website
+            </a>
+          </div>
+        </div>
+      </div>
     );
   }
 
