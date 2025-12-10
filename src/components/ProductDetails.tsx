@@ -45,12 +45,8 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
       return t('booking.invalidName') || 'Please enter a valid name (at least 2 characters)';
     }
 
-    if (!phone || phone.trim().length < 6) {
-      return t('booking.invalidPhone') || 'Please enter a valid phone number';
-    }
-
-    if (!/^[\d\s\-+()]+$/.test(phone)) {
-      return t('booking.invalidPhoneFormat') || 'Phone number can only contain digits, spaces, and +()-';
+    if (!phone) {
+      return t('booking.invalidPhone') || 'Please enter a phone number';
     }
 
     if (!tourDate) {
@@ -60,9 +56,10 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
     const selectedDate = new Date(tourDate);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
+    selectedDate.setHours(0, 0, 0, 0);
 
     if (selectedDate < today) {
-      return t('booking.pastDate') || 'Please select a future date';
+      return t('booking.pastDate') || 'Please select today or a future date';
     }
 
     if (!adults || adults < 1) {
