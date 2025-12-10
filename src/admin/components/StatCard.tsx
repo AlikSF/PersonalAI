@@ -24,12 +24,12 @@ export function StatCard({
 }: StatCardProps) {
   return (
     <div
-      className={`relative overflow-hidden rounded-xl p-6 shadow-sm border transition-all duration-300 hover:shadow-md hover:scale-[1.02] ${gradient}`}
+      className={`relative overflow-hidden rounded-xl p-4 shadow-sm border transition-all duration-300 hover:shadow-md hover:scale-[1.02] ${gradient}`}
     >
       <div className="relative z-10">
-        <div className="flex items-start justify-between mb-4">
-          <div className={`p-3 rounded-lg ${iconBg} shadow-sm`}>
-            <Icon className={`w-6 h-6 ${textColor}`} />
+        <div className="flex items-start justify-between mb-3">
+          <div className={`p-2 rounded-lg ${iconBg} shadow-sm`}>
+            <Icon className={`w-5 h-5 ${textColor}`} />
           </div>
           {trend && (
             <div
@@ -45,8 +45,8 @@ export function StatCard({
           )}
         </div>
         <div>
-          <p className="text-sm font-medium text-slate-600 mb-1">{title}</p>
-          <p className={`text-4xl font-bold ${textColor}`}>
+          <p className="text-xs font-medium text-slate-600 mb-1">{title}</p>
+          <p className={`text-3xl font-bold ${textColor}`}>
             {value.toLocaleString()}
           </p>
         </div>
