@@ -12,6 +12,7 @@ interface Booking {
   tour_date: string;
   adults: number;
   children: number;
+  total_price: number;
   booking_status: string;
   payment_status: string;
   platform?: string;
@@ -35,6 +36,7 @@ export function BookingEditModal({ booking, onClose, onUpdate }: BookingEditModa
     tour_date: booking.tour_date,
     adults: booking.adults || 1,
     children: booking.children || 0,
+    total_price: booking.total_price || 0,
     booking_status: booking.booking_status,
     payment_status: booking.payment_status,
     platform: booking.platform || 'telegram',
@@ -63,6 +65,7 @@ export function BookingEditModal({ booking, onClose, onUpdate }: BookingEditModa
           tour_date: formData.tour_date,
           adults: formData.adults,
           children: formData.children,
+          total_price: formData.total_price,
           booking_status: formData.booking_status,
           payment_status: formData.payment_status,
           platform: formData.platform,
@@ -248,6 +251,28 @@ export function BookingEditModal({ booking, onClose, onUpdate }: BookingEditModa
                 <option value="telegram">Telegram</option>
                 <option value="whatsapp">WhatsApp</option>
               </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                {t.totalPrice} <span className="text-red-500">*</span>
+              </label>
+              <div className="relative">
+                <input
+                  type="number"
+                  min="0"
+                  step="1"
+                  value={formData.total_price}
+                  onChange={(e) =>
+                    setFormData({ ...formData, total_price: parseFloat(e.target.value) || 0 })
+                  }
+                  className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-semibold"
+                  required
+                />
+                <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 font-medium">
+                  THB
+                </span>
+              </div>
             </div>
           </div>
 

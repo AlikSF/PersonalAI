@@ -33,7 +33,9 @@ export function BookingCreateModal({ onClose, onCreated }: BookingCreateModalPro
     payment_status: 'pending',
     platform: 'telegram',
     special_requests: '',
+    total_price: 0,
   });
+  const [manualPriceEdit, setManualPriceEdit] = useState(false);
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -42,6 +44,13 @@ export function BookingCreateModal({ onClose, onCreated }: BookingCreateModalPro
       document.body.style.overflow = 'unset';
     };
   }, []);
+
+  useEffect(() => {
+    if (!manualPriceEdit && formData.product_id) {
+      const calculatedPrice = calculateTotalPrice();
+      setFormData(prev => ({ ...prev, total_price: calculatedPrice }));
+    }
+  }, [formData.product_id, formData.adults, manualPriceEdit, products]);
 
   const fetchProducts = async () => {
     setLoadingProducts(true);
@@ -76,8 +85,6 @@ export function BookingCreateModal({ onClose, onCreated }: BookingCreateModalPro
     setSaving(true);
 
     try {
-      const totalPrice = calculateTotalPrice();
-
       const { error } = await supabase
         .from('bookings')
         .insert({
@@ -89,7 +96,7 @@ export function BookingCreateModal({ onClose, onCreated }: BookingCreateModalPro
           tour_date: formData.tour_date,
           adults: formData.adults,
           children: formData.children,
-          total_price: totalPrice,
+          total_price: formData.total_price,
           booking_status: formData.booking_status,
           payment_status: formData.payment_status,
           platform: formData.platform,
@@ -315,11 +322,28 @@ export function BookingCreateModal({ onClose, onCreated }: BookingCreateModalPro
 
               <div className="md:col-span-2">
                 <label className="block text-sm font-medium text-slate-700 mb-1">
-                  {t.totalPrice}
+                  {t.totalPrice} <span className="text-red-500">*</span>
                 </label>
-                <div className="px-3 py-2 bg-slate-50 border border-slate-300 rounded-lg text-slate-900 font-semibold">
-                  {calculateTotalPrice().toLocaleString()} THB
+                <div className="relative">
+                  <input
+                    type="number"
+                    min="0"
+                    step="1"
+                    value={formData.total_price}
+                    onChange={(e) => {
+                      setFormData({ ...formData, total_price: parseFloat(e.target.value) || 0 });
+                      setManualPriceEdit(true);
+                    }}
+                    className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent font-semibold"
+                    required
+                  />
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-600 font-medium">
+                    THB
+                  </span>
                 </div>
+                <p className="text-xs text-slate-500 mt-1">
+                  {t.editablePrice || 'You can edit this price to add extras or adjust for custom pricing'}
+                </p>
               </div>
             </div>
           </div>
