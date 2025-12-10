@@ -6,6 +6,7 @@ import { BookingEditModal } from './BookingEditModal';
 import { BookingCreateModal } from './BookingCreateModal';
 import { BookingComments } from './BookingComments';
 import { BookingActivityLog } from './BookingActivityLog';
+import { MessageEditModal } from './MessageEditModal';
 import {
   Calendar,
   Mail,
@@ -85,6 +86,7 @@ export function BookingsManagement() {
   const [selectedBooking, setSelectedBooking] = useState<Booking | null>(null);
   const [selectedMessage, setSelectedMessage] = useState<ContactMessage | null>(null);
   const [editingBooking, setEditingBooking] = useState<Booking | null>(null);
+  const [editingMessage, setEditingMessage] = useState<ContactMessage | null>(null);
   const [creatingBooking, setCreatingBooking] = useState(false);
   const [bookingDetailsTab, setBookingDetailsTab] = useState<BookingDetailsTab>('details');
   const [bookingSortField, setBookingSortField] = useState<BookingSortField>('created_at');
@@ -741,12 +743,22 @@ export function BookingsManagement() {
                   <span className="text-sm text-slate-500">{formatDateTime(msg.created_at)}</span>
                 </td>
                 <td className="px-4 py-3 text-center">
-                  <button
-                    onClick={() => setSelectedMessage(msg)}
-                    className="p-2 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                  >
-                    <Eye className="w-4 h-4" />
-                  </button>
+                  <div className="flex items-center justify-center gap-2">
+                    <button
+                      onClick={() => setSelectedMessage(msg)}
+                      className="p-2 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                      title={t.view || 'View'}
+                    >
+                      <Eye className="w-4 h-4" />
+                    </button>
+                    <button
+                      onClick={() => setEditingMessage(msg)}
+                      className="p-2 text-slate-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                      title={t.edit || 'Edit'}
+                    >
+                      <Edit className="w-4 h-4" />
+                    </button>
+                  </div>
                 </td>
               </tr>
             ))}
@@ -1097,6 +1109,20 @@ export function BookingsManagement() {
           onCreated={() => {
             fetchBookings();
             setCreatingBooking(false);
+          }}
+        />
+      )}
+
+      {editingMessage && (
+        <MessageEditModal
+          message={editingMessage}
+          onClose={() => setEditingMessage(null)}
+          onUpdate={() => {
+            fetchMessages();
+            setEditingMessage(null);
+            if (selectedMessage && selectedMessage.id === editingMessage.id) {
+              setSelectedMessage({ ...editingMessage });
+            }
           }}
         />
       )}
