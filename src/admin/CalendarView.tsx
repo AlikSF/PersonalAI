@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Pencil } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Eye, Edit, X, User, MessageSquare, History, CheckCircle, Clock, XCircle } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAdminLang } from './AdminLanguageContext';
 import { BookingEditModal } from './BookingEditModal';
+import { BookingComments } from './BookingComments';
+import { BookingActivityLog } from './BookingActivityLog';
 
 interface Booking {
   id: string;
@@ -23,16 +25,21 @@ interface FullBooking {
   customer_name: string;
   customer_email: string;
   customer_phone: string;
-  country_code: string;
-  tour_date: string;
+  country_code: string | null;
+  dial_code: string | null;
+  tour_date: string | null;
   adults: number;
   children: number;
   total_price: number;
   booking_status: string;
   payment_status: string;
-  platform?: string;
-  special_requests?: string;
+  platform?: string | null;
+  special_requests?: string | null;
+  created_at: string;
+  product?: { name: string };
 }
+
+type BookingDetailsTab = 'details' | 'comments' | 'activity';
 
 export function CalendarView() {
   const { t, lang } = useAdminLang();
@@ -40,7 +47,9 @@ export function CalendarView() {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
+  const [selectedBooking, setSelectedBooking] = useState<FullBooking | null>(null);
   const [editingBooking, setEditingBooking] = useState<FullBooking | null>(null);
+  const [bookingDetailsTab, setBookingDetailsTab] = useState<BookingDetailsTab>('details');
 
   useEffect(() => {
     fetchBookings();
@@ -72,7 +81,7 @@ export function CalendarView() {
     try {
       const { data, error } = await supabase
         .from('bookings')
-        .select('id, product_id, customer_name, customer_email, customer_phone, country_code, tour_date, adults, children, total_price, booking_status, payment_status, platform, special_requests')
+        .select('id, product_id, customer_name, customer_email, customer_phone, country_code, dial_code, tour_date, adults, children, total_price, booking_status, payment_status, platform, special_requests, created_at, product:products(name)')
         .eq('id', bookingId)
         .single();
 
@@ -82,6 +91,58 @@ export function CalendarView() {
       console.error('Error fetching booking:', error);
       return null;
     }
+  }
+
+  function formatDate(dateString: string | null) {
+    if (!dateString) return '-';
+    return new Date(dateString).toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+    });
+  }
+
+  function formatDateTime(dateString: string) {
+    return new Date(dateString).toLocaleDateString('en-GB', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+    });
+  }
+
+  function getPaymentStatusBadge(status: string) {
+    const styles = {
+      pending: 'bg-amber-100 text-amber-700 border-amber-200',
+      paid: 'bg-emerald-100 text-emerald-700 border-emerald-200',
+      failed: 'bg-red-100 text-red-700 border-red-200',
+    };
+    const icons = {
+      pending: <Clock className="w-3 h-3" />,
+      paid: <CheckCircle className="w-3 h-3" />,
+      failed: <XCircle className="w-3 h-3" />,
+    };
+    return (
+      <span className={`inline-flex items-center gap-1 px-2 py-1 text-xs font-medium rounded-full border ${styles[status as keyof typeof styles]}`}>
+        {icons[status as keyof typeof icons]}
+        {status}
+      </span>
+    );
+  }
+
+  function getBookingStatusBadge(status: string) {
+    const styles = {
+      pending: 'bg-slate-100 text-slate-700 border-slate-200',
+      confirmed: 'bg-blue-100 text-blue-700 border-blue-200',
+      completed: 'bg-emerald-100 text-emerald-700 border-emerald-200',
+      cancelled: 'bg-slate-100 text-slate-600 border-slate-200',
+    };
+    return (
+      <span className={`inline-flex items-center gap-1 px-2 py-1 text-xs font-medium rounded-full border ${styles[status as keyof typeof styles]}`}>
+        {status}
+      </span>
+    );
   }
 
   function getDaysInMonth(date: Date) {
@@ -311,19 +372,168 @@ export function CalendarView() {
                       onClick={async () => {
                         const fullBooking = await fetchFullBooking(booking.id);
                         if (fullBooking) {
-                          setEditingBooking(fullBooking);
+                          setSelectedBooking(fullBooking);
+                          setBookingDetailsTab('details');
                         }
                       }}
                       className="p-2 hover:bg-blue-100 rounded-lg transition-colors group"
-                      title={lang === 'ru' ? 'Редактировать бронирование' : 'Edit booking'}
+                      title={lang === 'ru' ? 'Просмотреть бронирование' : 'View booking'}
                     >
-                      <Pencil className="w-4 h-4 text-slate-600 group-hover:text-blue-600" />
+                      <Eye className="w-4 h-4 text-slate-600 group-hover:text-blue-600" />
                     </button>
                   </div>
                 </div>
               ))}
             </div>
           )}
+        </div>
+      )}
+
+      {selectedBooking && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col">
+            <div className="p-6 border-b border-slate-200 flex items-center justify-between">
+              <h3 className="text-xl font-bold text-slate-900">{t.bookingDetails}</h3>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    setEditingBooking(selectedBooking);
+                  }}
+                  className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  <Edit className="w-4 h-4" />
+                  {t.editBooking}
+                </button>
+                <button
+                  onClick={() => {
+                    setSelectedBooking(null);
+                    setBookingDetailsTab('details');
+                  }}
+                  className="p-2 hover:bg-slate-100 rounded-lg transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+            </div>
+
+            <div className="flex border-b border-slate-200">
+              <button
+                onClick={() => setBookingDetailsTab('details')}
+                className={`px-6 py-3 font-medium text-sm transition-colors relative ${
+                  bookingDetailsTab === 'details'
+                    ? 'text-blue-600'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <span className="flex items-center gap-2">
+                  <Eye className="w-4 h-4" />
+                  {t.details}
+                </span>
+                {bookingDetailsTab === 'details' && (
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600" />
+                )}
+              </button>
+              <button
+                onClick={() => setBookingDetailsTab('comments')}
+                className={`px-6 py-3 font-medium text-sm transition-colors relative ${
+                  bookingDetailsTab === 'comments'
+                    ? 'text-blue-600'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <span className="flex items-center gap-2">
+                  <MessageSquare className="w-4 h-4" />
+                  {t.comments}
+                </span>
+                {bookingDetailsTab === 'comments' && (
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600" />
+                )}
+              </button>
+              <button
+                onClick={() => setBookingDetailsTab('activity')}
+                className={`px-6 py-3 font-medium text-sm transition-colors relative ${
+                  bookingDetailsTab === 'activity'
+                    ? 'text-blue-600'
+                    : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <span className="flex items-center gap-2">
+                  <History className="w-4 h-4" />
+                  {t.activityLog}
+                </span>
+                {bookingDetailsTab === 'activity' && (
+                  <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-600" />
+                )}
+              </button>
+            </div>
+
+            <div className="flex-1 overflow-y-auto p-6">
+              {bookingDetailsTab === 'details' && (
+                <div className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-4">
+                      <h4 className="font-semibold text-slate-900 flex items-center gap-2">
+                        <User className="w-4 h-4" />
+                        {t.customerInfo}
+                      </h4>
+                      <div className="space-y-2">
+                        <p className="text-sm"><span className="text-slate-500">{t.name}:</span> <span className="font-medium">{selectedBooking.customer_name}</span></p>
+                        <p className="text-sm"><span className="text-slate-500">{t.email}:</span> <span className="font-medium">{selectedBooking.customer_email}</span></p>
+                        <p className="text-sm"><span className="text-slate-500">{t.phone}:</span> <span className="font-medium">{selectedBooking.dial_code || ''}{selectedBooking.customer_phone}</span></p>
+                        {selectedBooking.country_code && (
+                          <p className="text-sm"><span className="text-slate-500">{t.country}:</span> <span className="font-medium">{selectedBooking.country_code}</span></p>
+                        )}
+                      </div>
+                    </div>
+                    <div className="space-y-4">
+                      <h4 className="font-semibold text-slate-900 flex items-center gap-2">
+                        <CalendarIcon className="w-4 h-4" />
+                        {t.bookingInfo}
+                      </h4>
+                      <div className="space-y-2">
+                        <p className="text-sm"><span className="text-slate-500">{t.product}:</span> <span className="font-medium">{selectedBooking.product?.name || '-'}</span></p>
+                        <p className="text-sm"><span className="text-slate-500">{t.tourDate}:</span> <span className="font-medium">{formatDate(selectedBooking.tour_date)}</span></p>
+                        <p className="text-sm"><span className="text-slate-500">{t.adultsCount}:</span> <span className="font-medium">{selectedBooking.adults || 0}</span></p>
+                        <p className="text-sm"><span className="text-slate-500">{t.childrenCount}:</span> <span className="font-medium">{selectedBooking.children || 0}</span></p>
+                        <p className="text-sm"><span className="text-slate-500">Platform:</span> <span className="font-medium">{selectedBooking.platform || 'telegram'}</span></p>
+                        <p className="text-sm"><span className="text-slate-500">{t.price}:</span> <span className="font-medium">{selectedBooking.total_price?.toLocaleString()} THB</span></p>
+                        <div className="space-y-2">
+                          <p className="text-sm">
+                            <span className="text-slate-500">{t.paymentStatus}:</span>{' '}
+                            {getPaymentStatusBadge(selectedBooking.payment_status)}
+                          </p>
+                          <p className="text-sm">
+                            <span className="text-slate-500">{t.bookingStatus}:</span>{' '}
+                            {getBookingStatusBadge(selectedBooking.booking_status)}
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {selectedBooking.special_requests && (
+                    <div className="space-y-2">
+                      <h4 className="font-semibold text-slate-900 flex items-center gap-2">
+                        <MessageSquare className="w-4 h-4" />
+                        {t.specialRequests}
+                      </h4>
+                      <p className="text-sm text-slate-700 bg-slate-50 p-4 rounded-lg">{selectedBooking.special_requests}</p>
+                    </div>
+                  )}
+                  <div className="text-sm text-slate-500">
+                    {t.created}: {formatDateTime(selectedBooking.created_at)}
+                  </div>
+                </div>
+              )}
+
+              {bookingDetailsTab === 'comments' && (
+                <BookingComments bookingId={selectedBooking.id} />
+              )}
+
+              {bookingDetailsTab === 'activity' && (
+                <BookingActivityLog bookingId={selectedBooking.id} />
+              )}
+            </div>
+          </div>
         </div>
       )}
 
@@ -334,6 +544,9 @@ export function CalendarView() {
           onUpdate={() => {
             fetchBookings();
             setEditingBooking(null);
+            if (selectedBooking) {
+              setSelectedBooking({ ...editingBooking });
+            }
           }}
         />
       )}
