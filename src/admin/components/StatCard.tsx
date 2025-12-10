@@ -24,29 +24,29 @@ export function StatCard({
 }: StatCardProps) {
   return (
     <div
-      className={`relative overflow-hidden rounded-lg p-2.5 shadow-sm border transition-all duration-300 hover:shadow-md hover:scale-[1.02] ${gradient}`}
+      className={`relative overflow-hidden rounded-lg p-4 shadow-sm border transition-all duration-300 hover:shadow-md hover:scale-[1.02] ${gradient}`}
     >
       <div className="relative z-10">
-        <div className="flex items-start justify-between mb-1.5">
-          <div className={`p-1.5 rounded ${iconBg} shadow-sm`}>
-            <Icon className={`w-3.5 h-3.5 ${textColor}`} />
+        <div className="flex items-start justify-between mb-2">
+          <div className={`p-2 rounded-lg ${iconBg} shadow-sm`}>
+            <Icon className={`w-5 h-5 ${textColor}`} />
           </div>
           {trend && (
             <div
-              className={`flex items-center gap-0.5 text-xs font-semibold px-1.5 py-0.5 rounded-full ${
+              className={`flex items-center gap-1 text-xs font-semibold px-2 py-1 rounded-full ${
                 trend.isPositive
                   ? 'bg-emerald-100 text-emerald-700'
                   : 'bg-red-100 text-red-700'
               }`}
             >
               <span>{trend.isPositive ? '↑' : '↓'}</span>
-              <span className="text-xs">{Math.abs(trend.value)}%</span>
+              <span>{Math.abs(trend.value)}%</span>
             </div>
           )}
         </div>
         <div>
-          <p className="text-xs font-medium text-slate-600 mb-0.5">{title}</p>
-          <p className={`text-xl font-bold ${textColor}`}>
+          <p className="text-sm font-medium text-slate-600 mb-1">{title}</p>
+          <p className={`text-2xl font-bold ${textColor}`}>
             {value.toLocaleString()}
           </p>
         </div>

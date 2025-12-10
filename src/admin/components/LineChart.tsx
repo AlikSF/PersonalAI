@@ -6,10 +6,10 @@ interface LineChartProps {
   height?: number;
 }
 
-export function LineChart({ data, color = '#3b82f6', height = 80 }: LineChartProps) {
+export function LineChart({ data, color = '#3b82f6', height = 250 }: LineChartProps) {
   if (data.length === 0) {
     return (
-      <div className="flex items-center justify-center h-20 text-slate-400 text-xs">
+      <div className="flex items-center justify-center h-64 text-slate-400 text-sm">
         No data available
       </div>
     );
@@ -36,7 +36,7 @@ export function LineChart({ data, color = '#3b82f6', height = 80 }: LineChartPro
       <svg
         viewBox={`0 0 ${width} ${height}`}
         className="w-full"
-        style={{ minHeight: '80px' }}
+        style={{ height: '250px' }}
       >
         <defs>
           <linearGradient id={`gradient-${color}`} x1="0%" y1="0%" x2="0%" y2="100%">
@@ -55,7 +55,7 @@ export function LineChart({ data, color = '#3b82f6', height = 80 }: LineChartPro
           d={pathD}
           fill="none"
           stroke={color}
-          strokeWidth="2"
+          strokeWidth="1.5"
           strokeLinecap="round"
           strokeLinejoin="round"
           className="transition-all duration-500"
@@ -68,7 +68,7 @@ export function LineChart({ data, color = '#3b82f6', height = 80 }: LineChartPro
               <circle
                 cx={x}
                 cy={y}
-                r="3"
+                r="2"
                 fill={color}
                 className="transition-all duration-500"
               />
@@ -96,7 +96,7 @@ export function LineChart({ data, color = '#3b82f6', height = 80 }: LineChartPro
         />
       </svg>
 
-      <div className="flex justify-between mt-2 px-2 text-xs text-slate-500">
+      <div className="flex justify-between mt-3 px-2 text-xs text-slate-500">
         <span>{data[0]?.date}</span>
         <span>{data[Math.floor(data.length / 2)]?.date}</span>
         <span>{data[data.length - 1]?.date}</span>

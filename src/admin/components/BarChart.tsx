@@ -9,7 +9,7 @@ interface BarChartProps {
 export function BarChart({ data, color = '#10b981', showValues = true }: BarChartProps) {
   if (data.length === 0) {
     return (
-      <div className="flex items-center justify-center h-48 text-slate-400">
+      <div className="flex items-center justify-center h-64 text-slate-400 text-sm">
         No data available
       </div>
     );
@@ -18,23 +18,23 @@ export function BarChart({ data, color = '#10b981', showValues = true }: BarChar
   const maxCount = Math.max(...data.map((d) => d.count), 1);
 
   return (
-    <div className="space-y-1">
+    <div className="space-y-2">
       {data.map((item, index) => (
-        <div key={index} className="flex items-center gap-2 group">
-          <span className="text-xs text-slate-600 font-medium w-12 text-right">
+        <div key={index} className="flex items-center gap-3 group">
+          <span className="text-sm text-slate-600 font-medium w-16 text-right">
             {item.month}
           </span>
           <div className="flex-1 relative">
-            <div className="bg-slate-100 rounded h-5 overflow-hidden">
+            <div className="bg-slate-100 rounded h-6 overflow-hidden">
               <div
-                className="h-full rounded flex items-center justify-end px-2 transition-all duration-700 ease-out"
+                className="h-full rounded flex items-center justify-end px-3 transition-all duration-700 ease-out"
                 style={{
                   width: `${Math.max((item.count / maxCount) * 100, item.count > 0 ? 5 : 0)}%`,
                   background: `linear-gradient(135deg, ${color} 0%, ${adjustColorBrightness(color, -20)} 100%)`,
                 }}
               >
                 {showValues && item.count > 0 && (
-                  <span className="text-xs font-bold text-white drop-shadow">
+                  <span className="text-sm font-bold text-white drop-shadow">
                     {item.count}
                   </span>
                 )}
