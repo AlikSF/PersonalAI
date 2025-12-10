@@ -401,7 +401,7 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
                       <label htmlFor="name" className="block text-xs md:text-sm font-medium text-gray-700 mb-2">
                         <div className="flex items-center space-x-2">
                           <User className="h-4 w-4" />
-                          <span>{t('booking.name')}</span>
+                          <span>{t('booking.name')} <span className="text-red-500">*</span></span>
                         </div>
                       </label>
                       <input
