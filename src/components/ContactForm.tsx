@@ -14,8 +14,39 @@ export function ContactForm() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+  const validatePhone = (phone: string): boolean => {
+    const phoneRegex = /^[\d\s\-+()]{6,}$/;
+    return phoneRegex.test(phone);
+  };
+
   const handleSubmit = async (e: React.FormEvent, platform: 'telegram' | 'whatsapp') => {
     e.preventDefault();
+
+    if (!formData.name || formData.name.trim().length < 2) {
+      alert('Please enter a valid name (at least 2 characters)');
+      return;
+    }
+
+    if (!formData.email || !validateEmail(formData.email)) {
+      alert('Please enter a valid email address');
+      return;
+    }
+
+    if (!formData.phone || !validatePhone(formData.phone)) {
+      alert('Please enter a valid phone number (at least 6 digits)');
+      return;
+    }
+
+    if (!formData.message || formData.message.trim().length < 10) {
+      alert('Please enter a message (at least 10 characters)');
+      return;
+    }
+
     setLoading(true);
 
     try {

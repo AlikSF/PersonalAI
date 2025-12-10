@@ -38,13 +38,52 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
     });
   };
 
-  const handleConfirmBooking = (platform: 'telegram' | 'whatsapp') => {
-    const { name, phone, dialCode, countryCode, tourDate, adults, children } = formData;
+  const validateForm = (): string | null => {
+    const { name, phone, tourDate, adults } = formData;
 
-    if (!name || !phone || !tourDate || !adults) {
-      alert(t('booking.fillFields'));
+    if (!name || name.trim().length < 2) {
+      return t('booking.invalidName') || 'Please enter a valid name (at least 2 characters)';
+    }
+
+    if (!phone || phone.trim().length < 6) {
+      return t('booking.invalidPhone') || 'Please enter a valid phone number';
+    }
+
+    if (!/^[\d\s\-+()]+$/.test(phone)) {
+      return t('booking.invalidPhoneFormat') || 'Phone number can only contain digits, spaces, and +()-';
+    }
+
+    if (!tourDate) {
+      return t('booking.selectDate') || 'Please select a tour date';
+    }
+
+    const selectedDate = new Date(tourDate);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (selectedDate < today) {
+      return t('booking.pastDate') || 'Please select a future date';
+    }
+
+    if (!adults || adults < 1) {
+      return t('booking.minAdults') || 'At least one adult is required';
+    }
+
+    if (adults > 50) {
+      return t('booking.maxGuests') || 'Maximum 50 guests allowed';
+    }
+
+    return null;
+  };
+
+  const handleConfirmBooking = (platform: 'telegram' | 'whatsapp') => {
+    const validationError = validateForm();
+    if (validationError) {
+      alert(validationError);
       return;
     }
+
+    const { name, phone, dialCode, countryCode, tourDate, adults, children } = formData;
 
     const totalPrice = product.price_per_day;
     const displayName = getDisplayName(product, language);

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, memo } from 'react';
 import { MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Product } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -9,11 +9,13 @@ interface ProductCardProps {
   onViewDetails: (product: Product) => void;
 }
 
-export function ProductCard({ product, onViewDetails }: ProductCardProps) {
+function ProductCardComponent({ product, onViewDetails }: ProductCardProps) {
   const { t, language } = useLanguage();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
+  const [imageLoading, setImageLoading] = useState(true);
+  const [imageError, setImageError] = useState(false);
 
   const images = product.images && product.images.length > 0 ? product.images : [product.image_url];
 
@@ -65,11 +67,26 @@ export function ProductCard({ product, onViewDetails }: ProductCardProps) {
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
       >
-        <img
-          src={images[currentImageIndex]}
-          alt={`${getDisplayName(product, language)} - ${currentImageIndex + 1}`}
-          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-        />
+        {imageLoading && (
+          <div className="absolute inset-0 bg-slate-200 animate-pulse" />
+        )}
+        {imageError ? (
+          <div className="absolute inset-0 bg-slate-100 flex items-center justify-center">
+            <span className="text-slate-400 text-sm">Image unavailable</span>
+          </div>
+        ) : (
+          <img
+            src={images[currentImageIndex]}
+            alt={`${getDisplayName(product, language)} - ${currentImageIndex + 1}`}
+            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+            loading="lazy"
+            onLoad={() => setImageLoading(false)}
+            onError={() => {
+              setImageLoading(false);
+              setImageError(true);
+            }}
+          />
+        )}
 
         {images.length > 1 && (
           <>
@@ -149,3 +166,5 @@ export function ProductCard({ product, onViewDetails }: ProductCardProps) {
     </div>
   );
 }
+
+export const ProductCard = memo(ProductCardComponent);

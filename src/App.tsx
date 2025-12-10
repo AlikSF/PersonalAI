@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Header } from './components/Header';
 import { Hero } from './components/Hero';
 import { Benefits } from './components/Benefits';
@@ -14,155 +14,117 @@ import { Loader2, Search, X } from 'lucide-react';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 import { AuthProvider } from './contexts/AuthContext';
 import { AdminRouter } from './admin/AdminRouter';
+import { getDisplayName } from './lib/productHelpers';
 
 function AppContent() {
   const { t, language } = useLanguage();
   const [products, setProducts] = useState<Product[]>([]);
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [showProductDetails, setShowProductDetails] = useState(false);
   const [categoryFilter, setCategoryFilter] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('');
 
   useEffect(() => {
     fetchProducts();
   }, []);
 
   useEffect(() => {
-    filterProducts();
-  }, [products, categoryFilter, searchQuery, language]);
+    const timer = setTimeout(() => {
+      setDebouncedSearchQuery(searchQuery);
+    }, 300);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   const fetchProducts = async () => {
-    setLoading(true);
-    const { data, error } = await supabase
-      .from('products')
-      .select('*')
-      .eq('is_active', true)
-      .order('priority', { ascending: true, nullsLast: true })
-      .order('created_at', { ascending: false });
+    try {
+      setLoading(true);
+      setError(null);
+      const { data, error: fetchError } = await supabase
+        .from('products')
+        .select('*')
+        .eq('is_active', true)
+        .order('priority', { ascending: true, nullsLast: true })
+        .order('created_at', { ascending: false });
 
-    if (!error && data) {
-      setProducts(data);
+      if (fetchError) throw fetchError;
+      if (data) setProducts(data);
+    } catch (err) {
+      console.error('Error fetching products:', err);
+      setError(err instanceof Error ? err.message : 'Failed to load products');
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   };
 
-  const filterProducts = () => {
+  const filteredProducts = useMemo(() => {
     let filtered = [...products];
 
     if (categoryFilter) {
       filtered = filtered.filter((p) => p.category === categoryFilter);
     }
 
-    if (searchQuery.trim()) {
-      const query = searchQuery.toLowerCase();
+    if (debouncedSearchQuery.trim()) {
+      const query = debouncedSearchQuery.toLowerCase();
 
-      // Multi-language search: searches in name, description, location, category, and features
-      // For each language, it uses the language-specific column if available, otherwise falls back to Russian (base)
       filtered = filtered.filter((p) => {
-        // Get language-specific fields with fallback to Russian (base columns)
-        // ru: name, description, location, category, features
-        // en: name_en, description_en, location_en, category_en, features_en (fallback to base)
-        // kk: name_kk, description_kk, location_kk, category_kk, features_kk (fallback to base)
-        // ky: name_ky, description_ky, location_ky, category_ky, features_ky (fallback to base)
-        // az: name_az, description_az, location_az, category_az, features_az (fallback to base)
-        // zh: name_zh, description_zh, location_zh, category_zh, features_zh (fallback to base)
-        // fr: name_fr, description_fr, location_fr, category_fr, features_fr (fallback to base)
-        // uz: name_uz, description_uz, location_uz, category_uz, features_uz (fallback to base)
+        const getField = (langField: string | null | undefined, baseField: string) => {
+          return (langField || baseField || '').toLowerCase();
+        };
 
-        const name = language === 'en' ? (p.name_en || p.name) :
-                     language === 'az' ? (p.name_az || p.name) :
-                     language === 'kk' ? (p.name_kk || p.name) :
-                     language === 'ky' ? (p.name_ky || p.name) :
-                     language === 'zh' ? (p.name_zh || p.name) :
-                     language === 'fr' ? (p.name_fr || p.name) :
-                     language === 'uz' ? (p.name_uz || p.name) :
-                     p.name;
+        const langFieldMap: Record<string, keyof Product> = {
+          en: `name_en` as keyof Product,
+          az: `name_az` as keyof Product,
+          kk: `name_kk` as keyof Product,
+          ky: `name_ky` as keyof Product,
+          zh: `name_zh` as keyof Product,
+          fr: `name_fr` as keyof Product,
+          uz: `name_uz` as keyof Product,
+        };
 
-        const description = language === 'en' ? (p.description_en || p.description) :
-                            language === 'az' ? (p.description_az || p.description) :
-                            language === 'kk' ? (p.description_kk || p.description) :
-                            language === 'ky' ? (p.description_ky || p.description) :
-                            language === 'zh' ? (p.description_zh || p.description) :
-                            language === 'fr' ? (p.description_fr || p.description) :
-                            language === 'uz' ? (p.description_uz || p.description) :
-                            p.description;
+        const getName = () => {
+          const field = langFieldMap[language];
+          return field ? getField(p[field] as string, p.name) : p.name.toLowerCase();
+        };
 
-        const location = language === 'en' ? (p.location_en || p.location) :
-                         language === 'az' ? (p.location_az || p.location) :
-                         language === 'kk' ? (p.location_kk || p.location) :
-                         language === 'ky' ? (p.location_ky || p.location) :
-                         language === 'zh' ? (p.location_zh || p.location) :
-                         language === 'fr' ? (p.location_fr || p.location) :
-                         language === 'uz' ? (p.location_uz || p.location) :
-                         p.location;
+        const getDesc = () => {
+          const field = (`description_${language === 'ru' ? '' : language}`.replace('description_', 'description_') || 'description') as keyof Product;
+          return field !== 'description' ? getField(p[field] as string, p.description) : p.description.toLowerCase();
+        };
 
-        // For category, search in both the base category AND the translated category
-        // This ensures we catch matches in either language (e.g., "Insta Tours" or "Инста туры")
-        const categoryTranslated = language === 'en' ? (p.category_en || p.category) :
-                                    language === 'az' ? (p.category_az || p.category) :
-                                    language === 'kk' ? (p.category_kk || p.category) :
-                                    language === 'ky' ? (p.category_ky || p.category) :
-                                    language === 'zh' ? (p.category_zh || p.category) :
-                                    language === 'fr' ? (p.category_fr || p.category) :
-                                    language === 'uz' ? (p.category_uz || p.category) :
-                                    p.category;
+        const getLoc = () => {
+          const field = (`location_${language === 'ru' ? '' : language}`.replace('location_', 'location_') || 'location') as keyof Product;
+          return field !== 'location' ? getField(p[field] as string, p.location) : p.location.toLowerCase();
+        };
 
-        // Get features based on language (JSONB field)
-        const features = language === 'en' ? (p.features_en || p.features) :
-                         language === 'az' ? (p.features_az || p.features) :
-                         language === 'kk' ? (p.features_kk || p.features) :
-                         language === 'ky' ? (p.features_ky || p.features) :
-                         language === 'zh' ? (p.features_zh || p.features) :
-                         language === 'fr' ? (p.features_fr || p.features) :
-                         language === 'uz' ? (p.features_uz || p.features) :
-                         p.features;
+        const name = getName();
+        const description = getDesc();
+        const location = getLoc();
+        const category = p.category?.toLowerCase() || '';
+        const features = p.features ? JSON.stringify(p.features).toLowerCase() : '';
 
-        // Convert features JSONB to searchable text
-        const featuresText = features ? JSON.stringify(features).toLowerCase() : '';
-
-        // Search across all fields (OR condition)
-        // For category, we search in BOTH the base category (Russian) and the translated category
-        // to ensure matches regardless of which field contains the search term
-        return (name?.toLowerCase().includes(query) ||
-                description?.toLowerCase().includes(query) ||
-                location?.toLowerCase().includes(query) ||
-                categoryTranslated?.toLowerCase().includes(query) ||
-                p.category?.toLowerCase().includes(query) ||
-                featuresText.includes(query));
+        return (
+          name.includes(query) ||
+          description.includes(query) ||
+          location.includes(query) ||
+          category.includes(query) ||
+          features.includes(query)
+        );
       });
 
-      // Sort results: prioritize title matches first, then other matches
       filtered.sort((a, b) => {
-        const aName = language === 'en' ? (a.name_en || a.name) :
-                      language === 'az' ? (a.name_az || a.name) :
-                      language === 'kk' ? (a.name_kk || a.name) :
-                      language === 'ky' ? (a.name_ky || a.name) :
-                      language === 'zh' ? (a.name_zh || a.name) :
-                      language === 'fr' ? (a.name_fr || a.name) :
-                      language === 'uz' ? (a.name_uz || a.name) :
-                      a.name;
-
-        const bName = language === 'en' ? (b.name_en || b.name) :
-                      language === 'az' ? (b.name_az || b.name) :
-                      language === 'kk' ? (b.name_kk || b.name) :
-                      language === 'ky' ? (b.name_ky || b.name) :
-                      language === 'zh' ? (b.name_zh || b.name) :
-                      language === 'fr' ? (b.name_fr || b.name) :
-                      language === 'uz' ? (b.name_uz || b.name) :
-                      b.name;
-
-        const aNameMatch = aName?.toLowerCase().includes(query) ? 1 : 0;
-        const bNameMatch = bName?.toLowerCase().includes(query) ? 1 : 0;
-
-        // Products with name matches appear first
-        return bNameMatch - aNameMatch;
+        const aName = getDisplayName(a, language).toLowerCase();
+        const bName = getDisplayName(b, language).toLowerCase();
+        const aMatch = aName.includes(query) ? 1 : 0;
+        const bMatch = bName.includes(query) ? 1 : 0;
+        return bMatch - aMatch;
       });
     }
 
-    setFilteredProducts(filtered);
-  };
+    return filtered;
+  }, [products, categoryFilter, debouncedSearchQuery, language]);
 
   const handleViewDetails = (product: Product) => {
     setSelectedProduct(product);
@@ -261,10 +223,28 @@ function AppContent() {
           <div className="flex justify-center items-center py-20">
             <Loader2 className="h-12 w-12 text-blue-600 animate-spin" />
           </div>
+        ) : error ? (
+          <div className="flex flex-col items-center justify-center py-20">
+            <div className="bg-red-50 border border-red-200 rounded-lg p-6 max-w-md">
+              <p className="text-red-700 text-center mb-4">{error}</p>
+              <button
+                onClick={fetchProducts}
+                className="w-full bg-red-600 text-white py-2 px-4 rounded-lg hover:bg-red-700 transition-colors"
+              >
+                {t('common.retry') || 'Try Again'}
+              </button>
+            </div>
+          </div>
         ) : (
           <>
             <div className="mb-4 md:mb-6 text-center">
               <p className="text-gray-600 text-lg">
+                {searchQuery && searchQuery !== debouncedSearchQuery && (
+                  <span className="inline-flex items-center gap-2 text-blue-600 mr-2">
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Searching...
+                  </span>
+                )}
                 {filteredProducts.length} {filteredProducts.length === 1 ? t('products.rental') : t('products.rentals')}{' '}
                 {t('products.available')}
               </p>
