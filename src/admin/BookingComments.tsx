@@ -52,20 +52,30 @@ export function BookingComments({ bookingId }: BookingCommentsProps) {
 
     setPosting(true);
     try {
-      const { error } = await supabase.from('booking_comments').insert({
+      console.log('Posting comment with user:', {
+        userId: user.id,
+        email: user.email,
+        bookingId
+      });
+
+      const { data, error } = await supabase.from('booking_comments').insert({
         booking_id: bookingId,
         user_id: user.id,
         user_email: user.email || 'unknown',
         comment: newComment.trim(),
-      });
+      }).select();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error details:', error);
+        alert(`Failed to post comment: ${error.message}\nCode: ${error.code}\nDetails: ${error.details}`);
+        throw error;
+      }
 
+      console.log('Comment posted successfully:', data);
       setNewComment('');
       await fetchComments();
     } catch (error) {
       console.error('Error posting comment:', error);
-      alert('Failed to post comment');
     } finally {
       setPosting(false);
     }
