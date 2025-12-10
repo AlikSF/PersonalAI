@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ChevronLeft, ChevronRight, Calendar as CalendarIcon } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, Pencil } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAdminLang } from './AdminLanguageContext';
 import { BookingEditModal } from './BookingEditModal';
@@ -19,6 +19,7 @@ interface Booking {
 
 interface FullBooking {
   id: string;
+  product_id: string;
   customer_name: string;
   customer_email: string;
   customer_phone: string;
@@ -26,8 +27,10 @@ interface FullBooking {
   tour_date: string;
   adults: number;
   children: number;
+  total_price: number;
   booking_status: string;
   payment_status: string;
+  platform?: string;
   special_requests?: string;
 }
 
@@ -69,7 +72,7 @@ export function CalendarView() {
     try {
       const { data, error } = await supabase
         .from('bookings')
-        .select('id, customer_name, customer_email, customer_phone, country_code, tour_date, adults, children, booking_status, payment_status, special_requests')
+        .select('id, product_id, customer_name, customer_email, customer_phone, country_code, tour_date, adults, children, total_price, booking_status, payment_status, platform, special_requests')
         .eq('id', bookingId)
         .single();
 
@@ -266,14 +269,7 @@ export function CalendarView() {
               {selectedBookings.map((booking) => (
                 <div
                   key={booking.id}
-                  onDoubleClick={async () => {
-                    const fullBooking = await fetchFullBooking(booking.id);
-                    if (fullBooking) {
-                      setEditingBooking(fullBooking);
-                    }
-                  }}
-                  className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200 hover:border-slate-300 transition-colors cursor-pointer"
-                  title={lang === 'ru' ? 'Дважды щелкните для редактирования' : 'Double-click to edit'}
+                  className="flex items-center justify-between p-4 bg-slate-50 rounded-lg border border-slate-200 hover:border-slate-300 transition-colors"
                 >
                   <div className="flex-1">
                     <p className="font-medium text-slate-900">{booking.customer_name}</p>
@@ -284,31 +280,45 @@ export function CalendarView() {
                     </p>
                     <p className="text-xs text-slate-500">{booking.customer_email}</p>
                   </div>
-                  <div className="flex flex-col items-end gap-2">
-                    <span
-                      className={`px-2 py-1 text-xs font-medium rounded-full ${
-                        booking.booking_status === 'confirmed'
-                          ? 'bg-emerald-100 text-emerald-700'
-                          : booking.booking_status === 'completed'
-                          ? 'bg-blue-100 text-blue-700'
-                          : booking.booking_status === 'cancelled'
-                          ? 'bg-red-100 text-red-700'
-                          : 'bg-amber-100 text-amber-700'
-                      }`}
+                  <div className="flex items-center gap-3">
+                    <div className="flex flex-col items-end gap-2">
+                      <span
+                        className={`px-2 py-1 text-xs font-medium rounded-full ${
+                          booking.booking_status === 'confirmed'
+                            ? 'bg-emerald-100 text-emerald-700'
+                            : booking.booking_status === 'completed'
+                            ? 'bg-blue-100 text-blue-700'
+                            : booking.booking_status === 'cancelled'
+                            ? 'bg-red-100 text-red-700'
+                            : 'bg-amber-100 text-amber-700'
+                        }`}
+                      >
+                        {booking.booking_status}
+                      </span>
+                      <span
+                        className={`px-2 py-1 text-xs font-medium rounded-full ${
+                          booking.payment_status === 'paid'
+                            ? 'bg-emerald-100 text-emerald-700'
+                            : booking.payment_status === 'failed'
+                            ? 'bg-red-100 text-red-700'
+                            : 'bg-slate-100 text-slate-700'
+                        }`}
+                      >
+                        {booking.payment_status}
+                      </span>
+                    </div>
+                    <button
+                      onClick={async () => {
+                        const fullBooking = await fetchFullBooking(booking.id);
+                        if (fullBooking) {
+                          setEditingBooking(fullBooking);
+                        }
+                      }}
+                      className="p-2 hover:bg-blue-100 rounded-lg transition-colors group"
+                      title={lang === 'ru' ? 'Редактировать бронирование' : 'Edit booking'}
                     >
-                      {booking.booking_status}
-                    </span>
-                    <span
-                      className={`px-2 py-1 text-xs font-medium rounded-full ${
-                        booking.payment_status === 'paid'
-                          ? 'bg-emerald-100 text-emerald-700'
-                          : booking.payment_status === 'failed'
-                          ? 'bg-red-100 text-red-700'
-                          : 'bg-slate-100 text-slate-700'
-                      }`}
-                    >
-                      {booking.payment_status}
-                    </span>
+                      <Pencil className="w-4 h-4 text-slate-600 group-hover:text-blue-600" />
+                    </button>
                   </div>
                 </div>
               ))}
