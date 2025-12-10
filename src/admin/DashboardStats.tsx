@@ -16,8 +16,6 @@ interface MessageStats {
   thisMonth: number;
   thisWeek: number;
   today: number;
-  dailyData: { day: string; count: number }[];
-  weeklyData: { week: string; count: number }[];
   monthlyData: { month: string; count: number }[];
 }
 
@@ -35,8 +33,6 @@ export function DashboardStats() {
     thisMonth: 0,
     thisWeek: 0,
     today: 0,
-    dailyData: [],
-    weeklyData: [],
     monthlyData: [],
   });
   const [loading, setLoading] = useState(true);
@@ -97,8 +93,6 @@ export function DashboardStats() {
           (m) => new Date(m.created_at) >= startOfMonth
         ).length;
 
-        const dailyData = calculateDailyData(messages);
-        const weeklyData = calculateWeeklyData(messages);
         const monthlyData = calculateMonthlyData(messages);
 
         setMessageStats({
@@ -106,8 +100,6 @@ export function DashboardStats() {
           thisMonth: thisMonthMessages,
           thisWeek: thisWeekMessages,
           today: todayMessages,
-          dailyData,
-          weeklyData,
           monthlyData,
         });
       }
@@ -116,32 +108,6 @@ export function DashboardStats() {
     } finally {
       setLoading(false);
     }
-  }
-
-  function calculateDailyData(data: any[]) {
-    const last7Days = [];
-    const now = new Date();
-
-    for (let i = 6; i >= 0; i--) {
-      const date = new Date(now);
-      date.setDate(date.getDate() - i);
-      date.setHours(0, 0, 0, 0);
-
-      const nextDate = new Date(date);
-      nextDate.setDate(date.getDate() + 1);
-
-      const count = data.filter((item) => {
-        const itemDate = new Date(item.created_at);
-        return itemDate >= date && itemDate < nextDate;
-      }).length;
-
-      last7Days.push({
-        day: date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-        count,
-      });
-    }
-
-    return last7Days;
   }
 
   function calculateWeeklyData(data: any[]) {
@@ -202,8 +168,6 @@ export function DashboardStats() {
 
   const maxWeeklyBookings = Math.max(...bookingStats.weeklyData.map((d) => d.count), 1);
   const maxMonthlyBookings = Math.max(...bookingStats.monthlyData.map((d) => d.count), 1);
-  const maxDailyMessages = Math.max(...messageStats.dailyData.map((d) => d.count), 1);
-  const maxWeeklyMessages = Math.max(...messageStats.weeklyData.map((d) => d.count), 1);
   const maxMonthlyMessages = Math.max(...messageStats.monthlyData.map((d) => d.count), 1);
 
   return (
@@ -304,48 +268,6 @@ export function DashboardStats() {
         </div>
 
         <div className="space-y-6">
-          <div>
-            <h3 className="text-sm font-semibold text-slate-700 mb-3">{t.messagesPerDay}</h3>
-            <div className="space-y-2">
-              {messageStats.dailyData.map((item, index) => (
-                <div key={index} className="flex items-center gap-3">
-                  <span className="text-xs text-slate-600 w-16">{item.day}</span>
-                  <div className="flex-1 bg-slate-100 rounded-full h-6 overflow-hidden">
-                    <div
-                      className="bg-gradient-to-r from-orange-500 to-orange-600 h-full rounded-full flex items-center justify-end pr-2 transition-all duration-500"
-                      style={{ width: `${(item.count / maxDailyMessages) * 100}%` }}
-                    >
-                      {item.count > 0 && (
-                        <span className="text-xs font-medium text-white">{item.count}</span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <h3 className="text-sm font-semibold text-slate-700 mb-3">{t.messagesPerWeek}</h3>
-            <div className="space-y-2">
-              {messageStats.weeklyData.map((item, index) => (
-                <div key={index} className="flex items-center gap-3">
-                  <span className="text-xs text-slate-600 w-16">{item.week}</span>
-                  <div className="flex-1 bg-slate-100 rounded-full h-6 overflow-hidden">
-                    <div
-                      className="bg-gradient-to-r from-pink-500 to-pink-600 h-full rounded-full flex items-center justify-end pr-2 transition-all duration-500"
-                      style={{ width: `${(item.count / maxWeeklyMessages) * 100}%` }}
-                    >
-                      {item.count > 0 && (
-                        <span className="text-xs font-medium text-white">{item.count}</span>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-
           <div>
             <h3 className="text-sm font-semibold text-slate-700 mb-3">{t.messagesPerMonth}</h3>
             <div className="space-y-2">
