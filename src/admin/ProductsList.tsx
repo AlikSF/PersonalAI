@@ -4,7 +4,7 @@ import { useAdminLang } from './AdminLanguageContext';
 import { useAuth } from '../contexts/AuthContext';
 import { Plus, Edit2, Trash2, Loader2, AlertTriangle, X, CheckCircle, XCircle, ArrowUpDown, ArrowUp, ArrowDown, Package } from 'lucide-react';
 
-type SortField = 'name' | 'created_at' | null;
+type SortField = 'name' | 'created_at' | 'priority' | null;
 type SortDirection = 'asc' | 'desc';
 
 export function ProductsList() {
@@ -39,7 +39,11 @@ export function ProductsList() {
       .select('*');
 
     if (sortField) {
-      query = query.order(sortField, { ascending: sortDirection === 'asc' });
+      if (sortField === 'priority') {
+        query = query.order(sortField, { ascending: sortDirection === 'asc', nullsLast: true });
+      } else {
+        query = query.order(sortField, { ascending: sortDirection === 'asc' });
+      }
     } else {
       query = query
         .order('priority', { ascending: true, nullsLast: true })
@@ -174,8 +178,14 @@ export function ProductsList() {
                   <th className="px-4 py-3 text-left text-xs font-semibold text-slate-600 uppercase tracking-wider hidden md:table-cell">
                     {t.description}
                   </th>
-                  <th className="px-4 py-3 text-center text-xs font-semibold text-slate-600 uppercase tracking-wider hidden lg:table-cell">
-                    {t.priority || 'Priority'}
+                  <th
+                    className="px-4 py-3 text-center text-xs font-semibold text-slate-600 uppercase tracking-wider hidden lg:table-cell cursor-pointer hover:bg-slate-100 transition-colors"
+                    onClick={() => handleSort('priority')}
+                  >
+                    <div className="flex items-center justify-center gap-2">
+                      {t.priority || 'Priority'}
+                      {getSortIcon('priority')}
+                    </div>
                   </th>
                   <th className="px-4 py-3 text-center text-xs font-semibold text-slate-600 uppercase tracking-wider hidden lg:table-cell">
                     {t.active || 'Active'}
