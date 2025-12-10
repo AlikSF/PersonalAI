@@ -147,8 +147,6 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
           country_code: dialCode,
           dial_code: dialCode,
           tour_date: tourDate,
-          start_date: tourDate,
-          end_date: tourDate,
           adults: adults,
           children: children,
           platform: platform,

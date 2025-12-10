@@ -70,8 +70,6 @@ export interface Booking {
   country_code?: string;
   dial_code?: string;
   tour_date?: string;
-  start_date: string;
-  end_date: string;
   total_price: number;
   payment_status: 'pending' | 'paid' | 'failed';
   booking_status: 'pending' | 'confirmed' | 'cancelled' | 'completed';

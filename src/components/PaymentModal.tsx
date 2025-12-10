@@ -59,7 +59,7 @@ export function PaymentModal({
               name: booking.customer_name,
               email: booking.customer_email,
               phone: booking.customer_phone,
-              message: `New booking confirmed!\n\nProduct: ${productName}\nStart Date: ${booking.start_date}\nEnd Date: ${booking.end_date}\nTotal: $${booking.total_price}\nSpecial Requests: ${booking.special_requests || 'None'}`,
+              message: `New booking confirmed!\n\nProduct: ${productName}\nTour Date: ${booking.tour_date || 'Not specified'}\nTotal: $${booking.total_price}\nSpecial Requests: ${booking.special_requests || 'None'}`,
               type: 'booking',
             }),
           }

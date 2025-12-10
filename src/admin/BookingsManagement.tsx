@@ -39,8 +39,6 @@ interface Booking {
   customer_phone: string;
   country_code: string | null;
   dial_code: string | null;
-  start_date: string | null;
-  end_date: string | null;
   tour_date: string | null;
   adults: number;
   children: number;
