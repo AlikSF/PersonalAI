@@ -14,7 +14,7 @@ export function Hero() {
     <div className="relative h-[calc(100vh-64px)] md:h-screen min-h-[500px]">
       <div className="absolute inset-0 bg-gradient-to-r from-slate-900/90 to-slate-800/70 z-10"></div>
       <img
-        src="https://images.pexels.com/photos/1268855/pexels-photo-1268855.jpeg"
+        src="https://aswrvvwbzhfsunioyglv.supabase.co/storage/v1/object/public/Photos/Admin%20Panel%20Images/backround.jpg"
         alt="Luxury tropical resort"
         className="absolute inset-0 w-full h-full object-cover"
       />
