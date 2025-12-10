@@ -11,7 +11,7 @@ import { CalendarView } from './CalendarView';
 import { Loader2, ShieldAlert } from 'lucide-react';
 
 export function AdminRouter() {
-  const { user, loading, isAdmin, signOut } = useAuth();
+  const { user, loading, userRole, signOut } = useAuth();
   const [path, setPath] = useState(window.location.pathname);
 
   useEffect(() => {
@@ -36,7 +36,9 @@ export function AdminRouter() {
     );
   }
 
-  if (!isAdmin) {
+  const hasAccess = userRole === 'admin' || userRole === 'user';
+
+  if (!hasAccess) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white/10 backdrop-blur-xl rounded-2xl shadow-2xl border border-white/20 p-8 text-center">
