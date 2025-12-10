@@ -5,6 +5,7 @@ import { useAdminLang } from './AdminLanguageContext';
 
 interface Booking {
   id: string;
+  product_id: string;
   customer_name: string;
   customer_email: string;
   customer_phone: string;
@@ -19,6 +20,13 @@ interface Booking {
   special_requests?: string;
 }
 
+interface Product {
+  id: string;
+  name: string;
+  name_en?: string;
+  price_per_day: number;
+}
+
 interface BookingEditModalProps {
   booking: Booking;
   onClose: () => void;
@@ -26,9 +34,12 @@ interface BookingEditModalProps {
 }
 
 export function BookingEditModal({ booking, onClose, onUpdate }: BookingEditModalProps) {
-  const { t } = useAdminLang();
+  const { t, lang } = useAdminLang();
   const [saving, setSaving] = useState(false);
+  const [products, setProducts] = useState<Product[]>([]);
+  const [loadingProducts, setLoadingProducts] = useState(true);
   const [formData, setFormData] = useState({
+    product_id: booking.product_id,
     customer_name: booking.customer_name,
     customer_email: booking.customer_email,
     customer_phone: booking.customer_phone,
@@ -45,10 +56,33 @@ export function BookingEditModal({ booking, onClose, onUpdate }: BookingEditModa
 
   useEffect(() => {
     document.body.style.overflow = 'hidden';
+    fetchProducts();
     return () => {
       document.body.style.overflow = 'unset';
     };
   }, []);
+
+  const fetchProducts = async () => {
+    setLoadingProducts(true);
+    try {
+      const { data, error } = await supabase
+        .from('products')
+        .select('id, name, name_en, price_per_day')
+        .eq('is_active', true)
+        .order('priority', { ascending: true, nullsFirst: false });
+
+      if (error) throw error;
+      setProducts(data || []);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    } finally {
+      setLoadingProducts(false);
+    }
+  };
+
+  const getProductName = (product: Product) => {
+    return lang === 'en' ? (product.name_en || product.name) : product.name;
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,6 +92,7 @@ export function BookingEditModal({ booking, onClose, onUpdate }: BookingEditModa
       const { error } = await supabase
         .from('bookings')
         .update({
+          product_id: formData.product_id,
           customer_name: formData.customer_name,
           customer_email: formData.customer_email,
           customer_phone: formData.customer_phone,
@@ -100,6 +135,30 @@ export function BookingEditModal({ booking, onClose, onUpdate }: BookingEditModa
 
         <form onSubmit={handleSubmit} className="p-6 space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="md:col-span-2">
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                {t.product} <span className="text-red-500">*</span>
+              </label>
+              <select
+                value={formData.product_id}
+                onChange={(e) =>
+                  setFormData({ ...formData, product_id: e.target.value })
+                }
+                disabled={loadingProducts}
+                className="w-full px-3 py-2 border border-slate-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent disabled:bg-slate-100 disabled:cursor-not-allowed"
+                required
+              >
+                <option value="">
+                  {loadingProducts ? t.loading : t.selectProduct}
+                </option>
+                {products.map((product) => (
+                  <option key={product.id} value={product.id}>
+                    {getProductName(product)} - {product.price_per_day.toLocaleString()} THB
+                  </option>
+                ))}
+              </select>
+            </div>
+
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">
                 {t.customer} {t.name}
