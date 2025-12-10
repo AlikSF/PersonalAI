@@ -18,16 +18,16 @@ export function BarChart({ data, color = '#10b981', showValues = true }: BarChar
   const maxCount = Math.max(...data.map((d) => d.count), 1);
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-1">
       {data.map((item, index) => (
-        <div key={index} className="flex items-center gap-3 group">
-          <span className="text-xs text-slate-600 font-medium w-16 text-right">
+        <div key={index} className="flex items-center gap-2 group">
+          <span className="text-xs text-slate-600 font-medium w-12 text-right">
             {item.month}
           </span>
           <div className="flex-1 relative">
-            <div className="bg-slate-100 rounded-lg h-7 overflow-hidden">
+            <div className="bg-slate-100 rounded h-5 overflow-hidden">
               <div
-                className="h-full rounded-lg flex items-center justify-end px-3 transition-all duration-700 ease-out"
+                className="h-full rounded flex items-center justify-end px-2 transition-all duration-700 ease-out"
                 style={{
                   width: `${Math.max((item.count / maxCount) * 100, item.count > 0 ? 5 : 0)}%`,
                   background: `linear-gradient(135deg, ${color} 0%, ${adjustColorBrightness(color, -20)} 100%)`,

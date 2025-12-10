@@ -6,10 +6,10 @@ interface LineChartProps {
   height?: number;
 }
 
-export function LineChart({ data, color = '#3b82f6', height = 120 }: LineChartProps) {
+export function LineChart({ data, color = '#3b82f6', height = 80 }: LineChartProps) {
   if (data.length === 0) {
     return (
-      <div className="flex items-center justify-center h-48 text-slate-400">
+      <div className="flex items-center justify-center h-20 text-slate-400 text-xs">
         No data available
       </div>
     );
@@ -36,7 +36,7 @@ export function LineChart({ data, color = '#3b82f6', height = 120 }: LineChartPr
       <svg
         viewBox={`0 0 ${width} ${height}`}
         className="w-full"
-        style={{ minHeight: '120px' }}
+        style={{ minHeight: '80px' }}
       >
         <defs>
           <linearGradient id={`gradient-${color}`} x1="0%" y1="0%" x2="0%" y2="100%">
