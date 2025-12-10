@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { X, MapPin, Calendar, MessageCircle, User, ChevronLeft, ChevronRight, Minus, Plus } from 'lucide-react';
 import { Product, supabase } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
@@ -30,6 +30,17 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
   });
 
   if (!product) return null;
+
+  const images = product.images && product.images.length > 0 ? product.images : [product.image_url];
+
+  useEffect(() => {
+    images.forEach((src) => {
+      if (src) {
+        const img = new Image();
+        img.src = src;
+      }
+    });
+  }, [product?.id]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({
@@ -207,8 +218,6 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
   const getTodayDate = () => {
     return new Date().toISOString().split('T')[0];
   };
-
-  const images = product.images && product.images.length > 0 ? product.images : [product.image_url];
 
   const handlePrevImage = () => {
     setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
