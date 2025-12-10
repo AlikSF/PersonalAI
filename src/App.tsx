@@ -258,11 +258,12 @@ function AppContent() {
               </div>
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
-                {filteredProducts.map((product) => (
+                {filteredProducts.map((product, index) => (
                   <ProductCard
                     key={product.id}
                     product={product}
                     onViewDetails={handleViewDetails}
+                    eager={index < 6}
                   />
                 ))}
               </div>

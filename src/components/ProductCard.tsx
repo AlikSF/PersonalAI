@@ -7,9 +7,10 @@ import { getDisplayName, getDisplayLocation, getDisplayFeatures, getDisplayCateg
 interface ProductCardProps {
   product: Product;
   onViewDetails: (product: Product) => void;
+  eager?: boolean;
 }
 
-function ProductCardComponent({ product, onViewDetails }: ProductCardProps) {
+function ProductCardComponent({ product, onViewDetails, eager = false }: ProductCardProps) {
   const { t, language } = useLanguage();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
@@ -79,7 +80,7 @@ function ProductCardComponent({ product, onViewDetails }: ProductCardProps) {
             src={images[currentImageIndex]}
             alt={`${getDisplayName(product, language)} - ${currentImageIndex + 1}`}
             className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-            loading="lazy"
+            loading={eager ? "eager" : "lazy"}
             onLoad={() => setImageLoading(false)}
             onError={() => {
               setImageLoading(false);
