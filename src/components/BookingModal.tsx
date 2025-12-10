@@ -37,7 +37,7 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
         product_id: product.id,
         customer_name: formData.customer_name,
         customer_email: formData.customer_email || 'no-email@provided.com',
-        customer_phone: formData.customer_phone,
+        customer_phone: formData.customer_phone || null,
         tour_date: formData.tour_date,
         adults: formData.adults_count,
         children: formData.children_count,
@@ -61,7 +61,7 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
         `📍 Локация: ${product.location}\n\n` +
         `👤 Информация о клиенте:\n` +
         `Имя: ${formData.customer_name}\n` +
-        `Телефон: ${formData.customer_phone}\n` +
+        (formData.customer_phone ? `Телефон: ${formData.customer_phone}\n` : '') +
         `📱 Платформа: ${formData.platform === 'telegram' ? 'Telegram' : 'WhatsApp'}\n\n` +
         `📅 Детали бронирования:\n` +
         `Дата тура: ${formData.tour_date}\n` +
@@ -123,7 +123,9 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
             <p className="mb-2"><strong>Дата тура:</strong> {formData.tour_date}</p>
             <p className="mb-2"><strong>Взрослых:</strong> {formData.adults_count} | <strong>Детей:</strong> {formData.children_count}</p>
             <p className="mb-2"><strong>Цена:</strong> ฿{totalPrice}</p>
-            <p className="mb-2"><strong>Телефон:</strong> {formData.customer_phone}</p>
+            {formData.customer_phone && (
+              <p className="mb-2"><strong>Телефон:</strong> {formData.customer_phone}</p>
+            )}
             <p><strong>Платформа:</strong> {formData.platform === 'telegram' ? 'Telegram' : 'WhatsApp'}</p>
           </div>
           <p className="text-sm text-gray-500 mt-4">
@@ -177,11 +179,10 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Телефон *
+                Телефон
               </label>
               <input
                 type="tel"
-                required
                 value={formData.customer_phone}
                 onChange={(e) =>
                   setFormData({ ...formData, customer_phone: e.target.value })
