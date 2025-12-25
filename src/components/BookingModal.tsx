@@ -201,8 +201,13 @@ export function BookingModal({ product, onClose, onSuccess }: BookingModalProps)
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Телефон
+              <label className="block text-sm font-medium mb-1">
+                <span className="text-gray-700">{t('booking.phone').split('(')[0]}</span>
+                {t('booking.phone').includes('(') && (
+                  <span className="text-gray-500 font-normal">
+                    ({t('booking.phone').split('(')[1].split(')')[0]})
+                  </span>
+                )}
               </label>
               <input
                 type="tel"
