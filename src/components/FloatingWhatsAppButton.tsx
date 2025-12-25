@@ -8,10 +8,10 @@ export function FloatingWhatsAppButton() {
     let message = '';
 
     if (language === 'en' || language === 'fr') {
-      message = 'Hello! I would like to get more information about available tours in Phuket.';
+      message = 'Hello! I would like to book a tour';
     } else {
       // For ru, kk, ky, az, zh, uz - use Russian message
-      message = 'Здравствуйте! Я хочу узнать подробнее о доступных турах в Пхукете.';
+      message = 'Здравствуйте! Я хочу забронировать тур';
     }
 
     const telegramUrl = `https://t.me/${telegramUsername}?text=${encodeURIComponent(message)}`;
