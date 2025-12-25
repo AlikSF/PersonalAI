@@ -108,8 +108,7 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
         `📍 Location: ${displayLocation}\n\n` +
         `📅 Tour date: ${new Date(tourDate).toLocaleDateString()}\n` +
         `👥 Adults: ${adults}\n` +
-        `👶 Children: ${children}\n\n` +
-        `💰 Price: ฿${totalPrice.toFixed(2)}`;
+        `👶 Children: ${children}`;
 
       whatsappMessage =
         `TOUR BOOKING REQUEST\n\n` +
@@ -119,8 +118,7 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
         `Location: ${displayLocation}\n\n` +
         `Tour date: ${new Date(tourDate).toLocaleDateString()}\n` +
         `Adults: ${adults}\n` +
-        `Children: ${children}\n\n` +
-        `Price: ฿${totalPrice.toFixed(2)}`;
+        `Children: ${children}`;
     } else {
       // Russian message templates (for ru, kk, ky, az, zh, uz)
       telegramMessage =
@@ -131,8 +129,7 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
         `📍 Местоположение: ${displayLocation}\n\n` +
         `📅 Дата тура: ${new Date(tourDate).toLocaleDateString()}\n` +
         `👥 Взрослых: ${adults}\n` +
-        `👶 Детей: ${children}\n\n` +
-        `💰 Цена: ฿${totalPrice.toFixed(2)}`;
+        `👶 Детей: ${children}`;
 
       whatsappMessage =
         `ЗАПРОС НА БРОНИРОВАНИЕ ТУРА\n\n` +
@@ -142,8 +139,7 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
         `Местоположение: ${displayLocation}\n\n` +
         `Дата тура: ${new Date(tourDate).toLocaleDateString()}\n` +
         `Взрослых: ${adults}\n` +
-        `Детей: ${children}\n\n` +
-        `Цена: ฿${totalPrice.toFixed(2)}`;
+        `Детей: ${children}`;
     }
 
     // CRITICAL: Open window BEFORE any async operations for Safari iOS compatibility
