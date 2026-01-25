@@ -144,12 +144,31 @@ export function TourPage({ slug, showBooking = false }: TourPageProps) {
       setLoading(true);
       setError(null);
 
-      const { data, error: fetchError } = await supabase
+      let data = null;
+      let fetchError = null;
+
+      const slugResult = await supabase
         .from('products')
         .select('*')
-        .or(`slug.eq.${slug},id.eq.${slug}`)
+        .eq('slug', slug)
         .eq('is_active', true)
         .maybeSingle();
+
+      if (slugResult.data) {
+        data = slugResult.data;
+      } else if (!slugResult.error || slugResult.error.code === 'PGRST116') {
+        const idResult = await supabase
+          .from('products')
+          .select('*')
+          .eq('id', slug)
+          .eq('is_active', true)
+          .maybeSingle();
+
+        data = idResult.data;
+        fetchError = idResult.error;
+      } else {
+        fetchError = slugResult.error;
+      }
 
       if (fetchError) throw fetchError;
 
