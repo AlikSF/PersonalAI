@@ -1,4 +1,4 @@
-const SITE_URL = 'https://phuketvibe.com';
+const SITE_URL = 'https://phuketvibetour.com';
 const SITE_NAME = 'Phuket Vibe Tours';
 const DEFAULT_IMAGE = `${SITE_URL}/logo.jpg`;
 

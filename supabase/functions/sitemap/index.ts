@@ -1,7 +1,7 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
 
-const SITE_URL = "https://phuketvibe.com";
+const SITE_URL = "https://phuketvibetour.com";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
