@@ -1,8 +1,26 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAdminLang } from './AdminLanguageContext';
-import { ArrowLeft, Loader2, CheckCircle, XCircle, X, ChevronDown, ChevronUp } from 'lucide-react';
+import { ArrowLeft, Loader2, CheckCircle, XCircle, X, ChevronDown, ChevronUp, RefreshCw, Link } from 'lucide-react';
 import { ImageUploader } from './ImageUploader';
+
+function generateSlug(text: string): string {
+  if (!text) return '';
+  let result = text.toLowerCase();
+  const cyrillicMap: Record<string, string> = {
+    'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'e',
+    'ж': 'zh', 'з': 'z', 'и': 'i', 'й': 'i', 'к': 'k', 'л': 'l', 'м': 'm',
+    'н': 'n', 'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u',
+    'ф': 'f', 'х': 'h', 'ц': 'ts', 'ч': 'ch', 'ш': 'sh', 'щ': 'sch', 'ъ': '',
+    'ы': 'y', 'ь': '', 'э': 'e', 'ю': 'yu', 'я': 'ya'
+  };
+  result = result.split('').map(char => cyrillicMap[char] || char).join('');
+  result = result.replace(/[^a-z0-9\s-]/g, '');
+  result = result.replace(/\s+/g, '-');
+  result = result.replace(/-+/g, '-');
+  result = result.replace(/^-|-$/g, '');
+  return result;
+}
 
 interface ProductFormProps {
   productId?: string;
@@ -134,6 +152,7 @@ export function ProductForm({ productId }: ProductFormProps) {
     features: '',
     is_active: true,
     priority: '',
+    slug: '',
     name_en: '',
     description_en: '',
     location_en: '',
@@ -260,6 +279,17 @@ export function ProductForm({ productId }: ProductFormProps) {
     });
 
     payload['updated_at'] = new Date().toISOString();
+
+    if (!isEdit && !payload['slug']) {
+      const nameEn = formData.name_en as string;
+      const nameRu = formData.name as string;
+      const baseName = nameEn || nameRu || '';
+      if (baseName) {
+        const baseSlug = generateSlug(baseName);
+        const uniqueSuffix = Date.now().toString(36).slice(-6);
+        payload['slug'] = `${baseSlug}-${uniqueSuffix}`;
+      }
+    }
 
     let error;
     if (isEdit) {
@@ -473,6 +503,50 @@ export function ProductForm({ productId }: ProductFormProps) {
             <label htmlFor="is_active" className="text-sm font-medium text-slate-700">
               {t.activeHint}
             </label>
+          </div>
+
+          <div className="mt-6 pt-6 border-t border-slate-200">
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              {t.slug}
+            </label>
+            <div className="flex gap-2">
+              <div className="flex-1 relative">
+                <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                  <Link className="w-4 h-4 text-slate-400" />
+                </div>
+                <input
+                  type="text"
+                  value={(formData.slug as string) || ''}
+                  onChange={(e) => handleChange('slug', e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, ''))}
+                  className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 font-mono text-sm"
+                  placeholder="tour-name-slug"
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  const nameEn = formData.name_en as string;
+                  const nameRu = formData.name as string;
+                  const baseName = nameEn || nameRu || '';
+                  if (baseName) {
+                    const newSlug = generateSlug(baseName);
+                    handleChange('slug', newSlug);
+                  }
+                }}
+                className="px-3 py-2 bg-slate-100 text-slate-700 rounded-lg hover:bg-slate-200 transition-colors flex items-center gap-2"
+                title={t.generateSlug}
+              >
+                <RefreshCw className="w-4 h-4" />
+                <span className="hidden sm:inline">{t.generateSlug}</span>
+              </button>
+            </div>
+            <p className="text-xs text-slate-500 mt-1">{t.slugHint}</p>
+            {formData.slug && (
+              <p className="text-xs text-blue-600 mt-2 flex items-center gap-1">
+                <span className="font-medium">{t.slugUrl}:</span>
+                <span className="font-mono">/tour/{formData.slug as string}</span>
+              </p>
+            )}
           </div>
         </div>
 

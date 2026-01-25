@@ -171,6 +171,10 @@ interface AdminTranslations {
   selectProduct: string;
   totalPrice: string;
   loading: string;
+  slug: string;
+  slugHint: string;
+  slugUrl: string;
+  generateSlug: string;
 }
 
 const translations: Record<AdminLang, AdminTranslations> = {
@@ -343,6 +347,10 @@ const translations: Record<AdminLang, AdminTranslations> = {
     selectProduct: 'Select Product',
     totalPrice: 'Total Price',
     loading: 'Loading...',
+    slug: 'URL Slug',
+    slugHint: 'Auto-generated from English name. Used in the tour URL.',
+    slugUrl: 'Tour URL',
+    generateSlug: 'Generate Slug',
   },
   ru: {
     adminPanel: 'Панель администратора',
@@ -513,6 +521,10 @@ const translations: Record<AdminLang, AdminTranslations> = {
     selectProduct: 'Выберите продукт',
     totalPrice: 'Общая цена',
     loading: 'Загрузка...',
+    slug: 'URL-слаг',
+    slugHint: 'Автоматически создается из английского названия. Используется в URL тура.',
+    slugUrl: 'URL тура',
+    generateSlug: 'Сгенерировать слаг',
   },
 };
 
