@@ -6,6 +6,11 @@ import { Loader2, Save, CheckCircle, XCircle, X, ChevronDown, ChevronUp } from '
 interface CompanyInfo {
   id: number;
   name: string;
+  phone?: string | null;
+  email?: string | null;
+  google_maps_url?: string | null;
+  google_maps_place_id?: string | null;
+  business_category?: string | null;
   address: string;
   address_en?: string | null;
   address_kk?: string | null;
@@ -14,6 +19,14 @@ interface CompanyInfo {
   address_zh?: string | null;
   address_fr?: string | null;
   address_uz?: string | null;
+  opening_hours?: string | null;
+  opening_hours_en?: string | null;
+  opening_hours_kk?: string | null;
+  opening_hours_ky?: string | null;
+  opening_hours_az?: string | null;
+  opening_hours_zh?: string | null;
+  opening_hours_fr?: string | null;
+  opening_hours_uz?: string | null;
   license_info: string;
   license_info_en?: string | null;
   license_info_kk?: string | null;
@@ -128,6 +141,7 @@ export function CompanyInfoEditor() {
 
     const isExpanded = expandedSections.includes(lang.code);
     const addressField = lang.suffix ? `address${lang.suffix}` as keyof CompanyInfo : 'address';
+    const openingHoursField = lang.suffix ? `opening_hours${lang.suffix}` as keyof CompanyInfo : 'opening_hours';
     const licenseField = lang.suffix ? `license_info${lang.suffix}` as keyof CompanyInfo : 'license_info';
     const insuranceField = lang.suffix ? `insurance_info${lang.suffix}` as keyof CompanyInfo : 'insurance_info';
     const paymentField = lang.suffix ? `payment_info${lang.suffix}` as keyof CompanyInfo : 'payment_info';
@@ -159,6 +173,19 @@ export function CompanyInfoEditor() {
                 rows={3}
                 className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 resize-y min-h-[72px]"
                 placeholder={`Company address in ${lang.label}`}
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                Opening Hours
+              </label>
+              <textarea
+                value={(companyInfo[openingHoursField] as string) || ''}
+                onChange={(e) => handleChange(openingHoursField, e.target.value)}
+                rows={3}
+                className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 resize-y min-h-[72px]"
+                placeholder={`Opening hours in ${lang.label} (e.g., Mon-Sun: 08:00 - 22:00)`}
               />
             </div>
 
@@ -261,6 +288,77 @@ export function CompanyInfoEditor() {
           className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
           placeholder="Company name"
         />
+      </div>
+
+      <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+        <div className="mb-4">
+          <h2 className="text-lg font-semibold text-slate-900">Business Information (SEO)</h2>
+          <p className="text-sm text-slate-600">Contact details for the Contact page and Schema.org markup. Must match Google Maps exactly.</p>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2">
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              Phone Number
+            </label>
+            <input
+              type="tel"
+              value={companyInfo.phone || ''}
+              onChange={(e) => handleChange('phone', e.target.value)}
+              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+              placeholder="+66 XX XXX XXXX"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              Email Address
+            </label>
+            <input
+              type="email"
+              value={companyInfo.email || ''}
+              onChange={(e) => handleChange('email', e.target.value)}
+              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+              placeholder="contact@example.com"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              Business Category
+            </label>
+            <input
+              type="text"
+              value={companyInfo.business_category || ''}
+              onChange={(e) => handleChange('business_category', e.target.value)}
+              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+              placeholder="Travel Agency"
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              Google Place ID
+            </label>
+            <input
+              type="text"
+              value={companyInfo.google_maps_place_id || ''}
+              onChange={(e) => handleChange('google_maps_place_id', e.target.value)}
+              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+              placeholder="ChIJ..."
+            />
+            <p className="text-xs text-slate-500 mt-1">Find at: Google Maps &gt; Share &gt; Embed &gt; Copy Place ID from URL</p>
+          </div>
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              Google Maps Embed URL
+            </label>
+            <input
+              type="url"
+              value={companyInfo.google_maps_url || ''}
+              onChange={(e) => handleChange('google_maps_url', e.target.value)}
+              className="w-full px-4 py-2 border border-slate-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500"
+              placeholder="https://www.google.com/maps/embed?pb=..."
+            />
+            <p className="text-xs text-slate-500 mt-1">Google Maps &gt; Share &gt; Embed a map &gt; Copy the src URL from iframe</p>
+          </div>
+        </div>
       </div>
 
       <div className="bg-white rounded-xl shadow-sm border border-slate-200 p-6">

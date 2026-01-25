@@ -14,6 +14,7 @@ import { PrivacyPolicy } from './pages/PrivacyPolicy';
 import { TermsAndConditions } from './pages/TermsAndConditions';
 import { RefundPolicy } from './pages/RefundPolicy';
 import { CookiePolicy } from './pages/CookiePolicy';
+import { ContactPage } from './pages/ContactPage';
 import { TourPage } from './pages/TourPage';
 import { Product, supabase } from './lib/supabase';
 import { Loader2, Search, X } from 'lucide-react';
@@ -360,6 +361,7 @@ function App() {
   const path = useRoute();
   const isAdmin = path.startsWith('/admin');
   const isPolicyPage = ['/privacy-policy', '/terms-and-conditions', '/refund-policy', '/cookie-policy'].includes(path);
+  const isContactPage = path === '/contact';
   const tourRoute = parseTourRoute(path);
 
   if (isAdmin) {
@@ -374,6 +376,15 @@ function App() {
     return (
       <LanguageProvider>
         <PolicyPage path={path} />
+        <CookieConsent />
+      </LanguageProvider>
+    );
+  }
+
+  if (isContactPage) {
+    return (
+      <LanguageProvider>
+        <ContactPage />
         <CookieConsent />
       </LanguageProvider>
     );

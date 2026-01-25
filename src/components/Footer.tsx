@@ -131,7 +131,8 @@ export function Footer() {
           privacyPolicy: 'Privacy Policy',
           termsAndConditions: 'Terms & Conditions',
           refundPolicy: 'Refund Policy',
-          cookiePolicy: 'Cookie Policy'
+          cookiePolicy: 'Cookie Policy',
+          contact: 'Contact Us'
         };
       case 'az':
         return {
@@ -143,7 +144,8 @@ export function Footer() {
           privacyPolicy: 'Gizlilik Siyaseti',
           termsAndConditions: 'Şərtlər',
           refundPolicy: 'Geri Ödeme',
-          cookiePolicy: 'Cookie Siyaseti'
+          cookiePolicy: 'Cookie Siyaseti',
+          contact: 'Bizimlə Əlaqə'
         };
       case 'kk':
         return {
@@ -155,7 +157,8 @@ export function Footer() {
           privacyPolicy: 'Құпиялылық саясаты',
           termsAndConditions: 'Шарттар',
           refundPolicy: 'Қайтару саясаты',
-          cookiePolicy: 'Cookie саясаты'
+          cookiePolicy: 'Cookie саясаты',
+          contact: 'Байланыс'
         };
       case 'ky':
         return {
@@ -167,7 +170,8 @@ export function Footer() {
           privacyPolicy: 'Купуялык саясаты',
           termsAndConditions: 'Шарттар',
           refundPolicy: 'Кайтаруу саясаты',
-          cookiePolicy: 'Cookie саясаты'
+          cookiePolicy: 'Cookie саясаты',
+          contact: 'Байланыш'
         };
       case 'zh':
         return {
@@ -179,7 +183,8 @@ export function Footer() {
           privacyPolicy: '隐私政策',
           termsAndConditions: '条款和条件',
           refundPolicy: '退款政策',
-          cookiePolicy: 'Cookie 政策'
+          cookiePolicy: 'Cookie 政策',
+          contact: '联系我们'
         };
       case 'fr':
         return {
@@ -191,7 +196,8 @@ export function Footer() {
           privacyPolicy: 'Politique de confidentialité',
           termsAndConditions: 'Conditions générales',
           refundPolicy: 'Politique de remboursement',
-          cookiePolicy: 'Politique des cookies'
+          cookiePolicy: 'Politique des cookies',
+          contact: 'Contactez-nous'
         };
       case 'uz':
         return {
@@ -203,7 +209,8 @@ export function Footer() {
           privacyPolicy: 'Maxfiylik siyosati',
           termsAndConditions: 'Shartlar',
           refundPolicy: 'Qaytarish siyosati',
-          cookiePolicy: 'Cookie siyosati'
+          cookiePolicy: 'Cookie siyosati',
+          contact: 'Biz bilan bog\'laning'
         };
       default:
         return {
@@ -215,7 +222,8 @@ export function Footer() {
           privacyPolicy: 'Политика конфиденциальности',
           termsAndConditions: 'Условия использования',
           refundPolicy: 'Политика возврата',
-          cookiePolicy: 'Политика cookie'
+          cookiePolicy: 'Политика cookie',
+          contact: 'Контакты'
         };
     }
   };
@@ -275,6 +283,18 @@ export function Footer() {
 
         <div className="border-t border-gray-800 mt-8 pt-8">
           <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 mb-4">
+            <a
+              href="/contact"
+              onClick={(e) => {
+                e.preventDefault();
+                window.history.pushState({}, '', '/contact');
+                window.dispatchEvent(new PopStateEvent('popstate'));
+              }}
+              className="text-sm text-gray-500 hover:text-gray-300 transition-colors"
+            >
+              {headings.contact}
+            </a>
+            <span className="text-gray-700 hidden sm:inline">|</span>
             <a
               href="/privacy-policy"
               onClick={(e) => {
