@@ -416,15 +416,7 @@ export function TourPage({ slug, showBooking = false }: TourPageProps) {
       <Header />
 
       <main className="max-w-6xl mx-auto px-4 py-6 md:py-10">
-        <button
-          onClick={goBack}
-          className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6 transition"
-        >
-          <ArrowLeft className="h-5 w-5" />
-          <span>{showBookingForm ? t('booking.back') : (t('common.backToHome') || 'Back to Tours')}</span>
-        </button>
-
-        <div className="bg-white rounded-2xl shadow-lg overflow-hidden">
+        <div className="bg-white rounded-2xl shadow-lg overflow-hidden relative">
           <div
             className="relative h-64 md:h-[500px]"
             onTouchStart={handleTouchStart}
@@ -440,6 +432,14 @@ export function TourPage({ slug, showBooking = false }: TourPageProps) {
                 setIsLightboxOpen(true);
               }}
             />
+
+            <button
+              onClick={goBack}
+              className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm rounded-full p-2.5 hover:bg-white transition shadow-lg z-10"
+              aria-label={t('common.backToHome') || 'Back'}
+            >
+              <ArrowLeft className="h-5 w-5 text-gray-700" />
+            </button>
 
             {images.length > 1 && (
               <>
@@ -468,7 +468,7 @@ export function TourPage({ slug, showBooking = false }: TourPageProps) {
                   ))}
                 </div>
 
-                <div className="absolute top-4 left-4 bg-black/60 text-white px-3 py-1.5 rounded-full text-sm">
+                <div className="absolute top-4 left-14 bg-black/60 text-white px-3 py-1.5 rounded-full text-sm">
                   {currentImageIndex + 1} / {images.length}
                 </div>
               </>
