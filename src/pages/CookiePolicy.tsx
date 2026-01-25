@@ -6,7 +6,14 @@ export function CookiePolicy() {
   const isRussian = language === 'ru';
 
   return (
-    <PolicyLayout title={{ en: 'Cookie Policy', ru: 'Политика cookie' }}>
+    <PolicyLayout
+      title={{ en: 'Cookie Policy', ru: 'Политика cookie' }}
+      description={{
+        en: 'Cookie Policy for Phuket Vibe Tours. Learn how we use cookies and Google Analytics on our website. You control your cookie preferences.',
+        ru: 'Политика cookie Phuket Vibe Tours. Узнайте, как мы используем cookie и Google Analytics на нашем сайте. Вы контролируете свои настройки cookie.'
+      }}
+      path="/cookie-policy"
+    >
       {isRussian ? <RussianContent /> : <EnglishContent />}
     </PolicyLayout>
   );

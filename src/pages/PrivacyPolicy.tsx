@@ -6,7 +6,14 @@ export function PrivacyPolicy() {
   const isRussian = language === 'ru';
 
   return (
-    <PolicyLayout title={{ en: 'Privacy Policy', ru: 'Политика конфиденциальности' }}>
+    <PolicyLayout
+      title={{ en: 'Privacy Policy', ru: 'Политика конфиденциальности' }}
+      description={{
+        en: 'Privacy Policy for Phuket Vibe Tours. Learn how we collect, use, and protect your personal information when booking tours in Phuket, Thailand.',
+        ru: 'Политика конфиденциальности Phuket Vibe Tours. Узнайте, как мы собираем, используем и защищаем вашу личную информацию при бронировании туров на Пхукете.'
+      }}
+      path="/privacy-policy"
+    >
       {isRussian ? <RussianContent /> : <EnglishContent />}
     </PolicyLayout>
   );

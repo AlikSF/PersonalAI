@@ -1,14 +1,60 @@
+import { useEffect } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
 interface PolicyLayoutProps {
   title: { en: string; ru: string };
+  description: { en: string; ru: string };
+  path: string;
   children: React.ReactNode;
 }
 
-export function PolicyLayout({ title, children }: PolicyLayoutProps) {
+function setMeta(attr: string, key: string, value: string) {
+  let meta = document.querySelector(`meta[${attr}="${key}"]`);
+  if (!meta) {
+    meta = document.createElement('meta');
+    meta.setAttribute(attr, key);
+    document.head.appendChild(meta);
+  }
+  meta.setAttribute('content', value);
+}
+
+function setLink(rel: string, href: string) {
+  let link = document.querySelector(`link[rel="${rel}"]`) as HTMLLinkElement;
+  if (!link) {
+    link = document.createElement('link');
+    link.setAttribute('rel', rel);
+    document.head.appendChild(link);
+  }
+  link.setAttribute('href', href);
+}
+
+export function PolicyLayout({ title, description, path, children }: PolicyLayoutProps) {
   const { language } = useLanguage();
   const isRussian = language === 'ru';
+  const SITE_URL = 'https://phuketvibe.com';
+
+  useEffect(() => {
+    const pageTitle = isRussian ? title.ru : title.en;
+    const pageDesc = isRussian ? description.ru : description.en;
+    const canonicalUrl = `${SITE_URL}${path}`;
+
+    document.title = `${pageTitle} | Phuket Vibe Tours`;
+
+    setMeta('name', 'description', pageDesc);
+    setMeta('name', 'robots', 'index, follow');
+
+    setMeta('property', 'og:title', `${pageTitle} | Phuket Vibe Tours`);
+    setMeta('property', 'og:description', pageDesc);
+    setMeta('property', 'og:type', 'website');
+    setMeta('property', 'og:url', canonicalUrl);
+
+    setLink('canonical', canonicalUrl);
+
+    return () => {
+      document.title = 'Phuket Tours & Excursions | Phi Phi, Similan Islands | Phuket Vibe Tours';
+    };
+  }, [isRussian, title, description, path]);
 
   const handleBack = () => {
     window.history.pushState({}, '', '/');

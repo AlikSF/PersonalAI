@@ -6,7 +6,14 @@ export function TermsAndConditions() {
   const isRussian = language === 'ru';
 
   return (
-    <PolicyLayout title={{ en: 'Terms and Conditions', ru: 'Условия использования' }}>
+    <PolicyLayout
+      title={{ en: 'Terms and Conditions', ru: 'Условия использования' }}
+      description={{
+        en: 'Terms and Conditions for Phuket Vibe Tours. Read our booking policies, cancellation terms, and customer responsibilities for tours in Phuket, Thailand.',
+        ru: 'Условия использования Phuket Vibe Tours. Ознакомьтесь с правилами бронирования, условиями отмены и обязанностями клиентов для туров на Пхукете.'
+      }}
+      path="/terms-and-conditions"
+    >
       {isRussian ? <RussianContent /> : <EnglishContent />}
     </PolicyLayout>
   );

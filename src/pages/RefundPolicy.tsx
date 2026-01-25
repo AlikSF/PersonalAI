@@ -6,7 +6,14 @@ export function RefundPolicy() {
   const isRussian = language === 'ru';
 
   return (
-    <PolicyLayout title={{ en: 'Refund Policy', ru: 'Политика возврата' }}>
+    <PolicyLayout
+      title={{ en: 'Refund Policy', ru: 'Политика возврата' }}
+      description={{
+        en: 'Refund Policy for Phuket Vibe Tours. Full refund available for cancellations 24+ hours before tour. Learn about our cancellation and refund process.',
+        ru: 'Политика возврата Phuket Vibe Tours. Полный возврат при отмене за 24+ часа до тура. Узнайте о нашем процессе отмены и возврата средств.'
+      }}
+      path="/refund-policy"
+    >
       {isRussian ? <RussianContent /> : <EnglishContent />}
     </PolicyLayout>
   );

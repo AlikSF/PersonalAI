@@ -15,95 +15,141 @@ interface TourPageProps {
   showBooking?: boolean;
 }
 
+function setMeta(attr: string, key: string, value: string, isProperty = false) {
+  let meta = document.querySelector(`meta[${attr}="${key}"]`);
+  if (!meta) {
+    meta = document.createElement('meta');
+    meta.setAttribute(attr, key);
+    document.head.appendChild(meta);
+  }
+  meta.setAttribute('content', value);
+}
+
+function setLink(rel: string, href: string) {
+  let link = document.querySelector(`link[rel="${rel}"]`) as HTMLLinkElement;
+  if (!link) {
+    link = document.createElement('link');
+    link.setAttribute('rel', rel);
+    document.head.appendChild(link);
+  }
+  link.setAttribute('href', href);
+}
+
 function TourSEOHead({ product, language }: { product: Product; language: string }) {
   useEffect(() => {
+    const SITE_URL = 'https://phuketvibe.com';
     const name = getDisplayName(product, language as any);
-    const description = getDisplayDescription(product, language as any).substring(0, 160);
+    const location = getDisplayLocation(product, language as any);
+    const rawDescription = getDisplayDescription(product, language as any);
+    const description = rawDescription.length > 155 ? rawDescription.substring(0, 155) + '...' : rawDescription;
     const image = product.images?.[0] || product.image_url;
+    const slug = product.slug || product.id;
+    const canonicalUrl = `${SITE_URL}/tour/${slug}`;
 
-    document.title = `${name} | Phuket Vibe Tours`;
+    const seoTitle = `${name} | Phuket Tour | Book Now | Phuket Vibe Tours`;
+    const seoDescription = `${name} in ${location}. ${description} Book your Phuket adventure today!`;
 
-    let metaDesc = document.querySelector('meta[name="description"]');
-    if (!metaDesc) {
-      metaDesc = document.createElement('meta');
-      metaDesc.setAttribute('name', 'description');
-      document.head.appendChild(metaDesc);
-    }
-    metaDesc.setAttribute('content', description);
+    document.title = seoTitle;
 
-    let ogTitle = document.querySelector('meta[property="og:title"]');
-    if (!ogTitle) {
-      ogTitle = document.createElement('meta');
-      ogTitle.setAttribute('property', 'og:title');
-      document.head.appendChild(ogTitle);
-    }
-    ogTitle.setAttribute('content', name);
+    setMeta('name', 'description', seoDescription.substring(0, 160));
+    setMeta('name', 'robots', 'index, follow');
 
-    let ogDesc = document.querySelector('meta[property="og:description"]');
-    if (!ogDesc) {
-      ogDesc = document.createElement('meta');
-      ogDesc.setAttribute('property', 'og:description');
-      document.head.appendChild(ogDesc);
-    }
-    ogDesc.setAttribute('content', description);
+    setMeta('property', 'og:title', seoTitle);
+    setMeta('property', 'og:description', seoDescription.substring(0, 160));
+    setMeta('property', 'og:type', 'product');
+    setMeta('property', 'og:url', canonicalUrl);
+    setMeta('property', 'og:image', image);
+    setMeta('property', 'og:site_name', 'Phuket Vibe Tours');
 
-    let ogImage = document.querySelector('meta[property="og:image"]');
-    if (!ogImage) {
-      ogImage = document.createElement('meta');
-      ogImage.setAttribute('property', 'og:image');
-      document.head.appendChild(ogImage);
-    }
-    ogImage.setAttribute('content', image);
+    setMeta('name', 'twitter:card', 'summary_large_image');
+    setMeta('name', 'twitter:title', seoTitle);
+    setMeta('name', 'twitter:description', seoDescription.substring(0, 160));
+    setMeta('name', 'twitter:image', image);
 
-    let ogUrl = document.querySelector('meta[property="og:url"]');
-    if (!ogUrl) {
-      ogUrl = document.createElement('meta');
-      ogUrl.setAttribute('property', 'og:url');
-      document.head.appendChild(ogUrl);
-    }
-    ogUrl.setAttribute('content', window.location.href);
+    setLink('canonical', canonicalUrl);
 
-    const schemaScript = document.createElement('script');
-    schemaScript.type = 'application/ld+json';
-    schemaScript.id = 'tour-schema';
-    schemaScript.textContent = JSON.stringify({
+    const features = getDisplayFeatures(product, language as any);
+
+    const tourSchema = {
       "@context": "https://schema.org",
       "@type": "TouristTrip",
+      "@id": canonicalUrl,
       "name": name,
-      "description": description,
-      "image": product.images || [product.image_url],
-      "touristType": "Adventure tourism",
+      "description": rawDescription,
+      "image": product.images && product.images.length > 0 ? product.images : [product.image_url],
+      "touristType": ["Adventure tourism", "Beach tourism"],
       "offers": {
         "@type": "Offer",
         "price": product.price_per_day,
         "priceCurrency": "THB",
-        "availability": "https://schema.org/InStock"
+        "availability": "https://schema.org/InStock",
+        "url": `${canonicalUrl}/book`,
+        "validFrom": new Date().toISOString().split('T')[0]
       },
       "provider": {
-        "@type": "TourOperator",
+        "@type": "TravelAgency",
+        "@id": `${SITE_URL}/#organization`,
         "name": "PhuketVibe",
-        "url": "https://phuketvibe.com"
+        "url": SITE_URL
       },
       "itinerary": {
         "@type": "ItemList",
-        "itemListElement": getDisplayFeatures(product, language as any).map((feature, index) => ({
+        "itemListElement": features.map((feature, index) => ({
           "@type": "ListItem",
           "position": index + 1,
           "name": feature
         }))
       }
-    });
+    };
 
-    const existingSchema = document.getElementById('tour-schema');
-    if (existingSchema) {
-      existingSchema.remove();
-    }
-    document.head.appendChild(schemaScript);
+    const breadcrumbSchema = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": SITE_URL
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Tours",
+          "item": `${SITE_URL}/#rentals`
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": name,
+          "item": canonicalUrl
+        }
+      ]
+    };
+
+    const existingTourSchema = document.getElementById('tour-schema');
+    if (existingTourSchema) existingTourSchema.remove();
+    const existingBreadcrumb = document.getElementById('breadcrumb-schema');
+    if (existingBreadcrumb) existingBreadcrumb.remove();
+
+    const tourScript = document.createElement('script');
+    tourScript.type = 'application/ld+json';
+    tourScript.id = 'tour-schema';
+    tourScript.textContent = JSON.stringify(tourSchema);
+    document.head.appendChild(tourScript);
+
+    const breadcrumbScript = document.createElement('script');
+    breadcrumbScript.type = 'application/ld+json';
+    breadcrumbScript.id = 'breadcrumb-schema';
+    breadcrumbScript.textContent = JSON.stringify(breadcrumbSchema);
+    document.head.appendChild(breadcrumbScript);
 
     return () => {
-      document.title = 'Phuket Vibe Tours';
-      const schema = document.getElementById('tour-schema');
-      if (schema) schema.remove();
+      document.title = 'Phuket Tours & Excursions | Phi Phi, Similan Islands | Phuket Vibe Tours';
+      const tourSchemaEl = document.getElementById('tour-schema');
+      if (tourSchemaEl) tourSchemaEl.remove();
+      const breadcrumbEl = document.getElementById('breadcrumb-schema');
+      if (breadcrumbEl) breadcrumbEl.remove();
     };
   }, [product, language]);
 
