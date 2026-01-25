@@ -102,6 +102,56 @@ function TourSEOHead({ product, language }: { product: Product; language: string
       }
     };
 
+    const productSchema = {
+      "@context": "https://schema.org",
+      "@type": "Product",
+      "@id": `${canonicalUrl}#product`,
+      "name": name,
+      "description": rawDescription,
+      "image": product.images && product.images.length > 0 ? product.images : [product.image_url],
+      "brand": {
+        "@type": "Brand",
+        "name": "PhuketVibe"
+      },
+      "offers": {
+        "@type": "Offer",
+        "price": product.price_per_day,
+        "priceCurrency": "THB",
+        "availability": "https://schema.org/InStock",
+        "url": `${canonicalUrl}/book`,
+        "priceValidUntil": new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
+        "seller": {
+          "@type": "Organization",
+          "@id": `${SITE_URL}/#organization`,
+          "name": "PhuketVibe"
+        }
+      },
+      "category": "Tours & Excursions",
+      "areaServed": {
+        "@type": "Place",
+        "name": "Phuket, Thailand",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Phuket",
+          "addressCountry": "TH"
+        }
+      },
+      "provider": {
+        "@type": "TravelAgency",
+        "@id": `${SITE_URL}/#organization`,
+        "name": "PhuketVibe",
+        "url": SITE_URL,
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "105 Phangmuang Sai Kor Rd",
+          "addressLocality": "Patong",
+          "addressRegion": "Phuket",
+          "postalCode": "83150",
+          "addressCountry": "TH"
+        }
+      }
+    };
+
     const breadcrumbSchema = {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
@@ -129,6 +179,8 @@ function TourSEOHead({ product, language }: { product: Product; language: string
 
     const existingTourSchema = document.getElementById('tour-schema');
     if (existingTourSchema) existingTourSchema.remove();
+    const existingProductSchema = document.getElementById('product-schema');
+    if (existingProductSchema) existingProductSchema.remove();
     const existingBreadcrumb = document.getElementById('breadcrumb-schema');
     if (existingBreadcrumb) existingBreadcrumb.remove();
 
@@ -137,6 +189,12 @@ function TourSEOHead({ product, language }: { product: Product; language: string
     tourScript.id = 'tour-schema';
     tourScript.textContent = JSON.stringify(tourSchema);
     document.head.appendChild(tourScript);
+
+    const productScript = document.createElement('script');
+    productScript.type = 'application/ld+json';
+    productScript.id = 'product-schema';
+    productScript.textContent = JSON.stringify(productSchema);
+    document.head.appendChild(productScript);
 
     const breadcrumbScript = document.createElement('script');
     breadcrumbScript.type = 'application/ld+json';
@@ -148,6 +206,8 @@ function TourSEOHead({ product, language }: { product: Product; language: string
       document.title = 'Phuket Tours & Excursions | Phi Phi, Similan Islands | Phuket Vibe Tours';
       const tourSchemaEl = document.getElementById('tour-schema');
       if (tourSchemaEl) tourSchemaEl.remove();
+      const productSchemaEl = document.getElementById('product-schema');
+      if (productSchemaEl) productSchemaEl.remove();
       const breadcrumbEl = document.getElementById('breadcrumb-schema');
       if (breadcrumbEl) breadcrumbEl.remove();
     };
