@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { MapPin, Calendar, ChevronLeft, ChevronRight, MessageCircle, User, Minus, Plus, ArrowLeft, Loader2 } from 'lucide-react';
+import { MapPin, Calendar, ChevronLeft, ChevronRight, MessageCircle, User, Minus, Plus, ArrowLeft, Loader2, X } from 'lucide-react';
 import { Product, supabase } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
 import { Lightbox } from '../components/Lightbox';
@@ -580,10 +580,17 @@ export function TourPage({ slug, showBooking = false }: TourPageProps) {
               </>
             )}
 
-            <div className="absolute top-4 right-4">
+            <div className="absolute top-4 right-4 flex items-center gap-2">
               <span className="px-4 py-2 rounded-full text-sm font-semibold bg-white text-gray-700 shadow-lg">
                 {getDisplayCategory(product, language, t)}
               </span>
+              <button
+                onClick={goBack}
+                className="w-9 h-9 flex items-center justify-center bg-white/90 hover:bg-white rounded-full shadow-lg transition"
+                aria-label="Close"
+              >
+                <X className="h-5 w-5 text-gray-700" />
+              </button>
             </div>
           </div>
 
