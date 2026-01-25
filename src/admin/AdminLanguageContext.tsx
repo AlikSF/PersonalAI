@@ -175,6 +175,17 @@ interface AdminTranslations {
   slugHint: string;
   slugUrl: string;
   generateSlug: string;
+  view: string;
+  companyInfo: string;
+  editablePrice: string;
+  address: string;
+  license: string;
+  insurance: string;
+  payment: string;
+  companyName: string;
+  editMessage: string;
+  telegramSent: string;
+  save: string;
 }
 
 const translations: Record<AdminLang, AdminTranslations> = {
@@ -351,6 +362,17 @@ const translations: Record<AdminLang, AdminTranslations> = {
     slugHint: 'Auto-generated from English name. Used in the tour URL.',
     slugUrl: 'Tour URL',
     generateSlug: 'Generate Slug',
+    view: 'View',
+    companyInfo: 'Company Info',
+    editablePrice: 'You can edit this price to add extras or adjust for custom pricing',
+    address: 'Address',
+    license: 'License Info',
+    insurance: 'Insurance Info',
+    payment: 'Payment Info',
+    companyName: 'Company Name',
+    editMessage: 'Edit Message',
+    telegramSent: 'Telegram Sent',
+    save: 'Save',
   },
   ru: {
     adminPanel: 'Панель администратора',
@@ -525,6 +547,17 @@ const translations: Record<AdminLang, AdminTranslations> = {
     slugHint: 'Автоматически создается из английского названия. Используется в URL тура.',
     slugUrl: 'URL тура',
     generateSlug: 'Сгенерировать слаг',
+    view: 'Просмотр',
+    companyInfo: 'Информация о компании',
+    editablePrice: 'Вы можете изменить эту цену для добавления дополнительных услуг или индивидуального ценообразования',
+    address: 'Адрес',
+    license: 'Информация о лицензии',
+    insurance: 'Информация о страховании',
+    payment: 'Информация об оплате',
+    companyName: 'Название компании',
+    editMessage: 'Редактировать сообщение',
+    telegramSent: 'Telegram отправлен',
+    save: 'Сохранить',
   },
 };
 

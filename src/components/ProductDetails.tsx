@@ -87,7 +87,7 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
       return;
     }
 
-    const { name, phone, dialCode, countryCode, tourDate, adults, children } = formData;
+    const { name, phone, dialCode, tourDate, adults, children } = formData;
 
     const totalPrice = product.price_per_day;
     const displayName = getDisplayName(product, language);

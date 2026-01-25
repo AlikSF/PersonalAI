@@ -117,7 +117,7 @@ export function ContactForm() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="bg-white rounded-xl shadow-lg p-4 md:p-8">
+        <form onSubmit={(e) => e.preventDefault()} className="bg-white rounded-xl shadow-lg p-4 md:p-8">
           <div className="space-y-4 md:space-y-6">
             <div>
               <label className="block text-xs md:text-sm font-medium text-gray-700 mb-2">

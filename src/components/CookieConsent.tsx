@@ -7,13 +7,6 @@ const COOKIE_CONSENT_KEY = 'cookie_consent';
 
 type ConsentStatus = 'accepted' | 'rejected' | null;
 
-declare global {
-  interface Window {
-    dataLayer: unknown[];
-    gtag: (...args: unknown[]) => void;
-  }
-}
-
 function loadGA4() {
   if (document.querySelector(`script[src*="googletagmanager.com/gtag/js?id=${GA4_ID}"]`)) {
     return;

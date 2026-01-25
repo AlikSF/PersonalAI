@@ -15,7 +15,7 @@ interface TourPageProps {
   showBooking?: boolean;
 }
 
-function setMeta(attr: string, key: string, value: string, isProperty = false) {
+function setMeta(attr: string, key: string, value: string, _isProperty = false) {
   let meta = document.querySelector(`meta[${attr}="${key}"]`);
   if (!meta) {
     meta = document.createElement('meta');

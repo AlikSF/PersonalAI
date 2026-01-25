@@ -778,7 +778,9 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, [language]);
 
   const t = useCallback((key: string): string => {
-    return translations[language][key] || translations['ru'][key] || key;
+    const langTranslations = translations[language] as Record<string, string>;
+    const ruTranslations = translations['ru'] as Record<string, string>;
+    return langTranslations[key] || ruTranslations[key] || key;
   }, [language]);
 
   const value = useMemo(() => ({ language, setLanguage, t }), [language, t]);
