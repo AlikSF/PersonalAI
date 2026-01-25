@@ -38,6 +38,19 @@ function AppContent() {
   }, []);
 
   useEffect(() => {
+    if (!loading && products.length > 0) {
+      const savedPosition = sessionStorage.getItem('scrollPosition');
+      if (savedPosition) {
+        const position = parseInt(savedPosition, 10);
+        sessionStorage.removeItem('scrollPosition');
+        requestAnimationFrame(() => {
+          window.scrollTo(0, position);
+        });
+      }
+    }
+  }, [loading, products.length]);
+
+  useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearchQuery(searchQuery);
     }, 300);

@@ -62,6 +62,7 @@ function ProductCardComponent({ product, onViewDetails, eager = false, useUrlNav
   const handleClick = (e: React.MouseEvent) => {
     if (useUrlNavigation) {
       e.preventDefault();
+      sessionStorage.setItem('scrollPosition', window.scrollY.toString());
       const tourUrl = generateTourUrl(product.slug, product.id);
       window.history.pushState(null, '', tourUrl);
       window.dispatchEvent(new PopStateEvent('popstate'));
