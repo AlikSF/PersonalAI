@@ -10,6 +10,10 @@ import { ContactForm } from './components/ContactForm';
 import { Footer } from './components/Footer';
 import { FloatingWhatsAppButton } from './components/FloatingWhatsAppButton';
 import { CookieConsent } from './components/CookieConsent';
+import { PrivacyPolicy } from './pages/PrivacyPolicy';
+import { TermsAndConditions } from './pages/TermsAndConditions';
+import { RefundPolicy } from './pages/RefundPolicy';
+import { CookiePolicy } from './pages/CookiePolicy';
 import { Product, supabase } from './lib/supabase';
 import { Loader2, Search, X } from 'lucide-react';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
@@ -309,15 +313,40 @@ function useRoute() {
   return path;
 }
 
+function PolicyPage({ path }: { path: string }) {
+  switch (path) {
+    case '/privacy-policy':
+      return <PrivacyPolicy />;
+    case '/terms-and-conditions':
+      return <TermsAndConditions />;
+    case '/refund-policy':
+      return <RefundPolicy />;
+    case '/cookie-policy':
+      return <CookiePolicy />;
+    default:
+      return null;
+  }
+}
+
 function App() {
   const path = useRoute();
   const isAdmin = path.startsWith('/admin');
+  const isPolicyPage = ['/privacy-policy', '/terms-and-conditions', '/refund-policy', '/cookie-policy'].includes(path);
 
   if (isAdmin) {
     return (
       <AuthProvider>
         <AdminRouter />
       </AuthProvider>
+    );
+  }
+
+  if (isPolicyPage) {
+    return (
+      <LanguageProvider>
+        <PolicyPage path={path} />
+        <CookieConsent />
+      </LanguageProvider>
     );
   }
 

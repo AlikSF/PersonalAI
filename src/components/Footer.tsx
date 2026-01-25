@@ -119,7 +119,6 @@ export function Footer() {
     companyInfo.payment_info_uz
   );
 
-  // Translations for section headings
   const getHeadings = () => {
     switch (language) {
       case 'en':
@@ -128,7 +127,11 @@ export function Footer() {
           insurance: 'Insurance',
           payment: 'Payment Methods',
           rights: 'All rights reserved.',
-          cookieSettings: 'Cookie Settings'
+          cookieSettings: 'Cookie Settings',
+          privacyPolicy: 'Privacy Policy',
+          termsAndConditions: 'Terms & Conditions',
+          refundPolicy: 'Refund Policy',
+          cookiePolicy: 'Cookie Policy'
         };
       case 'az':
         return {
@@ -136,7 +139,11 @@ export function Footer() {
           insurance: 'Sığorta',
           payment: 'Ödəniş üsulları',
           rights: 'Bütün hüquqlar qorunur.',
-          cookieSettings: 'Cookie parametrləri'
+          cookieSettings: 'Cookie parametrləri',
+          privacyPolicy: 'Gizlilik Siyaseti',
+          termsAndConditions: 'Şərtlər',
+          refundPolicy: 'Geri Ödeme',
+          cookiePolicy: 'Cookie Siyaseti'
         };
       case 'kk':
         return {
@@ -144,7 +151,11 @@ export function Footer() {
           insurance: 'Сақтандыру',
           payment: 'Төлем әдістері',
           rights: 'Барлық құқықтар қорғалған.',
-          cookieSettings: 'Cookie параметрлері'
+          cookieSettings: 'Cookie параметрлері',
+          privacyPolicy: 'Құпиялылық саясаты',
+          termsAndConditions: 'Шарттар',
+          refundPolicy: 'Қайтару саясаты',
+          cookiePolicy: 'Cookie саясаты'
         };
       case 'ky':
         return {
@@ -152,7 +163,11 @@ export function Footer() {
           insurance: 'Камсыздандыруу',
           payment: 'Төлөм ыкмалары',
           rights: 'Бардык укуктар корголгон.',
-          cookieSettings: 'Cookie жөндөөлөрү'
+          cookieSettings: 'Cookie жөндөөлөрү',
+          privacyPolicy: 'Купуялык саясаты',
+          termsAndConditions: 'Шарттар',
+          refundPolicy: 'Кайтаруу саясаты',
+          cookiePolicy: 'Cookie саясаты'
         };
       case 'zh':
         return {
@@ -160,7 +175,11 @@ export function Footer() {
           insurance: '保险',
           payment: '支付方式',
           rights: '版权所有。',
-          cookieSettings: 'Cookie 设置'
+          cookieSettings: 'Cookie 设置',
+          privacyPolicy: '隐私政策',
+          termsAndConditions: '条款和条件',
+          refundPolicy: '退款政策',
+          cookiePolicy: 'Cookie 政策'
         };
       case 'fr':
         return {
@@ -168,7 +187,11 @@ export function Footer() {
           insurance: 'Assurance',
           payment: 'Moyens de paiement',
           rights: 'Tous droits réservés.',
-          cookieSettings: 'Paramètres des cookies'
+          cookieSettings: 'Paramètres des cookies',
+          privacyPolicy: 'Politique de confidentialité',
+          termsAndConditions: 'Conditions générales',
+          refundPolicy: 'Politique de remboursement',
+          cookiePolicy: 'Politique des cookies'
         };
       case 'uz':
         return {
@@ -176,7 +199,11 @@ export function Footer() {
           insurance: 'Sug\'urta',
           payment: 'To\'lov usullari',
           rights: 'Barcha huquqlar himoyalangan.',
-          cookieSettings: 'Cookie sozlamalari'
+          cookieSettings: 'Cookie sozlamalari',
+          privacyPolicy: 'Maxfiylik siyosati',
+          termsAndConditions: 'Shartlar',
+          refundPolicy: 'Qaytarish siyosati',
+          cookiePolicy: 'Cookie siyosati'
         };
       default:
         return {
@@ -184,7 +211,11 @@ export function Footer() {
           insurance: 'Страхование',
           payment: 'Способы оплаты',
           rights: 'Все права защищены.',
-          cookieSettings: 'Настройки cookie'
+          cookieSettings: 'Настройки cookie',
+          privacyPolicy: 'Политика конфиденциальности',
+          termsAndConditions: 'Условия использования',
+          refundPolicy: 'Политика возврата',
+          cookiePolicy: 'Политика cookie'
         };
     }
   };
@@ -242,16 +273,66 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center">
-          <p className="text-sm text-gray-400 mb-2">
+        <div className="border-t border-gray-800 mt-8 pt-8">
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 mb-4">
+            <a
+              href="/privacy-policy"
+              onClick={(e) => {
+                e.preventDefault();
+                window.history.pushState({}, '', '/privacy-policy');
+                window.dispatchEvent(new PopStateEvent('popstate'));
+              }}
+              className="text-sm text-gray-500 hover:text-gray-300 transition-colors"
+            >
+              {headings.privacyPolicy}
+            </a>
+            <span className="text-gray-700 hidden sm:inline">|</span>
+            <a
+              href="/terms-and-conditions"
+              onClick={(e) => {
+                e.preventDefault();
+                window.history.pushState({}, '', '/terms-and-conditions');
+                window.dispatchEvent(new PopStateEvent('popstate'));
+              }}
+              className="text-sm text-gray-500 hover:text-gray-300 transition-colors"
+            >
+              {headings.termsAndConditions}
+            </a>
+            <span className="text-gray-700 hidden sm:inline">|</span>
+            <a
+              href="/refund-policy"
+              onClick={(e) => {
+                e.preventDefault();
+                window.history.pushState({}, '', '/refund-policy');
+                window.dispatchEvent(new PopStateEvent('popstate'));
+              }}
+              className="text-sm text-gray-500 hover:text-gray-300 transition-colors"
+            >
+              {headings.refundPolicy}
+            </a>
+            <span className="text-gray-700 hidden sm:inline">|</span>
+            <a
+              href="/cookie-policy"
+              onClick={(e) => {
+                e.preventDefault();
+                window.history.pushState({}, '', '/cookie-policy');
+                window.dispatchEvent(new PopStateEvent('popstate'));
+              }}
+              className="text-sm text-gray-500 hover:text-gray-300 transition-colors"
+            >
+              {headings.cookiePolicy}
+            </a>
+            <span className="text-gray-700 hidden sm:inline">|</span>
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent('openCookieSettings'))}
+              className="text-sm text-gray-500 hover:text-gray-300 transition-colors"
+            >
+              {headings.cookieSettings}
+            </button>
+          </div>
+          <p className="text-sm text-gray-400 text-center">
             &copy; {new Date().getFullYear()} {companyInfo.name}. {headings.rights}
           </p>
-          <button
-            onClick={() => window.dispatchEvent(new CustomEvent('openCookieSettings'))}
-            className="text-sm text-gray-500 hover:text-gray-300 transition-colors underline underline-offset-2"
-          >
-            {headings.cookieSettings}
-          </button>
         </div>
       </div>
     </footer>
