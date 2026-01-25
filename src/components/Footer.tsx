@@ -127,56 +127,64 @@ export function Footer() {
           licenses: 'Licenses & Documents',
           insurance: 'Insurance',
           payment: 'Payment Methods',
-          rights: 'All rights reserved.'
+          rights: 'All rights reserved.',
+          cookieSettings: 'Cookie Settings'
         };
       case 'az':
         return {
           licenses: 'Lisenziyalar və sənədlər',
           insurance: 'Sığorta',
           payment: 'Ödəniş üsulları',
-          rights: 'Bütün hüquqlar qorunur.'
+          rights: 'Bütün hüquqlar qorunur.',
+          cookieSettings: 'Cookie parametrləri'
         };
       case 'kk':
         return {
           licenses: 'Лицензиялар және құжаттар',
           insurance: 'Сақтандыру',
           payment: 'Төлем әдістері',
-          rights: 'Барлық құқықтар қорғалған.'
+          rights: 'Барлық құқықтар қорғалған.',
+          cookieSettings: 'Cookie параметрлері'
         };
       case 'ky':
         return {
           licenses: 'Лицензиялар жана документтер',
           insurance: 'Камсыздандыруу',
           payment: 'Төлөм ыкмалары',
-          rights: 'Бардык укуктар корголгон.'
+          rights: 'Бардык укуктар корголгон.',
+          cookieSettings: 'Cookie жөндөөлөрү'
         };
       case 'zh':
         return {
           licenses: '许可证和文件',
           insurance: '保险',
           payment: '支付方式',
-          rights: '版权所有。'
+          rights: '版权所有。',
+          cookieSettings: 'Cookie 设置'
         };
       case 'fr':
         return {
           licenses: 'Licences et documents',
           insurance: 'Assurance',
           payment: 'Moyens de paiement',
-          rights: 'Tous droits réservés.'
+          rights: 'Tous droits réservés.',
+          cookieSettings: 'Paramètres des cookies'
         };
       case 'uz':
         return {
           licenses: 'Litsenziyalar va hujjatlar',
           insurance: 'Sug\'urta',
           payment: 'To\'lov usullari',
-          rights: 'Barcha huquqlar himoyalangan.'
+          rights: 'Barcha huquqlar himoyalangan.',
+          cookieSettings: 'Cookie sozlamalari'
         };
       default:
         return {
           licenses: 'Лицензии и документы',
           insurance: 'Страхование',
           payment: 'Способы оплаты',
-          rights: 'Все права защищены.'
+          rights: 'Все права защищены.',
+          cookieSettings: 'Настройки cookie'
         };
     }
   };
@@ -235,9 +243,15 @@ export function Footer() {
         </div>
 
         <div className="border-t border-gray-800 mt-8 pt-8 text-center">
-          <p className="text-sm text-gray-400">
+          <p className="text-sm text-gray-400 mb-2">
             &copy; {new Date().getFullYear()} {companyInfo.name}. {headings.rights}
           </p>
+          <button
+            onClick={() => window.dispatchEvent(new CustomEvent('openCookieSettings'))}
+            className="text-sm text-gray-500 hover:text-gray-300 transition-colors underline underline-offset-2"
+          >
+            {headings.cookieSettings}
+          </button>
         </div>
       </div>
     </footer>
