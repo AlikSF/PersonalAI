@@ -23,6 +23,7 @@ export interface Product {
   is_active: boolean;
   created_at: string;
   updated_at: string;
+  slug?: string | null;
   name_en?: string | null;
   description_en?: string | null;
   location_en?: string | null;

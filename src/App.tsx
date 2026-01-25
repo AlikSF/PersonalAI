@@ -14,6 +14,7 @@ import { PrivacyPolicy } from './pages/PrivacyPolicy';
 import { TermsAndConditions } from './pages/TermsAndConditions';
 import { RefundPolicy } from './pages/RefundPolicy';
 import { CookiePolicy } from './pages/CookiePolicy';
+import { TourPage } from './pages/TourPage';
 import { Product, supabase } from './lib/supabase';
 import { Loader2, Search, X } from 'lucide-react';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
@@ -328,10 +329,25 @@ function PolicyPage({ path }: { path: string }) {
   }
 }
 
+function parseTourRoute(path: string): { slug: string; showBooking: boolean } | null {
+  const tourMatch = path.match(/^\/tour\/([^/]+)$/);
+  if (tourMatch) {
+    return { slug: decodeURIComponent(tourMatch[1]), showBooking: false };
+  }
+
+  const bookingMatch = path.match(/^\/tour\/([^/]+)\/book$/);
+  if (bookingMatch) {
+    return { slug: decodeURIComponent(bookingMatch[1]), showBooking: true };
+  }
+
+  return null;
+}
+
 function App() {
   const path = useRoute();
   const isAdmin = path.startsWith('/admin');
   const isPolicyPage = ['/privacy-policy', '/terms-and-conditions', '/refund-policy', '/cookie-policy'].includes(path);
+  const tourRoute = parseTourRoute(path);
 
   if (isAdmin) {
     return (
@@ -346,6 +362,14 @@ function App() {
       <LanguageProvider>
         <PolicyPage path={path} />
         <CookieConsent />
+      </LanguageProvider>
+    );
+  }
+
+  if (tourRoute) {
+    return (
+      <LanguageProvider>
+        <TourPage slug={tourRoute.slug} showBooking={tourRoute.showBooking} />
       </LanguageProvider>
     );
   }

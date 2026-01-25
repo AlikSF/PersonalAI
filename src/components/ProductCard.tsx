@@ -3,14 +3,16 @@ import { MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Product } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
 import { getDisplayName, getDisplayLocation, getDisplayFeatures, getDisplayCategory } from '../lib/productHelpers';
+import { generateTourUrl } from '../lib/router';
 
 interface ProductCardProps {
   product: Product;
   onViewDetails: (product: Product) => void;
   eager?: boolean;
+  useUrlNavigation?: boolean;
 }
 
-function ProductCardComponent({ product, onViewDetails, eager = false }: ProductCardProps) {
+function ProductCardComponent({ product, onViewDetails, eager = false, useUrlNavigation = true }: ProductCardProps) {
   const { t, language } = useLanguage();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [touchStart, setTouchStart] = useState(0);
@@ -57,10 +59,24 @@ function ProductCardComponent({ product, onViewDetails, eager = false }: Product
     setTouchEnd(0);
   };
 
+  const handleClick = (e: React.MouseEvent) => {
+    if (useUrlNavigation) {
+      e.preventDefault();
+      const tourUrl = generateTourUrl(product.slug, product.id);
+      window.history.pushState(null, '', tourUrl);
+      window.dispatchEvent(new PopStateEvent('popstate'));
+    } else {
+      onViewDetails(product);
+    }
+  };
+
+  const tourUrl = generateTourUrl(product.slug, product.id);
+
   return (
-    <div
-      onClick={() => onViewDetails(product)}
-      className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col h-full"
+    <a
+      href={tourUrl}
+      onClick={handleClick}
+      className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col h-full no-underline"
     >
       <div
         className="relative h-40 md:h-56 overflow-hidden flex-shrink-0"
@@ -159,12 +175,12 @@ function ProductCardComponent({ product, onViewDetails, eager = false }: Product
               <p className="text-[10px] md:text-xs text-gray-500">{t('products.startingFrom')}</p>
             </div>
           </div>
-          <button className="w-full bg-blue-600 text-white py-2 md:py-2.5 rounded-lg text-xs md:text-sm font-semibold hover:bg-blue-700 transition group-hover:shadow-lg">
+          <span className="w-full bg-blue-600 text-white py-2 md:py-2.5 rounded-lg text-xs md:text-sm font-semibold hover:bg-blue-700 transition group-hover:shadow-lg block text-center">
             {t('products.viewDetails')}
-          </button>
+          </span>
         </div>
       </div>
-    </div>
+    </a>
   );
 }
 
