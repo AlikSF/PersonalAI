@@ -640,7 +640,7 @@ export function TourPage({ slug, showBooking = false }: TourPageProps) {
                   <div>
                     <p className="text-gray-600 text-sm mb-1">{t('products.startingFrom')}</p>
                     <div className="flex items-baseline gap-2">
-                      <span className="text-4xl md:text-5xl font-bold text-gray-900">
+                      <span className="text-2xl md:text-3xl font-bold text-gray-900">
                         ฿{product.price_per_day.toFixed(2)}
                       </span>
                     </div>
@@ -662,9 +662,9 @@ export function TourPage({ slug, showBooking = false }: TourPageProps) {
                       setShowBookingForm(true);
                       window.history.pushState(null, '', `/tour/${product.slug || product.id}/book`);
                     }}
-                    className="flex items-center justify-center gap-3 bg-blue-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+                    className="flex items-center justify-center gap-2 md:gap-3 bg-blue-600 text-white px-6 py-3 md:px-8 md:py-4 rounded-xl text-base md:text-lg font-semibold hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
                   >
-                    <MessageCircle className="h-6 w-6" />
+                    <MessageCircle className="h-5 w-5 md:h-6 md:w-6" />
                     <span>{t('products.bookNow')}</span>
                   </button>
                 </div>
