@@ -10,12 +10,6 @@ import { ContactForm } from './components/ContactForm';
 import { Footer } from './components/Footer';
 import { FloatingWhatsAppButton } from './components/FloatingWhatsAppButton';
 import { CookieConsent } from './components/CookieConsent';
-import { PrivacyPolicy } from './pages/PrivacyPolicy';
-import { TermsAndConditions } from './pages/TermsAndConditions';
-import { RefundPolicy } from './pages/RefundPolicy';
-import { CookiePolicy } from './pages/CookiePolicy';
-import { ContactPage } from './pages/ContactPage';
-import { TourPage } from './pages/TourPage';
 import { Product, supabase } from './lib/supabase';
 import { Loader2, Search, X } from 'lucide-react';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
@@ -39,19 +33,6 @@ function AppContent() {
   }, []);
 
   useEffect(() => {
-    if (!loading && products.length > 0) {
-      const savedPosition = sessionStorage.getItem('scrollPosition');
-      if (savedPosition) {
-        const position = parseInt(savedPosition, 10);
-        sessionStorage.removeItem('scrollPosition');
-        requestAnimationFrame(() => {
-          window.scrollTo(0, position);
-        });
-      }
-    }
-  }, [loading, products.length]);
-
-  useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedSearchQuery(searchQuery);
     }, 300);
@@ -66,7 +47,7 @@ function AppContent() {
         .from('products')
         .select('*')
         .eq('is_active', true)
-        .order('priority', { ascending: true, nullsFirst: false })
+        .order('priority', { ascending: true, nullsLast: true })
         .order('created_at', { ascending: false });
 
       if (fetchError) throw fetchError;
@@ -162,6 +143,13 @@ function AppContent() {
     const searchInput = document.querySelector('input[type="search"]') as HTMLInputElement;
     if (searchInput) {
       searchInput.blur();
+    }
+  };
+
+  const scrollToContact = () => {
+    const contactSection = document.getElementById('contact');
+    if (contactSection) {
+      contactSection.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -321,73 +309,15 @@ function useRoute() {
   return path;
 }
 
-function PolicyPage({ path }: { path: string }) {
-  switch (path) {
-    case '/privacy-policy':
-      return <PrivacyPolicy />;
-    case '/terms-and-conditions':
-      return <TermsAndConditions />;
-    case '/refund-policy':
-      return <RefundPolicy />;
-    case '/cookie-policy':
-      return <CookiePolicy />;
-    default:
-      return null;
-  }
-}
-
-function parseTourRoute(path: string): { slug: string; showBooking: boolean } | null {
-  const tourMatch = path.match(/^\/tour\/([^/]+)$/);
-  if (tourMatch) {
-    return { slug: decodeURIComponent(tourMatch[1]), showBooking: false };
-  }
-
-  const bookingMatch = path.match(/^\/tour\/([^/]+)\/book$/);
-  if (bookingMatch) {
-    return { slug: decodeURIComponent(bookingMatch[1]), showBooking: true };
-  }
-
-  return null;
-}
-
 function App() {
   const path = useRoute();
   const isAdmin = path.startsWith('/admin');
-  const isPolicyPage = ['/privacy-policy', '/terms-and-conditions', '/refund-policy', '/cookie-policy'].includes(path);
-  const isContactPage = path === '/contact';
-  const tourRoute = parseTourRoute(path);
 
   if (isAdmin) {
     return (
       <AuthProvider>
         <AdminRouter />
       </AuthProvider>
-    );
-  }
-
-  if (isPolicyPage) {
-    return (
-      <LanguageProvider>
-        <PolicyPage path={path} />
-        <CookieConsent />
-      </LanguageProvider>
-    );
-  }
-
-  if (isContactPage) {
-    return (
-      <LanguageProvider>
-        <ContactPage />
-        <CookieConsent />
-      </LanguageProvider>
-    );
-  }
-
-  if (tourRoute) {
-    return (
-      <LanguageProvider>
-        <TourPage slug={tourRoute.slug} showBooking={tourRoute.showBooking} />
-      </LanguageProvider>
     );
   }
 
