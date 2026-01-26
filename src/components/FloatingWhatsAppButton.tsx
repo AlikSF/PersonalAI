@@ -27,7 +27,7 @@ export function FloatingWhatsAppButton() {
       title="Telegram"
     >
       <img
-        src="/telegram logo.webp"
+        src="/telegram_logo_(1).webp"
         alt="Telegram"
         className="w-14 h-14 md:w-16 md:h-16 rounded-full"
       />
