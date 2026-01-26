@@ -77,15 +77,11 @@ const translations = {
     'booking.phoneOtherHelper': 'Выберите "Другое" из списка и введите код страны',
     'booking.tourDate': 'Дата тура',
     'booking.tourDatePlaceholder': 'Выберите дату тура',
-    'booking.adults': 'Кол-во взрослых',
-    'booking.children': 'Кол-во детей',
+    'booking.adults': 'Количество взрослых',
+    'booking.children': 'Количество детей',
     'booking.back': 'Назад',
     'booking.confirm': 'Подтвердить бронирование',
     'booking.fillFields': 'Пожалуйста, заполните все поля',
-    'booking.privacyConsent': 'Я согласен с',
-    'booking.privacyPolicy': 'Политикой конфиденциальности',
-    'booking.and': 'и',
-    'booking.termsOfService': 'Условиями использования',
     'contact.title': 'Свяжитесь с нами',
     'contact.subtitle': 'Есть вопросы? Наша команда готова помочь вам спланировать идеальную аренду.',
     'contact.name': 'Полное имя',
@@ -161,10 +157,6 @@ const translations = {
     'booking.back': 'Back',
     'booking.confirm': 'Confirm Booking',
     'booking.fillFields': 'Please fill in all fields',
-    'booking.privacyConsent': 'I agree to the',
-    'booking.privacyPolicy': 'Privacy Policy',
-    'booking.and': 'and',
-    'booking.termsOfService': 'Terms of Service',
     'contact.title': 'Get in Touch',
     'contact.subtitle': 'Have questions? Our team is here to help you plan your perfect rental experience.',
     'contact.name': 'Full Name',
@@ -274,10 +266,6 @@ const translations = {
     'booking.back': 'Артқа',
     'booking.confirm': 'Брондауды растау',
     'booking.fillFields': 'Барлық өрістерді толтырыңыз',
-    'booking.privacyConsent': 'Мен келісемін',
-    'booking.privacyPolicy': 'Құпиялылық саясатымен',
-    'booking.and': 'және',
-    'booking.termsOfService': 'Қызмет көрсету шарттарымен',
     'contact.title': 'Бізбен байланысыңыз',
     'contact.subtitle': 'Сұрақтарыңыз бар ма? Біздің команда сізге тамаша жалға жоспарлауға көмектесуге дайын.',
     'contact.name': 'Толық аты',
@@ -370,10 +358,6 @@ const translations = {
     'booking.back': 'Артка',
     'booking.confirm': 'Брондоону ырастоо',
     'booking.fillFields': 'Бардык талааларды толтуруңуз',
-    'booking.privacyConsent': 'Мен макулмун',
-    'booking.privacyPolicy': 'Купуялуулук саясаты',
-    'booking.and': 'жана',
-    'booking.termsOfService': 'Кызмат көрсөтүү шарттары',
     'contact.title': 'Биз менен байланышыңыз',
     'contact.subtitle': 'Суроолоруңуз барбы? Биздин команда сизге мыкты ижарага пландаштырууга жардам берүүгө даяр.',
     'contact.name': 'Толук аты',
@@ -466,10 +450,6 @@ const translations = {
     'booking.back': 'Geri',
     'booking.confirm': 'Sifarişi təsdiq et',
     'booking.fillFields': 'Bütün sahələri doldurun',
-    'booking.privacyConsent': 'Mən razıyam',
-    'booking.privacyPolicy': 'Məxfilik Siyasəti',
-    'booking.and': 'və',
-    'booking.termsOfService': 'Xidmət Şərtləri',
     'contact.title': 'Bizimlə əlaqə saxlayın',
     'contact.subtitle': 'Suallarınız var? Komandamız sizə mükəmməl icarə planlaşdırmağa kömək etməyə hazırdır.',
     'contact.name': 'Tam ad',
@@ -562,10 +542,6 @@ const translations = {
     'booking.back': '返回',
     'booking.confirm': '确认预订',
     'booking.fillFields': '请填写所有字段',
-    'booking.privacyConsent': '我同意',
-    'booking.privacyPolicy': '隐私政策',
-    'booking.and': '和',
-    'booking.termsOfService': '服务条款',
     'contact.title': '联系我们',
     'contact.subtitle': '有问题吗？我们的团队随时准备帮助您规划完美的租赁体验。',
     'contact.name': '全名',
@@ -658,10 +634,6 @@ const translations = {
     'booking.back': 'Retour',
     'booking.confirm': 'Confirmer la réservation',
     'booking.fillFields': 'Veuillez remplir tous les champs',
-    'booking.privacyConsent': 'J\'accepte',
-    'booking.privacyPolicy': 'la Politique de confidentialité',
-    'booking.and': 'et',
-    'booking.termsOfService': 'les Conditions d\'utilisation',
     'contact.title': 'Contactez-nous',
     'contact.subtitle': 'Des questions ? Notre équipe est là pour vous aider à planifier votre location parfaite.',
     'contact.name': 'Nom complet',
@@ -754,10 +726,6 @@ const translations = {
     'booking.back': 'Orqaga',
     'booking.confirm': 'Buyurtmani tasdiqlash',
     'booking.fillFields': 'Barcha maydonlarni to\'ldiring',
-    'booking.privacyConsent': 'Men roziman',
-    'booking.privacyPolicy': 'Maxfiylik siyosati',
-    'booking.and': 'va',
-    'booking.termsOfService': 'Foydalanish shartlari',
     'contact.title': 'Biz bilan bog\'laning',
     'contact.subtitle': 'Savollaringiz bormi? Bizning jamoamiz sizga mukammal ijaraga rejalashtirish uchun yordam berishga tayyor.',
     'contact.name': 'To\'liq ism',
@@ -801,7 +769,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     localStorage.setItem('lang', language);
 
-    if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
+    if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('event', 'language_change', {
         language_code: language,
         language_label: languageConfig[language].label
@@ -810,9 +778,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   }, [language]);
 
   const t = useCallback((key: string): string => {
-    const langTranslations = translations[language] as Record<string, string>;
-    const ruTranslations = translations['ru'] as Record<string, string>;
-    return langTranslations[key] || ruTranslations[key] || key;
+    return translations[language][key] || translations['ru'][key] || key;
   }, [language]);
 
   const value = useMemo(() => ({ language, setLanguage, t }), [language, t]);

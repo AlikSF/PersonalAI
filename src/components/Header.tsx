@@ -4,35 +4,10 @@ import { LanguageSelector } from './LanguageSelector';
 export function Header() {
   const { t } = useLanguage();
 
-  const isHomePage = () => {
-    const path = window.location.pathname;
-    return path === '/' || path === '';
-  };
-
-  const navigateToHome = () => {
-    if (isHomePage()) {
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    } else {
-      window.history.pushState(null, '', '/');
-      window.dispatchEvent(new PopStateEvent('popstate'));
-    }
-  };
-
-  const navigateToSection = (id: string) => {
-    if (isHomePage()) {
-      const element = document.getElementById(id);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
-    } else {
-      window.history.pushState(null, '', `/#${id}`);
-      window.dispatchEvent(new PopStateEvent('popstate'));
-      setTimeout(() => {
-        const element = document.getElementById(id);
-        if (element) {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }
-      }, 100);
+  const scrollToSection = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
@@ -41,7 +16,7 @@ export function Header() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16 md:h-20">
           <button
-            onClick={navigateToHome}
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className="flex items-center space-x-2 md:space-x-3 hover:opacity-80 transition"
           >
             <img
@@ -56,19 +31,19 @@ export function Header() {
 
           <nav className="hidden md:flex items-center space-x-8">
             <button
-              onClick={navigateToHome}
+              onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
               className="text-gray-700 hover:text-blue-600 transition font-medium"
             >
               {t('nav.home')}
             </button>
             <button
-              onClick={() => navigateToSection('rentals')}
+              onClick={() => scrollToSection('rentals')}
               className="text-gray-700 hover:text-blue-600 transition font-medium"
             >
               {t('nav.products')}
             </button>
             <button
-              onClick={() => navigateToSection('contact')}
+              onClick={() => scrollToSection('contact')}
               className="text-gray-700 hover:text-blue-600 transition font-medium"
             >
               {t('nav.contact')}

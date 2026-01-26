@@ -87,7 +87,7 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
       return;
     }
 
-    const { name, phone, dialCode, tourDate, adults, children } = formData;
+    const { name, phone, dialCode, countryCode, tourDate, adults, children } = formData;
 
     const totalPrice = product.price_per_day;
     const displayName = getDisplayName(product, language);
@@ -317,9 +317,9 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
 
           <div className="p-4 md:p-8">
             <div className="mb-4 md:mb-6">
-            <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-3 md:mb-4">
+            <h1 className="text-2xl md:text-4xl font-bold text-gray-900 mb-3 md:mb-4">
               {getDisplayName(product, language)}
-            </h2>
+            </h1>
 
             <div className="flex flex-wrap gap-3 md:gap-4 text-gray-600 mb-4 md:mb-6 text-sm md:text-base">
               <div className="flex items-center space-x-1 md:space-x-2">
