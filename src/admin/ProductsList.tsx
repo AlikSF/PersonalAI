@@ -40,13 +40,13 @@ export function ProductsList() {
 
     if (sortField) {
       if (sortField === 'priority') {
-        query = query.order(sortField, { ascending: sortDirection === 'asc', nullsFirst: false });
+        query = query.order(sortField, { ascending: sortDirection === 'asc', nullsLast: true });
       } else {
         query = query.order(sortField, { ascending: sortDirection === 'asc' });
       }
     } else {
       query = query
-        .order('priority', { ascending: true, nullsFirst: false })
+        .order('priority', { ascending: true, nullsLast: true })
         .order('created_at', { ascending: false });
     }
 

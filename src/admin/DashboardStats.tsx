@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Calendar,
   MessageSquare,
@@ -15,9 +16,12 @@ import { StatCard } from './components/StatCard';
 import { LineChart } from './components/LineChart';
 import { BarChart } from './components/BarChart';
 
+type BookingFilter = 'all' | 'confirmed' | 'pending' | 'cancelled';
+
 export function DashboardStats() {
   const { t } = useAdminLang();
   const { bookingStats, messageStats, loading, error } = useDashboardData();
+  const [bookingFilter, setBookingFilter] = useState<BookingFilter>('all');
 
   if (loading) {
     return (
@@ -42,6 +46,19 @@ export function DashboardStats() {
       </div>
     );
   }
+
+  const getFilteredBookingCount = () => {
+    switch (bookingFilter) {
+      case 'confirmed':
+        return bookingStats.byStatus.confirmed;
+      case 'pending':
+        return bookingStats.byStatus.pending;
+      case 'cancelled':
+        return bookingStats.byStatus.cancelled;
+      default:
+        return bookingStats.allTime;
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -91,7 +108,52 @@ export function DashboardStats() {
         </div>
 
         <div className="bg-white rounded-lg p-4 shadow-sm border border-slate-200 mb-4">
-          <h3 className="text-base font-semibold text-slate-900 mb-3">Status Overview</h3>
+          <div className="flex items-center justify-between mb-3">
+            <h3 className="text-base font-semibold text-slate-900">Status Overview</h3>
+            <div className="flex gap-2">
+              <button
+                onClick={() => setBookingFilter('all')}
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                  bookingFilter === 'all'
+                    ? 'bg-slate-900 text-white shadow-md'
+                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                }`}
+              >
+                All
+              </button>
+              <button
+                onClick={() => setBookingFilter('confirmed')}
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                  bookingFilter === 'confirmed'
+                    ? 'bg-emerald-600 text-white shadow-md'
+                    : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100'
+                }`}
+              >
+                Confirmed
+              </button>
+              <button
+                onClick={() => setBookingFilter('pending')}
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                  bookingFilter === 'pending'
+                    ? 'bg-amber-600 text-white shadow-md'
+                    : 'bg-amber-50 text-amber-600 hover:bg-amber-100'
+                }`}
+              >
+                Pending
+              </button>
+              <button
+                onClick={() => setBookingFilter('cancelled')}
+                className={`px-3 py-1.5 rounded-lg text-sm font-medium transition-all ${
+                  bookingFilter === 'cancelled'
+                    ? 'bg-red-600 text-white shadow-md'
+                    : 'bg-red-50 text-red-600 hover:bg-red-100'
+                }`}
+              >
+                Cancelled
+              </button>
+            </div>
+          </div>
+
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
             <div className="bg-gradient-to-br from-emerald-50 to-emerald-100 rounded-lg p-3 border border-emerald-200">
               <div className="flex items-center gap-2 mb-2">
