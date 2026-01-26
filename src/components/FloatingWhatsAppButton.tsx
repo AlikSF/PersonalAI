@@ -15,7 +15,7 @@ export function FloatingWhatsAppButton() {
     }
 
     const telegramUrl = `https://t.me/${telegramUsername}?text=${encodeURIComponent(message)}`;
-    window.open(telegramUrl, '_blank');
+    window.location.href = telegramUrl;
   };
 
   return (
