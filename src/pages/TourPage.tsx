@@ -726,21 +726,21 @@ export function TourPage({ slug, showBooking = false }: TourPageProps) {
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                           {t('booking.adults')}
                         </label>
-                        <div className="flex items-center justify-center gap-3 border border-gray-300 rounded-lg py-3">
+                        <div className="flex items-center justify-center gap-3 border border-gray-300 rounded-lg py-2">
                           <button
                             type="button"
                             onClick={() => setFormData({ ...formData, adults: Math.max(1, formData.adults - 1) })}
-                            className="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full transition"
+                            className="w-9 h-9 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full transition"
                           >
                             <Minus className="h-4 w-4" />
                           </button>
-                          <span className="text-2xl font-semibold text-gray-900 w-12 text-center">
+                          <span className="text-xl font-semibold text-gray-900 w-10 text-center">
                             {formData.adults}
                           </span>
                           <button
                             type="button"
                             onClick={() => setFormData({ ...formData, adults: formData.adults + 1 })}
-                            className="w-10 h-10 flex items-center justify-center bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-full transition"
+                            className="w-9 h-9 flex items-center justify-center bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-full transition"
                           >
                             <Plus className="h-4 w-4" />
                           </button>
@@ -751,21 +751,21 @@ export function TourPage({ slug, showBooking = false }: TourPageProps) {
                         <label className="block text-sm font-medium text-gray-700 mb-2">
                           {t('booking.children')}
                         </label>
-                        <div className="flex items-center justify-center gap-3 border border-gray-300 rounded-lg py-3">
+                        <div className="flex items-center justify-center gap-3 border border-gray-300 rounded-lg py-2">
                           <button
                             type="button"
                             onClick={() => setFormData({ ...formData, children: Math.max(0, formData.children - 1) })}
-                            className="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full transition"
+                            className="w-9 h-9 flex items-center justify-center bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-full transition"
                           >
                             <Minus className="h-4 w-4" />
                           </button>
-                          <span className="text-2xl font-semibold text-gray-900 w-12 text-center">
+                          <span className="text-xl font-semibold text-gray-900 w-10 text-center">
                             {formData.children}
                           </span>
                           <button
                             type="button"
                             onClick={() => setFormData({ ...formData, children: formData.children + 1 })}
-                            className="w-10 h-10 flex items-center justify-center bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-full transition"
+                            className="w-9 h-9 flex items-center justify-center bg-blue-100 hover:bg-blue-200 text-blue-700 rounded-full transition"
                           >
                             <Plus className="h-4 w-4" />
                           </button>
