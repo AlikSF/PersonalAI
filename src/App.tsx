@@ -15,6 +15,7 @@ import { Loader2, Search, X } from 'lucide-react';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 import { AuthProvider } from './contexts/AuthContext';
 import { AdminRouter } from './admin/AdminRouter';
+import { TourPage } from './pages/TourPage';
 import { getDisplayName } from './lib/productHelpers';
 
 function AppContent() {
@@ -309,15 +310,35 @@ function useRoute() {
   return path;
 }
 
+function parseTourRoute(path: string): { slug: string; showBooking: boolean } | null {
+  const tourMatch = path.match(/^\/tour\/([^/]+)(\/book)?$/);
+  if (tourMatch) {
+    return {
+      slug: tourMatch[1],
+      showBooking: !!tourMatch[2]
+    };
+  }
+  return null;
+}
+
 function App() {
   const path = useRoute();
   const isAdmin = path.startsWith('/admin');
+  const tourRoute = parseTourRoute(path);
 
   if (isAdmin) {
     return (
       <AuthProvider>
         <AdminRouter />
       </AuthProvider>
+    );
+  }
+
+  if (tourRoute) {
+    return (
+      <LanguageProvider>
+        <TourPage slug={tourRoute.slug} showBooking={tourRoute.showBooking} />
+      </LanguageProvider>
     );
   }
 
