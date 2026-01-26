@@ -9,7 +9,6 @@ import { Testimonials } from './components/Testimonials';
 import { ContactForm } from './components/ContactForm';
 import { Footer } from './components/Footer';
 import { FloatingWhatsAppButton } from './components/FloatingWhatsAppButton';
-import { CookieConsent } from './components/CookieConsent';
 import { Product, supabase } from './lib/supabase';
 import { Loader2, Search, X } from 'lucide-react';
 import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
@@ -291,8 +290,6 @@ function AppContent() {
           onClose={handleCloseDetails}
         />
       )}
-
-      <CookieConsent />
     </div>
   );
 }
