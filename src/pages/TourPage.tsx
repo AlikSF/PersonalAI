@@ -400,10 +400,7 @@ export function TourPage({ slug, showBooking = false }: TourPageProps) {
       url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
     }
 
-    const newWindow = window.open(url, '_blank');
-    if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
-      window.location.href = url;
-    }
+    window.location.href = url;
 
     if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('event', 'generate_lead', {
