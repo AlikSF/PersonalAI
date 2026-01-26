@@ -53,7 +53,7 @@ function AppContent() {
         .from('products')
         .select('*')
         .eq('is_active', true)
-        .order('priority', { ascending: true, nullsLast: true })
+        .order('priority', { ascending: true, nullsFirst: false })
         .order('created_at', { ascending: false });
 
       if (fetchError) throw fetchError;
@@ -145,17 +145,9 @@ function AppContent() {
 
   const handleClearSearch = () => {
     setSearchQuery('');
-    // Remove focus to close keyboard on mobile
     const searchInput = document.querySelector('input[type="search"]') as HTMLInputElement;
     if (searchInput) {
       searchInput.blur();
-    }
-  };
-
-  const scrollToContact = () => {
-    const contactSection = document.getElementById('contact');
-    if (contactSection) {
-      contactSection.scrollIntoView({ behavior: 'smooth' });
     }
   };
 
