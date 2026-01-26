@@ -331,7 +331,7 @@ export function TourPage({ slug, showBooking = false }: TourPageProps) {
     return null;
   };
 
-  const handleConfirmBooking = (platform: 'telegram' | 'whatsapp') => {
+  const handleConfirmBooking = async (platform: 'telegram' | 'whatsapp') => {
     if (!product) return;
 
     const validationError = validateForm();
@@ -346,21 +346,10 @@ export function TourPage({ slug, showBooking = false }: TourPageProps) {
     const displayLocation = getDisplayLocation(product, language);
     const fullPhone = phone ? `${dialCode} ${phone}` : '';
 
-    let telegramMessage: string;
-    let whatsappMessage: string;
+    let message: string;
 
     if (language === 'en' || language === 'fr') {
-      telegramMessage =
-        `🎯 TOUR BOOKING REQUEST\n\n` +
-        `👤 Client: ${name}\n` +
-        (fullPhone ? `📞 Phone: ${fullPhone}\n` : '') +
-        `🎯 Tour: ${displayName}\n` +
-        `📍 Location: ${displayLocation}\n\n` +
-        `📅 Tour date: ${new Date(tourDate).toLocaleDateString()}\n` +
-        `👥 Adults: ${adults}\n` +
-        `👶 Children: ${children}`;
-
-      whatsappMessage =
+      message =
         `TOUR BOOKING REQUEST\n\n` +
         `Client: ${name}\n` +
         (fullPhone ? `Phone: ${fullPhone}\n` : '') +
@@ -370,37 +359,45 @@ export function TourPage({ slug, showBooking = false }: TourPageProps) {
         `Adults: ${adults}\n` +
         `Children: ${children}`;
     } else {
-      telegramMessage =
-        `🎯 ЗАПРОС НА БРОНИРОВАНИЕ ТУРА\n\n` +
-        `👤 Клиент: ${name}\n` +
-        (fullPhone ? `📞 Телефон: ${fullPhone}\n` : '') +
-        `🎯 Тур: ${displayName}\n` +
-        `📍 Местоположение: ${displayLocation}\n\n` +
-        `📅 Дата тура: ${new Date(tourDate).toLocaleDateString()}\n` +
-        `👥 Взрослых: ${adults}\n` +
-        `👶 Детей: ${children}`;
-
-      whatsappMessage =
-        `ЗАПРОС НА БРОНИРОВАНИЕ ТУРА\n\n` +
-        `Клиент: ${name}\n` +
-        (fullPhone ? `Телефон: ${fullPhone}\n` : '') +
-        `Тур: ${displayName}\n` +
-        `Местоположение: ${displayLocation}\n\n` +
-        `Дата тура: ${new Date(tourDate).toLocaleDateString()}\n` +
-        `Взрослых: ${adults}\n` +
-        `Детей: ${children}`;
+      message =
+        `ZAPROS NA BRONIROVANIE TURA\n\n` +
+        `Klient: ${name}\n` +
+        (fullPhone ? `Telefon: ${fullPhone}\n` : '') +
+        `Tur: ${displayName}\n` +
+        `Mestopolozhenie: ${displayLocation}\n\n` +
+        `Data tura: ${new Date(tourDate).toLocaleDateString()}\n` +
+        `Vzroslyh: ${adults}\n` +
+        `Detej: ${children}`;
     }
 
     let url: string;
     if (platform === 'telegram') {
       const telegramUsername = 'PhuketVibemanager';
-      url = `https://t.me/${telegramUsername}?text=${encodeURIComponent(telegramMessage)}`;
+      try {
+        await navigator.clipboard.writeText(message);
+      } catch {
+        const textArea = document.createElement('textarea');
+        textArea.value = message;
+        textArea.style.position = 'fixed';
+        textArea.style.left = '-9999px';
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+      }
+      alert(language === 'en' || language === 'fr'
+        ? 'Message copied! Paste it in Telegram chat.'
+        : 'Soobschenie skopirovano! Vstavte ego v chat Telegram.');
+      url = `https://t.me/${telegramUsername}`;
     } else {
       const whatsappNumber = '66972137197';
-      url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+      url = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(message)}`;
     }
 
-    window.location.href = url;
+    const newWindow = window.open(url, '_blank');
+    if (!newWindow || newWindow.closed || typeof newWindow.closed === 'undefined') {
+      window.location.href = url;
+    }
 
     if (typeof window !== 'undefined' && window.gtag) {
       window.gtag('event', 'generate_lead', {
