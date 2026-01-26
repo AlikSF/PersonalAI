@@ -241,7 +241,7 @@ function AppContent() {
                 {searchQuery && searchQuery !== debouncedSearchQuery && (
                   <span className="inline-flex items-center gap-2 text-blue-600 mr-2">
                     <Loader2 className="h-4 w-4 animate-spin" />
-                    Searching...
+                    {t('products.searching')}
                   </span>
                 )}
                 {filteredProducts.length} {filteredProducts.length === 1 ? t('products.rental') : t('products.rentals')}{' '}
