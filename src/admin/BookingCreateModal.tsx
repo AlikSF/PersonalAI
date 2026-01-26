@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { X, Save, User, Calendar, Users } from 'lucide-react';
+import { X, Save, User, Calendar } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { useAdminLang } from './AdminLanguageContext';
 

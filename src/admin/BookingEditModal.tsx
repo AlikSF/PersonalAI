@@ -9,15 +9,15 @@ interface Booking {
   customer_name: string;
   customer_email: string;
   customer_phone: string;
-  country_code: string;
-  tour_date: string;
+  country_code: string | null;
+  tour_date: string | null;
   adults: number;
   children: number;
   total_price: number;
   booking_status: string;
   payment_status: string;
-  platform?: string;
-  special_requests?: string;
+  platform?: string | null;
+  special_requests?: string | null;
 }
 
 interface Product {
@@ -44,7 +44,7 @@ export function BookingEditModal({ booking, onClose, onUpdate }: BookingEditModa
     customer_email: booking.customer_email,
     customer_phone: booking.customer_phone,
     country_code: booking.country_code || '+1',
-    tour_date: booking.tour_date,
+    tour_date: booking.tour_date || '',
     adults: booking.adults || 1,
     children: booking.children || 0,
     total_price: booking.total_price || 0,

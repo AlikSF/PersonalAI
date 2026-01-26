@@ -11,11 +11,17 @@ interface Testimonial {
   textAz: string;
   textKk: string;
   textKy: string;
+  textZh: string;
+  textFr: string;
+  textUz: string;
   locationRu: string;
   locationEn: string;
   locationAz: string;
   locationKk: string;
   locationKy: string;
+  locationZh: string;
+  locationFr: string;
+  locationUz: string;
 }
 
 const testimonials: Testimonial[] = [

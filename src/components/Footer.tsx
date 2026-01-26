@@ -119,7 +119,6 @@ export function Footer() {
     companyInfo.payment_info_uz
   );
 
-  // Translations for section headings
   const getHeadings = () => {
     switch (language) {
       case 'en':
@@ -127,56 +126,104 @@ export function Footer() {
           licenses: 'Licenses & Documents',
           insurance: 'Insurance',
           payment: 'Payment Methods',
-          rights: 'All rights reserved.'
+          rights: 'All rights reserved.',
+          cookieSettings: 'Cookie Settings',
+          privacyPolicy: 'Privacy Policy',
+          termsAndConditions: 'Terms & Conditions',
+          refundPolicy: 'Refund Policy',
+          cookiePolicy: 'Cookie Policy',
+          contact: 'Contact Us'
         };
       case 'az':
         return {
           licenses: 'Lisenziyalar və sənədlər',
           insurance: 'Sığorta',
           payment: 'Ödəniş üsulları',
-          rights: 'Bütün hüquqlar qorunur.'
+          rights: 'Bütün hüquqlar qorunur.',
+          cookieSettings: 'Cookie parametrləri',
+          privacyPolicy: 'Gizlilik Siyaseti',
+          termsAndConditions: 'Şərtlər',
+          refundPolicy: 'Geri Ödeme',
+          cookiePolicy: 'Cookie Siyaseti',
+          contact: 'Bizimlə Əlaqə'
         };
       case 'kk':
         return {
           licenses: 'Лицензиялар және құжаттар',
           insurance: 'Сақтандыру',
           payment: 'Төлем әдістері',
-          rights: 'Барлық құқықтар қорғалған.'
+          rights: 'Барлық құқықтар қорғалған.',
+          cookieSettings: 'Cookie параметрлері',
+          privacyPolicy: 'Құпиялылық саясаты',
+          termsAndConditions: 'Шарттар',
+          refundPolicy: 'Қайтару саясаты',
+          cookiePolicy: 'Cookie саясаты',
+          contact: 'Байланыс'
         };
       case 'ky':
         return {
           licenses: 'Лицензиялар жана документтер',
           insurance: 'Камсыздандыруу',
           payment: 'Төлөм ыкмалары',
-          rights: 'Бардык укуктар корголгон.'
+          rights: 'Бардык укуктар корголгон.',
+          cookieSettings: 'Cookie жөндөөлөрү',
+          privacyPolicy: 'Купуялык саясаты',
+          termsAndConditions: 'Шарттар',
+          refundPolicy: 'Кайтаруу саясаты',
+          cookiePolicy: 'Cookie саясаты',
+          contact: 'Байланыш'
         };
       case 'zh':
         return {
           licenses: '许可证和文件',
           insurance: '保险',
           payment: '支付方式',
-          rights: '版权所有。'
+          rights: '版权所有。',
+          cookieSettings: 'Cookie 设置',
+          privacyPolicy: '隐私政策',
+          termsAndConditions: '条款和条件',
+          refundPolicy: '退款政策',
+          cookiePolicy: 'Cookie 政策',
+          contact: '联系我们'
         };
       case 'fr':
         return {
           licenses: 'Licences et documents',
           insurance: 'Assurance',
           payment: 'Moyens de paiement',
-          rights: 'Tous droits réservés.'
+          rights: 'Tous droits réservés.',
+          cookieSettings: 'Paramètres des cookies',
+          privacyPolicy: 'Politique de confidentialité',
+          termsAndConditions: 'Conditions générales',
+          refundPolicy: 'Politique de remboursement',
+          cookiePolicy: 'Politique des cookies',
+          contact: 'Contactez-nous'
         };
       case 'uz':
         return {
           licenses: 'Litsenziyalar va hujjatlar',
           insurance: 'Sug\'urta',
           payment: 'To\'lov usullari',
-          rights: 'Barcha huquqlar himoyalangan.'
+          rights: 'Barcha huquqlar himoyalangan.',
+          cookieSettings: 'Cookie sozlamalari',
+          privacyPolicy: 'Maxfiylik siyosati',
+          termsAndConditions: 'Shartlar',
+          refundPolicy: 'Qaytarish siyosati',
+          cookiePolicy: 'Cookie siyosati',
+          contact: 'Biz bilan bog\'laning'
         };
       default:
         return {
           licenses: 'Лицензии и документы',
           insurance: 'Страхование',
           payment: 'Способы оплаты',
-          rights: 'Все права защищены.'
+          rights: 'Все права защищены.',
+          cookieSettings: 'Настройки cookie',
+          privacyPolicy: 'Политика конфиденциальности',
+          termsAndConditions: 'Условия использования',
+          refundPolicy: 'Политика возврата',
+          cookiePolicy: 'Политика cookie',
+          contact: 'Контакты'
         };
     }
   };
@@ -234,8 +281,76 @@ export function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center">
-          <p className="text-sm text-gray-400">
+        <div className="border-t border-gray-800 mt-8 pt-8">
+          <div className="flex flex-wrap justify-center gap-x-4 gap-y-2 mb-4">
+            <a
+              href="/contact"
+              onClick={(e) => {
+                e.preventDefault();
+                window.history.pushState({}, '', '/contact');
+                window.dispatchEvent(new PopStateEvent('popstate'));
+              }}
+              className="text-sm text-gray-500 hover:text-gray-300 transition-colors"
+            >
+              {headings.contact}
+            </a>
+            <span className="text-gray-700 hidden sm:inline">|</span>
+            <a
+              href="/privacy-policy"
+              onClick={(e) => {
+                e.preventDefault();
+                window.history.pushState({}, '', '/privacy-policy');
+                window.dispatchEvent(new PopStateEvent('popstate'));
+              }}
+              className="text-sm text-gray-500 hover:text-gray-300 transition-colors"
+            >
+              {headings.privacyPolicy}
+            </a>
+            <span className="text-gray-700 hidden sm:inline">|</span>
+            <a
+              href="/terms-and-conditions"
+              onClick={(e) => {
+                e.preventDefault();
+                window.history.pushState({}, '', '/terms-and-conditions');
+                window.dispatchEvent(new PopStateEvent('popstate'));
+              }}
+              className="text-sm text-gray-500 hover:text-gray-300 transition-colors"
+            >
+              {headings.termsAndConditions}
+            </a>
+            <span className="text-gray-700 hidden sm:inline">|</span>
+            <a
+              href="/refund-policy"
+              onClick={(e) => {
+                e.preventDefault();
+                window.history.pushState({}, '', '/refund-policy');
+                window.dispatchEvent(new PopStateEvent('popstate'));
+              }}
+              className="text-sm text-gray-500 hover:text-gray-300 transition-colors"
+            >
+              {headings.refundPolicy}
+            </a>
+            <span className="text-gray-700 hidden sm:inline">|</span>
+            <a
+              href="/cookie-policy"
+              onClick={(e) => {
+                e.preventDefault();
+                window.history.pushState({}, '', '/cookie-policy');
+                window.dispatchEvent(new PopStateEvent('popstate'));
+              }}
+              className="text-sm text-gray-500 hover:text-gray-300 transition-colors"
+            >
+              {headings.cookiePolicy}
+            </a>
+            <span className="text-gray-700 hidden sm:inline">|</span>
+            <button
+              onClick={() => window.dispatchEvent(new CustomEvent('openCookieSettings'))}
+              className="text-sm text-gray-500 hover:text-gray-300 transition-colors"
+            >
+              {headings.cookieSettings}
+            </button>
+          </div>
+          <p className="text-sm text-gray-400 text-center">
             &copy; {new Date().getFullYear()} {companyInfo.name}. {headings.rights}
           </p>
         </div>
