@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { X, Calendar, AlertCircle, CheckCircle, Minus, Plus } from 'lucide-react';
+import { useState } from 'react';
+import { X, AlertCircle, CheckCircle, Minus, Plus } from 'lucide-react';
 import { Product, supabase } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
 
@@ -10,7 +10,7 @@ interface BookingModalProps {
 }
 
 export function BookingModal({ product, onClose, onSuccess }: BookingModalProps) {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
   const [formData, setFormData] = useState({
     customer_name: '',
     customer_email: '',

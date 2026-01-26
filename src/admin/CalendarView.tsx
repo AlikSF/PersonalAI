@@ -86,7 +86,11 @@ export function CalendarView() {
         .single();
 
       if (error) throw error;
-      return data as FullBooking;
+      const booking = data as { product: { name: string }[] } & Omit<FullBooking, 'product'>;
+      return {
+        ...booking,
+        product: booking.product?.[0] || { name: '' }
+      } as FullBooking;
     } catch (error) {
       console.error('Error fetching booking:', error);
       return null;
