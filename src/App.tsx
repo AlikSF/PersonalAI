@@ -16,6 +16,11 @@ import { LanguageProvider, useLanguage } from './contexts/LanguageContext';
 import { AuthProvider } from './contexts/AuthContext';
 import { AdminRouter } from './admin/AdminRouter';
 import { TourPage } from './pages/TourPage';
+import { PrivacyPolicy } from './pages/PrivacyPolicy';
+import { TermsAndConditions } from './pages/TermsAndConditions';
+import { RefundPolicy } from './pages/RefundPolicy';
+import { CookiePolicy } from './pages/CookiePolicy';
+import { ContactPage } from './pages/ContactPage';
 import { getDisplayName } from './lib/productHelpers';
 
 function AppContent() {
@@ -338,6 +343,46 @@ function App() {
     return (
       <LanguageProvider>
         <TourPage slug={tourRoute.slug} showBooking={tourRoute.showBooking} />
+      </LanguageProvider>
+    );
+  }
+
+  if (path === '/privacy-policy') {
+    return (
+      <LanguageProvider>
+        <PrivacyPolicy />
+      </LanguageProvider>
+    );
+  }
+
+  if (path === '/terms-and-conditions') {
+    return (
+      <LanguageProvider>
+        <TermsAndConditions />
+      </LanguageProvider>
+    );
+  }
+
+  if (path === '/refund-policy') {
+    return (
+      <LanguageProvider>
+        <RefundPolicy />
+      </LanguageProvider>
+    );
+  }
+
+  if (path === '/cookie-policy') {
+    return (
+      <LanguageProvider>
+        <CookiePolicy />
+      </LanguageProvider>
+    );
+  }
+
+  if (path === '/contact') {
+    return (
+      <LanguageProvider>
+        <ContactPage />
       </LanguageProvider>
     );
   }
