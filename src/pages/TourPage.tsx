@@ -792,6 +792,7 @@ export function TourPage({ slug, showBooking = false }: TourPageProps) {
                         <a href="/terms-and-conditions" target="_blank" className="text-blue-600 hover:underline">
                           {t('booking.termsOfService')}
                         </a>
+                        <span className="text-red-500 ml-1">*</span>
                       </span>
                     </label>
 
