@@ -270,10 +270,10 @@ export function Footer() {
                 <p className="text-sm text-gray-300 whitespace-pre-line">{displayPaymentInfo}</p>
                 <div className="flex items-center gap-2 mt-4">
                   <div className="bg-white rounded px-2 py-1 flex items-center justify-center">
-                    <img src="/VISA logo.png" alt="VISA" className="h-4 w-auto" />
+                    <img src="/VISA_logo_(1).png" alt="VISA" className="h-4 w-auto" />
                   </div>
                   <div className="bg-white rounded px-2 py-1 flex items-center justify-center">
-                    <img src="/mastercard.png" alt="Mastercard" className="h-4 w-auto" />
+                    <img src="/mastercard_(1).png" alt="Mastercard" className="h-4 w-auto" />
                   </div>
                 </div>
               </div>
