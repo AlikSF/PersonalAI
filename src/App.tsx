@@ -4,6 +4,7 @@ import { Hero } from './components/Hero';
 import { Benefits } from './components/Benefits';
 import { TrustSection } from './components/TrustSection';
 import { ProductCard } from './components/ProductCard';
+import { ScrollReveal } from './components/ScrollReveal';
 import { ProductDetails } from './components/ProductDetails';
 import { Testimonials } from './components/Testimonials';
 import { ContactForm } from './components/ContactForm';
@@ -257,13 +258,14 @@ function AppContent() {
               </div>
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
-                {filteredProducts.map((product) => (
-                  <ProductCard
-                    key={product.id}
-                    product={product}
-                    onViewDetails={handleViewDetails}
-                    eager={true}
-                  />
+                {filteredProducts.map((product, index) => (
+                  <ScrollReveal key={product.id} delay={(index % 3) * 80} className="flex">
+                    <ProductCard
+                      product={product}
+                      onViewDetails={handleViewDetails}
+                      eager={true}
+                    />
+                  </ScrollReveal>
                 ))}
               </div>
             )}
