@@ -1,5 +1,5 @@
 import { useState, memo } from 'react';
-import { MapPin, ChevronLeft, ChevronRight } from 'lucide-react';
+import { MapPin, ChevronLeft, ChevronRight, ArrowRight } from 'lucide-react';
 import { Product } from '../lib/supabase';
 import { useLanguage } from '../contexts/LanguageContext';
 import { getDisplayName, getDisplayLocation, getDisplayFeatures, getDisplayCategory } from '../lib/productHelpers';
@@ -176,8 +176,9 @@ function ProductCardComponent({ product, onViewDetails, eager = false, useUrlNav
               <p className="text-[10px] md:text-xs text-gray-500">{t('products.startingFrom')}</p>
             </div>
           </div>
-          <span className="w-full bg-blue-600 text-white py-2 md:py-2.5 rounded-lg text-xs md:text-sm font-semibold hover:bg-blue-700 transition group-hover:shadow-lg block text-center">
-            {t('products.viewDetails')}
+          <span className="w-full bg-blue-600 text-white py-2 md:py-2.5 rounded-lg text-xs md:text-sm font-semibold hover:bg-blue-700 transition group-hover:shadow-lg flex items-center justify-center gap-1 overflow-hidden">
+            <span className="transition-transform duration-300 group-hover:-translate-x-1">{t('products.viewDetails')}</span>
+            <ArrowRight className="h-3.5 w-3.5 md:h-4 md:w-4 opacity-0 -translate-x-3 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0" />
           </span>
         </div>
       </div>
