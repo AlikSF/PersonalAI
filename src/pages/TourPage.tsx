@@ -285,6 +285,24 @@ export function TourPage({ slug, showBooking = false }: TourPageProps) {
       }
 
       setProduct(data);
+
+      if (typeof window !== 'undefined' && window.gtag) {
+        window.gtag('event', 'view_item', {
+          currency: 'THB',
+          value: data.price_per_day,
+          items: [{
+            item_id: data.id,
+            item_name: getDisplayName(data, language),
+            item_category: getDisplayCategory(data, language, t),
+            price: data.price_per_day,
+          }],
+          tour_name: getDisplayName(data, language),
+          tour_id: data.id,
+          tour_slug: data.slug || '',
+          tour_category: getDisplayCategory(data, language, t),
+          tour_price: data.price_per_day,
+        });
+      }
     } catch (err) {
       console.error('Error fetching product:', err);
       setError(err instanceof Error ? err.message : 'Failed to load tour');

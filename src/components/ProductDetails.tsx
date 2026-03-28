@@ -29,6 +29,26 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
     children: 0
   });
 
+  useEffect(() => {
+    if (product && typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'view_item', {
+        currency: 'THB',
+        value: product.price_per_day,
+        items: [{
+          item_id: product.id,
+          item_name: getDisplayName(product, language),
+          item_category: getDisplayCategory(product, language, t),
+          price: product.price_per_day,
+        }],
+        tour_name: getDisplayName(product, language),
+        tour_id: product.id,
+        tour_slug: product.slug || '',
+        tour_category: getDisplayCategory(product, language, t),
+        tour_price: product.price_per_day,
+      });
+    }
+  }, [product?.id]);
+
   if (!product) return null;
 
   const images = product.images && product.images.length > 0 ? product.images : [product.image_url];

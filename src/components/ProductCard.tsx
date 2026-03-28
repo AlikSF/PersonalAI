@@ -60,6 +60,25 @@ function ProductCardComponent({ product, onViewDetails, eager = false, useUrlNav
   };
 
   const handleClick = (e: React.MouseEvent) => {
+    if (typeof window !== 'undefined' && window.gtag) {
+      window.gtag('event', 'select_item', {
+        currency: 'THB',
+        value: product.price_per_day,
+        item_list_name: 'Tours',
+        items: [{
+          item_id: product.id,
+          item_name: getDisplayName(product, language),
+          item_category: getDisplayCategory(product, language, t),
+          price: product.price_per_day,
+        }],
+        tour_name: getDisplayName(product, language),
+        tour_id: product.id,
+        tour_slug: product.slug || '',
+        tour_category: getDisplayCategory(product, language, t),
+        tour_price: product.price_per_day,
+      });
+    }
+
     if (useUrlNavigation) {
       e.preventDefault();
       sessionStorage.setItem('scrollPosition', window.scrollY.toString());
