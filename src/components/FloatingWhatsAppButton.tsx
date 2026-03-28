@@ -21,7 +21,7 @@ export function FloatingWhatsAppButton() {
   return (
     <button
       onClick={handleClick}
-      className="fixed bottom-6 right-6 md:bottom-8 md:right-8 bg-transparent p-0 rounded-full shadow-lg hover:scale-110 transition-all"
+      className="fixed bottom-6 right-6 md:bottom-8 md:right-8 bg-transparent p-0 rounded-full animate-telegram-pulse transition-all duration-300"
       style={{ zIndex: 9999 }}
       aria-label="Telegram"
       title="Telegram"

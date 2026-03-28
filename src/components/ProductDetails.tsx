@@ -368,7 +368,6 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
 
                   <button
                     onClick={() => {
-                      // Track booking intent in Google Analytics
                       if (typeof window !== 'undefined' && window.gtag) {
                         window.gtag('event', 'begin_checkout', {
                           currency: 'THB',
@@ -382,7 +381,7 @@ export function ProductDetails({ product, onClose }: ProductDetailsProps) {
                       }
                       setShowBookingForm(true);
                     }}
-                    className="w-full flex items-center justify-center space-x-2 bg-blue-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-lg text-base md:text-lg font-semibold hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
+                    className="btn-shimmer w-full flex items-center justify-center space-x-2 bg-blue-600 text-white px-6 md:px-8 py-3 md:py-4 rounded-lg text-base md:text-lg font-semibold hover:bg-blue-700 transition-all shadow-lg hover:shadow-xl transform hover:scale-105"
                   >
                     <MessageCircle className="h-5 w-5" />
                     <span>{t('products.bookNow')}</span>
