@@ -1,68 +1,10 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect } from 'react';
 import { Cookie, X } from 'lucide-react';
 import { useLanguage } from '../contexts/LanguageContext';
 
-const GA4_ID = 'G-LTF5JCLRBD';
 const COOKIE_CONSENT_KEY = 'cookie_consent';
 
 type ConsentStatus = 'accepted' | 'rejected' | null;
-
-function loadGA4() {
-  if (document.querySelector(`script[src*="googletagmanager.com/gtag/js?id=${GA4_ID}"]`)) {
-    return;
-  }
-
-  const script = document.createElement('script');
-  script.async = true;
-  script.src = `https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`;
-  document.head.appendChild(script);
-
-  window.dataLayer = window.dataLayer || [];
-  window.gtag = function gtag(...args: unknown[]) {
-    window.dataLayer.push(args);
-  };
-  window.gtag('js', new Date());
-  window.gtag('config', GA4_ID, { send_page_view: false });
-
-  trackPageView();
-  setupSPATracking();
-}
-
-function trackPageView() {
-  if (typeof window.gtag !== 'function') return;
-
-  window.gtag('event', 'page_view', {
-    page_title: document.title,
-    page_location: window.location.href,
-    page_path: window.location.pathname,
-  });
-}
-
-function setupSPATracking() {
-  let lastPath = window.location.pathname;
-
-  const handleNavigation = () => {
-    const currentPath = window.location.pathname;
-    if (currentPath !== lastPath) {
-      lastPath = currentPath;
-      trackPageView();
-    }
-  };
-
-  window.addEventListener('popstate', handleNavigation);
-
-  const originalPushState = history.pushState.bind(history);
-  history.pushState = (...args) => {
-    originalPushState(...args);
-    handleNavigation();
-  };
-
-  const originalReplaceState = history.replaceState.bind(history);
-  history.replaceState = (...args) => {
-    originalReplaceState(...args);
-    handleNavigation();
-  };
-}
 
 function getStoredConsent(): ConsentStatus {
   const stored = localStorage.getItem(COOKIE_CONSENT_KEY);
@@ -133,13 +75,6 @@ export function CookieConsent() {
   const [showBanner, setShowBanner] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
-  const checkAndLoadGA4 = useCallback(() => {
-    const consent = getStoredConsent();
-    if (consent === 'accepted') {
-      loadGA4();
-    }
-  }, []);
-
   useEffect(() => {
     const consent = getStoredConsent();
     if (consent === null) {
@@ -148,10 +83,8 @@ export function CookieConsent() {
         setIsAnimating(true);
       }, 1000);
       return () => clearTimeout(timer);
-    } else {
-      checkAndLoadGA4();
     }
-  }, [checkAndLoadGA4]);
+  }, []);
 
   useEffect(() => {
     const handleOpenCookieSettings = () => {
@@ -165,7 +98,6 @@ export function CookieConsent() {
 
   const handleAccept = () => {
     localStorage.setItem(COOKIE_CONSENT_KEY, 'accepted');
-    loadGA4();
     setIsAnimating(false);
     setTimeout(() => setShowBanner(false), 300);
   };
