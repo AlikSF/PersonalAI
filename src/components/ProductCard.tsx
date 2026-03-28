@@ -134,13 +134,13 @@ function ProductCardComponent({ product, onViewDetails, eager = false, useUrlNav
           </>
         )}
 
-        <div className="absolute top-2 left-2 right-2 md:top-4 md:left-4 md:right-4 flex items-start justify-between gap-2">
+        <div className="absolute top-2 left-2 right-2 md:top-4 md:left-4 md:right-4 flex items-start justify-between gap-1 md:gap-2">
           {product.priority !== null && product.priority !== undefined && product.priority <= 3 && (
-            <span className="px-2 py-1 md:px-3 rounded-full text-xs md:text-sm font-semibold bg-red-500 text-white shadow-md">
+            <span className="px-1.5 py-0.5 md:px-2.5 md:py-1 rounded-full text-[10px] md:text-xs font-semibold bg-red-500 text-white shadow-md whitespace-nowrap">
               🔥 HOT
             </span>
           )}
-          <span className="px-2 py-1 md:px-3 rounded-full text-xs md:text-sm font-semibold bg-white text-gray-700 ml-auto">
+          <span className="px-2 py-1 md:px-3 rounded-full text-xs md:text-sm font-semibold bg-white text-gray-700 ml-auto whitespace-nowrap">
             {getDisplayCategory(product, language, t)}
           </span>
         </div>
