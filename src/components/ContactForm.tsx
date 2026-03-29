@@ -211,7 +211,7 @@ export function ContactForm() {
           </h3>
           <div className="flex items-center justify-center gap-4">
             <a
-              href="https://www.instagram.com/phuketvibetours?igsh=MThxNHpyYXl6bzBieg=="
+              href="https://www.instagram.com/phuketvibe.tours"
               target="_blank"
               rel="noopener noreferrer"
               className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-purple-600 via-pink-600 to-orange-500 flex items-center justify-center text-white shadow-md hover:scale-110 transition-transform duration-300"
