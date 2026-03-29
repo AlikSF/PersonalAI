@@ -45,7 +45,7 @@ export function Header() {
             className="flex items-center space-x-2 md:space-x-3 hover:opacity-80 transition"
           >
             <img
-              src="/companylogo.jpg"
+              src="/Company_Logo_NEW.PNG"
               alt="Phuket Vibe Tours Logo"
               className="h-10 w-10 md:h-14 md:w-14 rounded-full object-cover shadow-sm"
             />

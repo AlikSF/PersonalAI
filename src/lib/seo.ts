@@ -1,6 +1,6 @@
 const SITE_URL = 'https://phuketvibetour.com';
 const SITE_NAME = 'Phuket Vibe Tours';
-const DEFAULT_IMAGE = `${SITE_URL}/logo.jpg`;
+const DEFAULT_IMAGE = `${SITE_URL}/Company_Logo_NEW.PNG`;
 
 interface SEOConfig {
   title: string;
@@ -92,12 +92,12 @@ export function getLocalBusinessSchema() {
     "url": SITE_URL,
     "logo": {
       "@type": "ImageObject",
-      "url": `${SITE_URL}/logo.jpg`,
+      "url": `${SITE_URL}/Company_Logo_NEW.PNG`,
       "width": 200,
       "height": 200
     },
     "image": [
-      `${SITE_URL}/logo.jpg`,
+      `${SITE_URL}/Company_Logo_NEW.PNG`,
       "https://aswrvvwbzhfsunioyglv.supabase.co/storage/v1/object/public/Photos/Admin%20Panel%20Images/backround.jpg"
     ],
     "telephone": "+66972137197",
