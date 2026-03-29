@@ -259,7 +259,7 @@ function AppContent() {
             ) : (
               <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-8">
                 {filteredProducts.map((product, index) => (
-                  <ScrollReveal key={product.id} delay={(index % 3) * 80} className="flex">
+                  <ScrollReveal key={product.id} delay={(index % 3) * 80} className="flex w-full">
                     <ProductCard
                       product={product}
                       onViewDetails={handleViewDetails}

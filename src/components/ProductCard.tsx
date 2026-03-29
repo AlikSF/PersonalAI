@@ -96,7 +96,7 @@ function ProductCardComponent({ product, onViewDetails, eager = false, useUrlNav
     <a
       href={tourUrl}
       onClick={handleClick}
-      className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col h-full no-underline"
+      className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer group flex flex-col h-full w-full no-underline"
     >
       <div
         className="relative h-40 md:h-56 overflow-hidden flex-shrink-0"
@@ -166,16 +166,16 @@ function ProductCardComponent({ product, onViewDetails, eager = false, useUrlNav
       </div>
 
       <div className="p-3 md:p-5 flex flex-col flex-grow">
-        <h3 className="text-sm md:text-lg font-bold text-gray-900 mb-1 md:mb-2 group-hover:text-blue-600 transition line-clamp-2">
+        <h3 className="text-sm md:text-lg font-bold text-gray-900 mb-1 md:mb-2 group-hover:text-blue-600 transition line-clamp-2 md:min-h-[3.5rem]">
           {getDisplayName(product, language)}
         </h3>
 
-        <div className="flex items-center text-gray-600 text-xs md:text-sm mb-2 md:mb-3">
+        <div className="flex items-center text-gray-600 text-xs md:text-sm mb-2 md:mb-3 md:min-h-[1.25rem]">
           <MapPin className="h-3 w-3 md:h-4 md:w-4 flex-shrink-0" />
           <span className="truncate ml-1">{getDisplayLocation(product, language)}</span>
         </div>
 
-        <div className="flex flex-wrap gap-1 md:gap-2 mb-3 md:mb-4">
+        <div className="flex flex-wrap gap-1 md:gap-2 mb-3 md:mb-4 md:min-h-[1.75rem]">
           {getDisplayFeatures(product, language).slice(0, 2).map((feature, index) => (
             <span
               key={index}
